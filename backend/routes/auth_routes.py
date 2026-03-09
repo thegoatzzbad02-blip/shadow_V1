@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from models.user_model import UserModel
-from utils.auth import check_password, generate_token
+from backend.models.user_model import UserModel
+from backend.utils.auth import check_password, generate_token
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -23,7 +23,6 @@ def login():
         'token': token
     }), 200
 
-# Ruta opcional para registrar (puede ser eliminada en producción)
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
