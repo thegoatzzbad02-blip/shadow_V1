@@ -1,17 +1,20 @@
 import sys
 import os
+# Añade el directorio raíz del proyecto (el que contiene la carpeta 'backend') al path
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Añadir el directorio actual al path de Python para que encuentre los módulos locales
-sys.path.insert(0, os.path.dirname(__file__))
-
 load_dotenv()
 
-# Rutas absolutas
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.join(BASE_DIR, '..', 'frontend')
+# Ahora importa desde backend.rutas, backend.modelos, etc.
+from backend.routes.auth_routes import auth_bp
+from backend.routes.admin_routes import admin_bp
+from backend.routes.user_routes import user_bp
+
+# Resto del código igual...
 
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
 CORS(app)
