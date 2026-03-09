@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow - Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
+</head>
+<body>
+    <div class="container">
+        <h1>SHADOW · ADMIN</h1>
+        <button id="logoutBtn">Cerrar sesión</button>
+
+        <h2>Crear Usuario</h2>
+        <form id="createUserForm">
+            <input type="text" id="newUsername" placeholder="Nombre de usuario" required>
+            <input type="password" id="newPassword" placeholder="Contraseña" required>
+            <input type="number" id="newCredits" placeholder="Créditos iniciales" value="0" min="0">
+            <button type="submit">Crear Usuario</button>
+        </form>
+        <div id="userMessage"></div>
+
+        <h2>Crear Producto</h2>
+        <form id="createProductForm">
+            <input type="text" id="productName" placeholder="Nombre del producto" required>
+            <input type="number" id="productPrice" placeholder="Precio en créditos" required min="1">
+            <input type="number" id="productStock" placeholder="Stock (cantidad de códigos)" required min="1">
+            <div id="codesContainer"></div>
+            <button type="submit">Crear Producto</button>
+        </form>
+        <div id="productMessage"></div>
+
+        <h3>Lista de Usuarios</h3>
+        <ul id="userList"></ul>
+
+        <h3>Lista de Productos</h3>
+        <ul id="productList"></ul>
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>Desarrollado por <strong>DRACCO</strong></p>
+                <div class="social-links">
+                    <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="social-link">📱 Telegram</a>
+                    <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="social-link">💬 WhatsApp</a>
+                </div>
+                <a href="https://tucanaldepagos.com" target="_blank" class="btn-creditos">⚡ Adquirir créditos</a>
+            </div>
+        </footer>
+    </div>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "pbkdf2:sha256:600000$iQXDYqhmlZbYCKeV$20ade80316b10301a8d49a38e8effffb74180a8cdd00c0dff944ac3c524f7700",
+    "role": "admin",
+    "credits": 0
+  },
+  {
+    "id": 2,
+    "username": "diego",
+    "password": "scrypt:32768:8:1$GQGBnuT9zoP1AJdi$709482298e8176b6e589ac28024b84e8bdbb860e50b47249193c746a3ccb5df40238cc1e29095f2103f95ebb5e40315d645f0f02445ec1071804f0d93b8615ff",
+    "role": "user",
+    "credits": 180
+  }
+]
