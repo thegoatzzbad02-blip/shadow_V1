@@ -1,7 +1,7 @@
 from functools import wraps
-from flask import request, jsonify
-from utils.auth import verify_token
-from models.user_model import UserModel
+from flask import request, jsonify, current_app
+from backend.utils.auth import verify_token
+from backend.models.user_model import UserModel
 
 def token_required(f):
     @wraps(f)
