@@ -1,6 +1,4 @@
-flask
-flask-cors
-pyjwt
-werkzeug
+Flask
+Flask-CORS
+PyJWT
 python-dotenv
-gunicorn
