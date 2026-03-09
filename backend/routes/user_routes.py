@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from utils.decorators import token_required
-from models.product_model import ProductModel
-from models.user_model import UserModel
+from backend.utils.decorators import token_required
+from backend.models.product_model import ProductModel
+from backend.models.user_model import UserModel
 
 user_bp = Blueprint('user', __name__)
 
@@ -20,14 +20,7 @@ def profile():
 @token_required
 def get_products():
     products = ProductModel.get_available()
-    safe_products = []
-    for p in products:
-        safe_products.append({
-            'id': p['id'],
-            'name': p['name'],
-            'price': p['price'],
-            'stock': p['stock']
-        })
+    safe_products = [{'id': p['id'], 'name': p['name'], 'price': p['price'], 'stock': p['stock']} for p in products]
     return jsonify(safe_products), 200
 
 @user_bp.route('/buy/<int:product_id>', methods=['POST'])
