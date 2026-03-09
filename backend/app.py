@@ -5,7 +5,6 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 
 # Añadir el directorio raíz del proyecto al path de Python
-# Esto permite importar módulos usando backend.subpaquete
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 load_dotenv()
@@ -13,6 +12,10 @@ load_dotenv()
 # Definir rutas absolutas
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))          # backend/
 FRONTEND_DIR = os.path.join(BASE_DIR, '..', 'frontend')        # ruta a la carpeta frontend
+
+print("BASE_DIR:", BASE_DIR)
+print("FRONTEND_DIR:", FRONTEND_DIR)
+print("Contenido de FRONTEND_DIR:", os.listdir(FRONTEND_DIR) if os.path.exists(FRONTEND_DIR) else "No existe")
 
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
 CORS(app)
