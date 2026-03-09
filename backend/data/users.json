@@ -2,7 +2,7 @@
   {
     "id": 1,
     "username": "admin",
-    "password": "pbkdf2:sha256:600000$iQXDYqhmlZbYCKeV$20ade80316b10301a8d49a38e8effffb74180a8cdd00c0dff944ac3c524f7700",
+    "password": "scrypt:32768:8:1bc134ecfefc2d2d345fd0925cb35a0beb81a58dadfc65b270b18e2793e4eb22b53bb751ebbaf8a8ad9597e6be4a2c9f3f670064a02df597606c612fc795eef3",
     "role": "admin",
     "credits": 0
   },
