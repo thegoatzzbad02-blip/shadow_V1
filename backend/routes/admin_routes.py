@@ -1,11 +1,10 @@
 from flask import Blueprint, request, jsonify
-from utils.decorators import token_required, admin_required
-from models.user_model import UserModel
-from models.product_model import ProductModel
+from backend.utils.decorators import token_required, admin_required
+from backend.models.user_model import UserModel
+from backend.models.product_model import ProductModel
 
 admin_bp = Blueprint('admin', __name__)
 
-# ========== USUARIOS ==========
 @admin_bp.route('/users', methods=['POST'])
 @token_required
 @admin_required
@@ -54,7 +53,6 @@ def delete_user(user_id):
         return jsonify({'message': 'Usuario eliminado'}), 200
     return jsonify({'message': 'Usuario no encontrado'}), 404
 
-# ========== PRODUCTOS ==========
 @admin_bp.route('/products', methods=['POST'])
 @token_required
 @admin_required
@@ -84,7 +82,7 @@ def update_product(product_id):
     name = data.get('name')
     price = data.get('price')
     stock = data.get('stock')
-    codes = data.get('codes')  # opcional
+    codes = data.get('codes')
     if not name or price is None or stock is None:
         return jsonify({'message': 'Faltan datos'}), 400
     if ProductModel.update_product(product_id, name, price, stock, codes):
