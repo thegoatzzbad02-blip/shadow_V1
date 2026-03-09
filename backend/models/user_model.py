@@ -1,7 +1,9 @@
 import json
 import os
 import time
-from utils.auth import hash_password
+from backend.utils.auth import hash_password
+
+# ... resto igual ...
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 USERS_FILE = os.path.join(DATA_DIR, 'users.json')
