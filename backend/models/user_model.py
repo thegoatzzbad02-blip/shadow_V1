@@ -3,14 +3,18 @@ import os
 import time
 from backend.utils.auth import hash_password
 
-# ... resto igual ...
+# Detectar si estamos en Vercel (producción)
+if os.environ.get('VERCEL'):
+    DATA_DIR = '/tmp/data'
+else:
+    DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
 USERS_FILE = os.path.join(DATA_DIR, 'users.json')
+os.makedirs(DATA_DIR, exist_ok=True)
 
 _cache = None
 _cache_time = 0
-CACHE_DURATION = 5  # segundos
+CACHE_DURATION = 5
 
 def _read_users():
     global _cache, _cache_time
