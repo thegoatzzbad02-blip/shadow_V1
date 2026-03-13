@@ -5,6 +5,13 @@ from backend.models.product_model import ProductModel
 
 admin_bp = Blueprint('admin', __name__)
 
+@admin_bp.route('/users', methods=['GET'])
+@token_required
+@admin_required
+def get_users():
+    users = UserModel.get_all_users()
+    return jsonify(users), 200
+
 @admin_bp.route('/users', methods=['POST'])
 @token_required
 @admin_required
@@ -24,13 +31,6 @@ def create_user():
         'role': user['role'],
         'credits': user['credits']
     }), 201
-
-@admin_bp.route('/users', methods=['GET'])
-@token_required
-@admin_required
-def get_users():
-    users = UserModel.get_all_users()
-    return jsonify(users), 200
 
 @admin_bp.route('/users/<int:user_id>', methods=['PUT'])
 @token_required
@@ -53,6 +53,13 @@ def delete_user(user_id):
         return jsonify({'message': 'Usuario eliminado'}), 200
     return jsonify({'message': 'Usuario no encontrado'}), 404
 
+@admin_bp.route('/products', methods=['GET'])
+@token_required
+@admin_required
+def get_products():
+    products = ProductModel.get_all_products()
+    return jsonify(products), 200
+
 @admin_bp.route('/products', methods=['POST'])
 @token_required
 @admin_required
@@ -66,13 +73,6 @@ def create_product():
         return jsonify({'message': 'Faltan datos del producto'}), 400
     product = ProductModel.create_product(name, price, stock, codes)
     return jsonify(product), 201
-
-@admin_bp.route('/products', methods=['GET'])
-@token_required
-@admin_required
-def get_products():
-    products = ProductModel.get_all_products()
-    return jsonify(products), 200
 
 @admin_bp.route('/products/<int:product_id>', methods=['PUT'])
 @token_required
