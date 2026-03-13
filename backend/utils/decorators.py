@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, jsonify, current_app
+from flask import request, jsonify
 from backend.utils.auth import verify_token
 from backend.models.user_model import UserModel
 
