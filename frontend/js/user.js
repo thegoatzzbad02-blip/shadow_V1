@@ -5,15 +5,22 @@ if (!token || !user || user.role !== 'user') {
     window.location.href = 'index.html';
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('username').textContent = user.username;
     document.getElementById('credits').textContent = user.credits;
     loadProducts();
 
-    document.getElementById('logoutBtn').addEventListener('click', function() {
+    document.getElementById('logoutBtn').addEventListener('click', () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = 'index.html';
+    });
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('codeModal')) {
+            closeModal();
+        }
     });
 });
 
@@ -24,7 +31,7 @@ async function fetchWithAuth(url, options = {}) {
         'Content-Type': 'application/json'
     };
     const response = await fetch(url, options);
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = 'index.html';
@@ -40,25 +47,23 @@ async function loadProducts() {
         container.innerHTML = '';
 
         if (products.length === 0) {
-            container.innerHTML = '<p style="text-align:center; padding:20px;">No hay productos disponibles</p>';
+            container.innerHTML = '<p class="message info">No hay productos disponibles</p>';
             return;
         }
 
         products.forEach(p => {
-            const div = document.createElement('div');
-            div.className = 'product-item';
-            div.innerHTML = `
-                <div class="product-info">
-                    <div class="product-name">${p.name}</div>
-                    <div class="product-price">${p.price} <small>créditos</small></div>
-                    <div class="product-stock">
-                        <span>Stock disponible:</span>
-                        <span class="stock-badge">${p.stock}</span>
-                    </div>
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-name">${p.name}</div>
+                <div class="product-price">${p.price} <small>créditos</small></div>
+                <div class="product-stock">
+                    <span>Stock:</span>
+                    <span class="stock-badge">${p.stock}</span>
                 </div>
-                <button onclick="buyProduct(${p.id}, ${p.price})">Comprar ahora</button>
+                <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">Comprar ahora</button>
             `;
-            container.appendChild(div);
+            container.appendChild(card);
         });
     } catch (error) {
         console.error('Error al cargar productos:', error);
@@ -72,25 +77,35 @@ window.buyProduct = async function(productId, price) {
     }
 
     try {
-        const response = await fetchWithAuth(`/api/user/buy/${productId}`, {
-            method: 'POST'
-        });
+        const response = await fetchWithAuth(`/api/user/buy/${productId}`, { method: 'POST' });
         const data = await response.json();
         if (response.ok) {
-            // Actualizar créditos
             user.credits -= price;
             localStorage.setItem('user', JSON.stringify(user));
             document.getElementById('credits').textContent = user.credits;
-            document.getElementById('buyMessage').innerHTML = `
-                <span>${data.message}</span><br>
-                <strong>🎁 Código: ${data.code}</strong><br>
-                <span>Créditos restantes: ${data.credits_remaining}</span>
-            `;
-            loadProducts(); // Recargar productos para actualizar stock
+
+            document.getElementById('purchasedCode').textContent = data.code;
+            document.getElementById('remainingCredits').innerHTML = `Créditos restantes: <strong>${user.credits}</strong>`;
+            document.getElementById('codeModal').style.display = 'flex';
+
+            loadProducts();
         } else {
-            document.getElementById('buyMessage').textContent = data.message || 'Error al comprar';
+            alert(data.message || 'Error al comprar');
         }
     } catch (error) {
         console.error('Error en compra:', error);
     }
+};
+
+function closeModal() {
+    document.getElementById('codeModal').style.display = 'none';
+}
+
+window.copyCode = function() {
+    const code = document.getElementById('purchasedCode').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        alert('✅ Código copiado al portapapeles');
+    }).catch(() => {
+        alert('No se pudo copiar, selecciona manualmente');
+    });
 };

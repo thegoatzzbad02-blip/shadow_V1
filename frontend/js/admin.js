@@ -86,10 +86,11 @@ async function fetchWithAuth(url, options = {}) {
     options.headers = {
         ...options.headers,
         'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
     };
     const response = await fetch(url, options);
-    if (response.status === 401 || response.status === 403) {
+    if (response.status === 401) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = 'index.html';
@@ -99,10 +100,7 @@ async function fetchWithAuth(url, options = {}) {
 
 function generateCodeFields(count) {
     const container = document.getElementById('codesContainer');
-    if (!container) {
-        console.error('Contenedor de códigos no encontrado');
-        return;
-    }
+    if (!container) return;
     container.innerHTML = '';
     for (let i = 0; i < count; i++) {
         const input = document.createElement('input');
@@ -115,39 +113,51 @@ function generateCodeFields(count) {
 }
 
 async function loadUsers() {
-    const response = await fetchWithAuth('/api/admin/users');
-    const users = await response.json();
-    const list = document.getElementById('userList');
-    list.innerHTML = '';
-    users.forEach(user => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${user.username} - Créditos: ${user.credits}</span>
-            <div>
-                <button class="action-btn edit-btn" onclick="editUser(${user.id})">Editar</button>
-                <button class="action-btn delete-btn" onclick="deleteUser(${user.id})">Eliminar</button>
-            </div>
-        `;
-        list.appendChild(li);
-    });
+    try {
+        const response = await fetchWithAuth('/api/admin/users');
+        if (!response.ok) throw new Error('Error al cargar usuarios');
+        const users = await response.json();
+        const list = document.getElementById('userList');
+        list.innerHTML = '';
+        users.forEach(user => {
+            const li = document.createElement('li');
+            li.className = 'list-item';
+            li.innerHTML = `
+                <span class="list-item-info">${user.username} - Créditos: ${user.credits}</span>
+                <div class="list-item-actions">
+                    <button onclick="editUser(${user.id})">Editar</button>
+                    <button onclick="deleteUser(${user.id})">Eliminar</button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+    } catch (error) {
+        console.error('Error en loadUsers:', error);
+    }
 }
 
 async function loadProducts() {
-    const response = await fetchWithAuth('/api/admin/products');
-    const products = await response.json();
-    const list = document.getElementById('productList');
-    list.innerHTML = '';
-    products.forEach(p => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${p.name} - Precio: ${p.price} - Stock: ${p.stock} (${p.codes.length} códigos)</span>
-            <div>
-                <button class="action-btn edit-btn" onclick="editProduct(${p.id})">Editar</button>
-                <button class="action-btn delete-btn" onclick="deleteProduct(${p.id})">Eliminar</button>
-            </div>
-        `;
-        list.appendChild(li);
-    });
+    try {
+        const response = await fetchWithAuth('/api/admin/products');
+        if (!response.ok) throw new Error('Error al cargar productos');
+        const products = await response.json();
+        const list = document.getElementById('productList');
+        list.innerHTML = '';
+        products.forEach(p => {
+            const li = document.createElement('li');
+            li.className = 'list-item';
+            li.innerHTML = `
+                <span class="list-item-info">${p.name} - Precio: ${p.price} - Stock: ${p.stock} (${p.codes.length} códigos)</span>
+                <div class="list-item-actions">
+                    <button onclick="editProduct(${p.id})">Editar</button>
+                    <button onclick="deleteProduct(${p.id})">Eliminar</button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+    } catch (error) {
+        console.error('Error en loadProducts:', error);
+    }
 }
 
 window.editUser = async function(userId) {
@@ -159,33 +169,33 @@ window.editUser = async function(userId) {
         method: 'PUT',
         body: JSON.stringify({ username: newName, credits: newCredits })
     });
-    const data = await response.json();
     if (response.ok) {
         alert('Usuario actualizado');
         loadUsers();
     } else {
+        const data = await response.json();
         alert(data.message || 'Error al actualizar');
     }
 };
 
 window.deleteUser = async function(userId) {
-    if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+    if (!confirm('¿Eliminar usuario?')) return;
     const response = await fetchWithAuth(`/api/admin/users/${userId}`, {
         method: 'DELETE'
     });
-    const data = await response.json();
     if (response.ok) {
         alert('Usuario eliminado');
         loadUsers();
     } else {
+        const data = await response.json();
         alert(data.message || 'Error al eliminar');
     }
 };
 
 window.editProduct = async function(productId) {
-    const newName = prompt('Nuevo nombre del producto:');
+    const newName = prompt('Nuevo nombre:');
     if (!newName) return;
-    const newPrice = parseInt(prompt('Nuevo precio en créditos:'));
+    const newPrice = parseInt(prompt('Nuevo precio:'));
     if (isNaN(newPrice)) return alert('Precio inválido');
     const newStock = parseInt(prompt('Nuevo stock:'));
     if (isNaN(newStock)) return alert('Stock inválido');
@@ -193,25 +203,25 @@ window.editProduct = async function(productId) {
         method: 'PUT',
         body: JSON.stringify({ name: newName, price: newPrice, stock: newStock })
     });
-    const data = await response.json();
     if (response.ok) {
         alert('Producto actualizado');
         loadProducts();
     } else {
+        const data = await response.json();
         alert(data.message || 'Error al actualizar');
     }
 };
 
 window.deleteProduct = async function(productId) {
-    if (!confirm('¿Estás seguro de eliminar este producto?')) return;
+    if (!confirm('¿Eliminar producto?')) return;
     const response = await fetchWithAuth(`/api/admin/products/${productId}`, {
         method: 'DELETE'
     });
-    const data = await response.json();
     if (response.ok) {
         alert('Producto eliminado');
         loadProducts();
     } else {
+        const data = await response.json();
         alert(data.message || 'Error al eliminar');
     }
 };

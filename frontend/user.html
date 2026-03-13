@@ -18,10 +18,21 @@
         </div>
 
         <h2>Productos Disponibles</h2>
-        <div id="products"></div>
-        <div id="buyMessage"></div>
+        <div id="products" class="products-grid"></div>
 
-        <footer class="site-footer">
+        <!-- MODAL PARA MOSTRAR EL CÓDIGO COMPRADO -->
+        <div id="codeModal" class="modal">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>🎉 ¡Compra exitosa!</h2>
+                <p class="modal-message">Tu código es:</p>
+                <div class="code-box" id="purchasedCode">CÓDIGO</div>
+                <p class="remaining" id="remainingCredits">Créditos restantes: <strong></strong></p>
+                <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+            </div>
+        </div>
+
+        <footer class="footer">
             <div class="footer-content">
                 <p>Desarrollado por <strong>DRACCO</strong></p>
                 <div class="social-links">
