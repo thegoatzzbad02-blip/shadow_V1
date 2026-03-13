@@ -19,6 +19,12 @@ class ProductModel:
         return cls.get_db().products
 
     @classmethod
+    def _convert_id(cls, doc):
+        if doc and '_id' in doc:
+            doc['_id'] = str(doc['_id'])
+        return doc
+
+    @classmethod
     def create_product(cls, name, price, stock, codes=None):
         collection = cls.get_collection()
         last_product = collection.find_one(sort=[("id", -1)])
@@ -35,15 +41,22 @@ class ProductModel:
 
     @classmethod
     def get_by_id(cls, product_id):
-        return cls.get_collection().find_one({"id": product_id})
+        doc = cls.get_collection().find_one({"id": product_id})
+        return cls._convert_id(doc)
 
     @classmethod
     def get_all_products(cls):
-        return list(cls.get_collection().find())
+        docs = list(cls.get_collection().find())
+        for doc in docs:
+            cls._convert_id(doc)
+        return docs
 
     @classmethod
     def get_available(cls):
-        return list(cls.get_collection().find({"stock": {"$gt": 0}}))
+        docs = list(cls.get_collection().find({"stock": {"$gt": 0}}))
+        for doc in docs:
+            cls._convert_id(doc)
+        return docs
 
     @classmethod
     def purchase(cls, product_id):

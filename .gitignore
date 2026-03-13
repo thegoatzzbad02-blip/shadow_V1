@@ -1,12 +1,14 @@
-# Entorno virtual
 venv/
-.env
+env/
+.venv/
+mi_entorno/
 __pycache__/
 *.pyc
+.env
+.env.local
+*.env
+.vscode/
+.idea/
 .DS_Store
+Thumbs.db
 *.log
-# Base de datos local (ya no se usa)
-*.db
-*.sqlite3
-# Vercel
-.vercel

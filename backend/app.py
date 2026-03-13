@@ -1,7 +1,8 @@
 import sys
 import os
 import json
-from flask import Flask, send_from_directory
+import traceback
+from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from bson import ObjectId
@@ -19,15 +20,14 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 app.config['MONGO_DBNAME'] = os.getenv('MONGO_DB_NAME', 'shadow_platform')
 
-# JSON Encoder personalizado para ObjectId
-class CustomJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        return super().default(obj)
+# Manejador global de errores para devolver JSON en lugar de HTML
+@app.errorhandler(Exception)
+def handle_error(e):
+    # Imprimir el traceback en los logs (útil para Vercel)
+    print("Error interno:", traceback.format_exc())
+    return jsonify({'message': 'Error interno del servidor', 'error': str(e)}), 500
 
-app.json_encoder = CustomJSONEncoder
-
+# Importar blueprints
 from backend.routes.auth_routes import auth_bp
 from backend.routes.admin_routes import admin_bp
 from backend.routes.user_routes import user_bp
