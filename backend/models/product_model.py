@@ -1,122 +1,78 @@
-import json
-import os
-import time
-
-if os.environ.get('VERCEL'):
-    DATA_DIR = '/tmp/data'
-else:
-    DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'data')
-
-PRODUCTS_FILE = os.path.join(DATA_DIR, 'products.json')
-os.makedirs(DATA_DIR, exist_ok=True)
-
-_cache = None
-_cache_time = 0
-CACHE_DURATION = 5
-
-def _read_products():
-    global _cache, _cache_time
-    now = time.time()
-    if _cache is not None and (now - _cache_time) < CACHE_DURATION:
-        return _cache
-    if not os.path.exists(PRODUCTS_FILE):
-        _cache = []
-    else:
-        try:
-            with open(PRODUCTS_FILE, 'r', encoding='utf-8') as f:
-                content = f.read().strip()
-                _cache = json.loads(content) if content else []
-        except json.JSONDecodeError:
-            _cache = []
-    _cache_time = now
-    return _cache
-
-def _write_products(products):
-    global _cache, _cache_time
-    with open(PRODUCTS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(products, f, indent=2, ensure_ascii=False)
-    _cache = products
-    _cache_time = time.time()
+from flask import current_app
+from pymongo import MongoClient
 
 class ProductModel:
-    @staticmethod
-    def create_product(name, price, stock, codes=None):
-        products = _read_products()
-        new_id = max([p['id'] for p in products], default=0) + 1
+    _client = None
+    _db = None
+
+    @classmethod
+    def get_db(cls):
+        if cls._client is None:
+            uri = current_app.config['MONGO_URI']
+            dbname = current_app.config['MONGO_DBNAME']
+            cls._client = MongoClient(uri)
+            cls._db = cls._client[dbname]
+        return cls._db
+
+    @classmethod
+    def get_collection(cls):
+        return cls.get_db().products
+
+    @classmethod
+    def create_product(cls, name, price, stock, codes=None):
+        collection = cls.get_collection()
+        last_product = collection.find_one(sort=[("id", -1)])
+        new_id = (last_product["id"] + 1) if last_product else 1
         new_product = {
-            'id': new_id,
-            'name': name,
-            'price': price,
-            'stock': stock,
-            'codes': codes if codes is not None else []
+            "id": new_id,
+            "name": name,
+            "price": price,
+            "stock": stock,
+            "codes": codes if codes is not None else []
         }
-        products.append(new_product)
-        _write_products(products)
+        collection.insert_one(new_product)
         return new_product
 
-    @staticmethod
-    def get_by_id(product_id):
-        products = _read_products()
-        for p in products:
-            if p['id'] == product_id:
-                return p
-        return None
+    @classmethod
+    def get_by_id(cls, product_id):
+        return cls.get_collection().find_one({"id": product_id})
 
-    find_by_id = get_by_id
+    @classmethod
+    def get_all_products(cls):
+        return list(cls.get_collection().find())
 
-    @staticmethod
-    def get_all_products():
-        return _read_products()
+    @classmethod
+    def get_available(cls):
+        return list(cls.get_collection().find({"stock": {"$gt": 0}}))
 
-    @staticmethod
-    def get_available():
-        products = _read_products()
-        return [p for p in products if p['stock'] > 0]
+    @classmethod
+    def purchase(cls, product_id):
+        collection = cls.get_collection()
+        product = collection.find_one({"id": product_id})
+        if not product or product["stock"] <= 0 or not product["codes"]:
+            return None
+        code = product["codes"].pop(0)
+        result = collection.update_one(
+            {"id": product_id},
+            {
+                "$set": {"codes": product["codes"]},
+                "$inc": {"stock": -1}
+            }
+        )
+        return code if result.modified_count > 0 else None
 
-    @staticmethod
-    def purchase(product_id):
-        products = _read_products()
-        for p in products:
-            if p['id'] == product_id:
-                if p['stock'] <= 0:
-                    return None
-                if not p['codes'] or len(p['codes']) == 0:
-                    return None
-                code = p['codes'].pop(0)
-                p['stock'] -= 1
-                _write_products(products)
-                return code
-        return None
+    @classmethod
+    def update_product(cls, product_id, new_name, new_price, new_stock, new_codes=None):
+        update_data = {"name": new_name, "price": new_price, "stock": new_stock}
+        if new_codes is not None:
+            update_data["codes"] = new_codes
+        result = cls.get_collection().update_one(
+            {"id": product_id},
+            {"$set": update_data}
+        )
+        return result.modified_count > 0
 
-    @staticmethod
-    def update_stock(product_id, new_stock):
-        products = _read_products()
-        for p in products:
-            if p['id'] == product_id:
-                p['stock'] = new_stock
-                _write_products(products)
-                return True
-        return False
-
-    @staticmethod
-    def update_product(product_id, new_name, new_price, new_stock, new_codes=None):
-        products = _read_products()
-        for p in products:
-            if p['id'] == product_id:
-                p['name'] = new_name
-                p['price'] = new_price
-                p['stock'] = new_stock
-                if new_codes is not None:
-                    p['codes'] = new_codes
-                _write_products(products)
-                return True
-        return False
-
-    @staticmethod
-    def delete_product(product_id):
-        products = _read_products()
-        new_products = [p for p in products if p['id'] != product_id]
-        if len(new_products) != len(products):
-            _write_products(new_products)
-            return True
-        return False
+    @classmethod
+    def delete_product(cls, product_id):
+        result = cls.get_collection().delete_one({"id": product_id})
+        return result.deleted_count > 0
