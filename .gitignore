@@ -1,0 +1,12 @@
+# Entorno virtual
+venv/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+# Base de datos local (ya no se usa)
+*.db
+*.sqlite3
+# Vercel
+.vercel
