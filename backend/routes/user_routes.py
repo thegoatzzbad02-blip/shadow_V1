@@ -20,15 +20,13 @@ def profile():
 @token_required
 def get_products():
     products = ProductModel.get_available()
-    safe_products = [{'id': p['id'], 'name': p['name'], 'price': p['price'], 'stock': p['stock']} for p in products]
-    return jsonify(safe_products), 200
+    return jsonify(products), 200
 
 @user_bp.route('/buy/<int:product_id>', methods=['POST'])
 @token_required
 def buy_product(product_id):
     user = request.user
     product = ProductModel.get_by_id(product_id)
-
     if not product:
         return jsonify({'message': 'Producto no encontrado'}), 404
     if product['stock'] <= 0:
