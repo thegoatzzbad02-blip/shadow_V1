@@ -9,7 +9,6 @@ class UserModel:
     @classmethod
     def get_db(cls):
         if cls._client is None:
-            # Leer directamente de variables de entorno
             uri = os.getenv('MONGO_URI')
             dbname = os.getenv('MONGO_DB_NAME', 'shadow_platform')
             print(f"[UserModel] Conectando con URI: {uri[:30] if uri else 'No URI'}...")
@@ -24,12 +23,21 @@ class UserModel:
         return cls.get_db().users
 
     @classmethod
+    def _convert_id(cls, doc):
+        """Convierte _id a string en un documento si existe."""
+        if doc and '_id' in doc:
+            doc['_id'] = str(doc['_id'])
+        return doc
+
+    @classmethod
     def find_by_username(cls, username):
-        return cls.get_collection().find_one({"username": username})
+        doc = cls.get_collection().find_one({"username": username})
+        return cls._convert_id(doc)
 
     @classmethod
     def find_by_id(cls, user_id):
-        return cls.get_collection().find_one({"id": user_id})
+        doc = cls.get_collection().find_one({"id": user_id})
+        return cls._convert_id(doc)
 
     @classmethod
     def create_user(cls, username, password, role='user', credits=0):
@@ -45,7 +53,7 @@ class UserModel:
             "credits": credits
         }
         collection.insert_one(new_user)
-        return new_user
+        return new_user  # No contiene _id
 
     @classmethod
     def update_credits(cls, user_id, new_credits):
@@ -72,6 +80,5 @@ class UserModel:
     def get_all_users(cls):
         docs = list(cls.get_collection().find({}, {"password": 0}))
         for doc in docs:
-            if '_id' in doc:
-                doc['_id'] = str(doc['_id'])
+            cls._convert_id(doc)
         return docs

@@ -4,22 +4,23 @@ import json
 from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
 load_dotenv()
 
-# Logs para verificar variables en Vercel
-print("=== DEBUG ENVIRONMENT VARIABLES ===")
-print("SECRET_KEY:", os.getenv('SECRET_KEY'))
-print("MONGO_URI:", os.getenv('MONGO_URI'))
-print("MONGO_DB_NAME:", os.getenv('MONGO_DB_NAME'))
-print("===================================")
+# Encoder personalizado para ObjectId
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, ObjectId):
+            return str(obj)
+        return super().default(obj)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FRONTEND_DIR = os.path.join(BASE_DIR, '..', 'frontend')
 
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
+app.json_encoder = CustomJSONEncoder
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -32,6 +33,19 @@ def handle_error(e):
     import traceback
     print("Error interno:", traceback.format_exc())
     return jsonify({'message': 'Error interno del servidor'}), 500
+
+# Ruta de depuración
+@app.route('/debug/env')
+def debug_env():
+    mongo_uri = app.config.get('MONGO_URI', 'no configurada')
+    if mongo_uri and mongo_uri != 'no configurada' and '@' in mongo_uri:
+        parts = mongo_uri.split('@')
+        mongo_uri = 'mongodb+srv://****:****@' + parts[1]
+    return jsonify({
+        'SECRET_KEY': '****' if app.config.get('SECRET_KEY') else 'no configurada',
+        'MONGO_URI': mongo_uri,
+        'MONGO_DB_NAME': app.config.get('MONGO_DBNAME', 'no configurada')
+    })
 
 from backend.routes.auth_routes import auth_bp
 from backend.routes.admin_routes import admin_bp
