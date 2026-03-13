@@ -1,4 +1,4 @@
-from flask import current_app
+import os
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -9,11 +9,12 @@ class UserModel:
     @classmethod
     def get_db(cls):
         if cls._client is None:
-            uri = current_app.config.get('MONGO_URI')
-            dbname = current_app.config.get('MONGO_DBNAME', 'shadow_platform')
+            # Leer directamente de variables de entorno
+            uri = os.getenv('MONGO_URI')
+            dbname = os.getenv('MONGO_DB_NAME', 'shadow_platform')
+            print(f"[UserModel] Conectando con URI: {uri[:30] if uri else 'No URI'}...")
             if not uri:
-                raise Exception("MONGO_URI no configurada en app.config")
-            print(f"[UserModel] Conectando a MongoDB: {uri[:30]}...")  # Log seguro
+                raise Exception("MONGO_URI no está definida en el entorno")
             cls._client = MongoClient(uri)
             cls._db = cls._client[dbname]
         return cls._db

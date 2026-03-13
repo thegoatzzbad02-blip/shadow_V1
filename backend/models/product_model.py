@@ -1,4 +1,4 @@
-from flask import current_app
+import os
 from pymongo import MongoClient
 
 class ProductModel:
@@ -8,11 +8,11 @@ class ProductModel:
     @classmethod
     def get_db(cls):
         if cls._client is None:
-            uri = current_app.config.get('MONGO_URI')
-            dbname = current_app.config.get('MONGO_DBNAME', 'shadow_platform')
+            uri = os.getenv('MONGO_URI')
+            dbname = os.getenv('MONGO_DB_NAME', 'shadow_platform')
+            print(f"[ProductModel] Conectando con URI: {uri[:30] if uri else 'No URI'}...")
             if not uri:
-                raise Exception("MONGO_URI no configurada en app.config")
-            print(f"[ProductModel] Conectando a MongoDB: {uri[:30]}...")
+                raise Exception("MONGO_URI no está definida en el entorno")
             cls._client = MongoClient(uri)
             cls._db = cls._client[dbname]
         return cls._db
@@ -38,7 +38,10 @@ class ProductModel:
 
     @classmethod
     def get_by_id(cls, product_id):
-        return cls.get_collection().find_one({"id": product_id})
+        doc = cls.get_collection().find_one({"id": product_id})
+        if doc and '_id' in doc:
+            doc['_id'] = str(doc['_id'])
+        return doc
 
     @classmethod
     def get_all_products(cls):
