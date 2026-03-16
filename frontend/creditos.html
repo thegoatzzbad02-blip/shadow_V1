@@ -3,66 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadow - Comprar Créditos</title>
+    <title>Shadow - Recargar Créditos</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
+    <!-- Librería para generar QR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>SHADOW · CRÉDITOS</h1>
+        <h1>SHADOW · RECARGAR</h1>
         <a href="index.html" class="back-link">← Volver al inicio</a>
 
         <div class="credits-info">
-            <p class="info-text">10 créditos = 1 USD. Elige el plan que mejor se adapte a ti y contacta con nosotros para realizar la compra.</p>
+            <p class="info-text">💰 Mínimo de recarga: <strong>10 USD</strong>. Escanea el código QR o copia la dirección para enviar el pago. Luego reporta tu pago por Telegram o WhatsApp.</p>
         </div>
 
-        <!-- PLANES DE CRÉDITOS -->
-        <h2>Planes Promocionales</h2>
-        <div class="plans-grid">
-            <div class="plan-card">
-                <h3>Básico</h3>
-                <div class="plan-credits">100 créditos</div>
-                <div class="plan-price">6 USDT</div>
-                <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="plan-btn">Seleccionar</a>
-            </div>
-            <div class="plan-card">
-                <h3>Estándar</h3>
-                <div class="plan-credits">200 créditos</div>
-                <div class="plan-price">12 USDT</div>
-                <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="plan-btn">Seleccionar</a>
-            </div>
-            <div class="plan-card">
-                <h3>Premium</h3>
-                <div class="plan-credits">320 créditos</div>
-                <div class="plan-price">26 USDT</div>
-                <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="plan-btn">Seleccionar</a>
-            </div>
-            <div class="plan-card">
-                <h3>Ultra</h3>
-                <div class="plan-credits">400 créditos</div>
-                <div class="plan-price">35 USDT</div>
-                <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="plan-btn">Seleccionar</a>
-            </div>
+        <!-- MÉTODOS DE PAGO CON QR -->
+        <h2>Métodos de pago</h2>
+        <div class="payment-grid" id="payment-grid">
+            <!-- Los métodos se generarán con JavaScript -->
         </div>
 
-        <!-- MÉTODOS DE PAGO -->
-        <div class="payment-methods">
-            <h3>Métodos de pago aceptados</h3>
-            <div class="payment-icons">
-                <span class="payment-badge">Paypal</span>
-                <span class="payment-badge">USDT</span>
-                <span class="payment-badge">BTC</span>
-                <span class="payment-badge">ETH</span>
-                <span class="payment-badge">LTC</span>
-                <span class="payment-badge">XMR</span>
-                <span class="payment-badge">Binance</span>
-                <span class="payment-badge">Zinli</span>
-                <span class="payment-badge">Transferencia</span>
-            </div>
-            <div class="contact-buttons">
-                <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="contact-btn telegram">📱 Contactar por Telegram</a>
-                <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="contact-btn whatsapp">💬 Contactar por WhatsApp</a>
-            </div>
+        <!-- BOTONES DE CONTACTO Y REPORTE -->
+        <div class="action-buttons">
+            <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="action-btn telegram">📱 Reportar por Telegram</a>
+            <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="action-btn whatsapp">💬 Reportar por WhatsApp</a>
         </div>
 
         <!-- FOOTER -->
@@ -73,9 +38,84 @@
                     <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="social-link">Telegram</a>
                     <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="social-link">WhatsApp</a>
                 </div>
-                <a href="creditos.html" class="btn-creditos">Adquirir créditos</a>
+                <a href="creditos.html" class="btn-creditos">Recargar</a>
             </div>
         </footer>
     </div>
+
+    <script>
+        // Lista de métodos de pago (nombre, dirección, moneda)
+        const paymentMethods = [
+            { name: 'Bitcoin (BTC)', address: 'bc1qk38sg3k0ehj8c3fa2dfxq0y0luzw9cs6adqpek', currency: 'BTC' },
+            { name: 'USDT (TRC20)', address: 'TYXt3bRjHoHz24DDAVcf3QPdJ7ZEjiWJFz', currency: 'USDT' },
+            { name: 'USDC (TRC20)', address: 'TYXt3bRjHoHz24DDAVcf3QPdJ7ZEjiWJFz', currency: 'USDC' },
+            { name: 'Litecoin (LTC)', address: 'ltc1q6ndwe2rhqxkgw46r5mchg4c3hl004s75y3rty0', currency: 'LTC' },
+            { name: 'TRX (TRC20)', address: 'TYXt3bRjHoHz24DDAVcf3QPdJ7ZEjiWJFz', currency: 'TRX' }
+        ];
+
+        // Función para acortar direcciones largas
+        function shortenAddress(addr) {
+            if (addr.length > 20) {
+                return addr.slice(0, 10) + '...' + addr.slice(-6);
+            }
+            return addr;
+        }
+
+        // Generar los métodos de pago
+        const container = document.getElementById('payment-grid');
+        paymentMethods.forEach(method => {
+            const card = document.createElement('div');
+            card.className = 'payment-card';
+
+            // Título
+            const title = document.createElement('h3');
+            title.textContent = method.name;
+            card.appendChild(title);
+
+            // Dirección (completa y acortada)
+            const addressFull = document.createElement('div');
+            addressFull.className = 'address-full';
+            addressFull.textContent = method.address;
+            card.appendChild(addressFull);
+
+            const addressShort = document.createElement('div');
+            addressShort.className = 'address-short';
+            addressShort.textContent = shortenAddress(method.address);
+            card.appendChild(addressShort);
+
+            // Contenedor del QR
+            const qrDiv = document.createElement('div');
+            qrDiv.className = 'qr-container';
+            qrDiv.id = `qr-${method.currency}`;
+            card.appendChild(qrDiv);
+
+            // Botón copiar
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.textContent = 'Copiar dirección';
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(method.address);
+                alert('Dirección copiada al portapapeles');
+            };
+            card.appendChild(copyBtn);
+
+            container.appendChild(card);
+        });
+
+        // Generar QR para cada método (después de agregarlos al DOM)
+        paymentMethods.forEach(method => {
+            const qrElement = document.getElementById(`qr-${method.currency}`);
+            if (qrElement) {
+                new QRCode(qrElement, {
+                    text: method.address,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#6c5ce7",
+                    colorLight: "#1a1e24",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        });
+    </script>
 </body>
 </html>
