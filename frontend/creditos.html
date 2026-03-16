@@ -6,7 +6,6 @@
     <title>Shadow - Recargar Créditos</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
-    <!-- Librería para generar QR -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
@@ -18,33 +17,28 @@
             <p class="info-text">💰 Mínimo de recarga: <strong>10 USD</strong>. Escanea el código QR o copia la dirección para enviar el pago. Luego reporta tu pago por Telegram o WhatsApp.</p>
         </div>
 
-        <!-- MÉTODOS DE PAGO CON QR -->
         <h2>Métodos de pago</h2>
-        <div class="payment-grid" id="payment-grid">
-            <!-- Los métodos se generarán con JavaScript -->
-        </div>
+        <div class="payment-grid" id="payment-grid"></div>
 
-        <!-- BOTONES DE CONTACTO Y REPORTE -->
         <div class="action-buttons">
-            <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="action-btn telegram">📱 Reportar por Telegram</a>
+            <a href="https://t.me/SHADOWTEAM" target="_blank" class="action-btn telegram">📱 Reportar por Telegram</a>
             <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="action-btn whatsapp">💬 Reportar por WhatsApp</a>
         </div>
 
-        <!-- FOOTER -->
         <footer class="footer">
+            <div class="footer-banner">
+                <a href="https://t.me/SHADOWTEAM" target="_blank">
+                    <img src="imagenes/bannerFOOTER.png" alt="Canal de Telegram" loading="lazy">
+                </a>
+            </div>
             <div class="footer-content">
-                <p>by <strong>SHADOW_2026</strong></p>
-                <div class="social-links">
-                    <a href="https://t.me/+J2hdNISmuMcyYjk5" target="_blank" class="social-link">Telegram</a>
-                    <a href="https://wa.me/message/HLUJXRRMBXIPJ1" target="_blank" class="social-link">WhatsApp</a>
-                </div>
-                <a href="creditos.html" class="btn-creditos">Recargar</a>
+               
+                <a href="creditos.html" class="btn-creditos">⚡ Adquirir créditos</a>
             </div>
         </footer>
     </div>
 
     <script>
-        // Lista de métodos de pago (nombre, dirección, moneda)
         const paymentMethods = [
             { name: 'Bitcoin (BTC)', address: 'bc1qk38sg3k0ehj8c3fa2dfxq0y0luzw9cs6adqpek', currency: 'BTC' },
             { name: 'USDT (TRC20)', address: 'TYXt3bRjHoHz24DDAVcf3QPdJ7ZEjiWJFz', currency: 'USDT' },
@@ -53,56 +47,29 @@
             { name: 'TRX (TRC20)', address: 'TYXt3bRjHoHz24DDAVcf3QPdJ7ZEjiWJFz', currency: 'TRX' }
         ];
 
-        // Función para acortar direcciones largas
         function shortenAddress(addr) {
-            if (addr.length > 20) {
-                return addr.slice(0, 10) + '...' + addr.slice(-6);
-            }
-            return addr;
+            return addr.length > 20 ? addr.slice(0, 10) + '...' + addr.slice(-6) : addr;
         }
 
-        // Generar los métodos de pago
         const container = document.getElementById('payment-grid');
         paymentMethods.forEach(method => {
             const card = document.createElement('div');
             card.className = 'payment-card';
-
-            // Título
-            const title = document.createElement('h3');
-            title.textContent = method.name;
-            card.appendChild(title);
-
-            // Dirección (completa y acortada)
-            const addressFull = document.createElement('div');
-            addressFull.className = 'address-full';
-            addressFull.textContent = method.address;
-            card.appendChild(addressFull);
-
-            const addressShort = document.createElement('div');
-            addressShort.className = 'address-short';
-            addressShort.textContent = shortenAddress(method.address);
-            card.appendChild(addressShort);
-
-            // Contenedor del QR
-            const qrDiv = document.createElement('div');
-            qrDiv.className = 'qr-container';
-            qrDiv.id = `qr-${method.currency}`;
-            card.appendChild(qrDiv);
-
-            // Botón copiar
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'copy-btn';
-            copyBtn.textContent = 'Copiar dirección';
+            card.innerHTML = `
+                <h3>${method.name}</h3>
+                <div class="address-full">${method.address}</div>
+                <div class="address-short">${shortenAddress(method.address)}</div>
+                <div class="qr-container" id="qr-${method.currency}"></div>
+                <button class="copy-btn">Copiar dirección</button>
+            `;
+            const copyBtn = card.querySelector('.copy-btn');
             copyBtn.onclick = () => {
                 navigator.clipboard.writeText(method.address);
                 alert('Dirección copiada al portapapeles');
             };
-            card.appendChild(copyBtn);
-
             container.appendChild(card);
         });
 
-        // Generar QR para cada método (después de agregarlos al DOM)
         paymentMethods.forEach(method => {
             const qrElement = document.getElementById(`qr-${method.currency}`);
             if (qrElement) {
