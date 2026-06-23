@@ -21,10 +21,10 @@ const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const productsContainer = document.getElementById('products');
 const noProductsMsg = document.getElementById('noProductsMessage');
+const categoryBtns = document.querySelectorAll('.category-btn');
 
 const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
-const categoryBtns = document.querySelectorAll('.category-btn');
 
 // ============================================================
 //  MOSTRAR DATOS DEL USUARIO
@@ -85,6 +85,20 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================================
+//  CATEGORÍAS
+// ============================================================
+let currentCategory = 'all';
+
+categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        applyFilters();
+    });
+});
+
+// ============================================================
 //  BUSCADOR
 // ============================================================
 let allProducts = [];
@@ -92,42 +106,30 @@ let allProducts = [];
 searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     clearSearchBtn.style.display = query ? 'block' : 'none';
-    filterProducts(query);
+    applyFilters();
 });
 
 clearSearchBtn.addEventListener('click', function() {
     searchInput.value = '';
     this.style.display = 'none';
-    filterProducts('');
+    applyFilters();
     searchInput.focus();
 });
 
-function filterProducts(query) {
-    if (!allProducts.length) return;
-    const filtered = query
-        ? allProducts.filter(p => p.name.toLowerCase().includes(query))
-        : allProducts;
-    renderProducts(filtered);
-    noProductsMsg.style.display = filtered.length === 0 ? 'block' : 'none';
-}
+function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    let filtered = allProducts;
 
-// ============================================================
-//  CATEGORÍAS
-// ============================================================
-categoryBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-        categoryBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        const category = this.dataset.category;
-        filterByCategory(category);
-    });
-});
+    // Filtro por categoría (simulado con una propiedad 'category' en el producto)
+    if (currentCategory !== 'all') {
+        filtered = filtered.filter(p => p.category && p.category.toLowerCase() === currentCategory);
+    }
 
-function filterByCategory(category) {
-    if (!allProducts.length) return;
-    const filtered = category === 'all'
-        ? allProducts
-        : allProducts.filter(p => p.category && p.category.toLowerCase() === category);
+    // Filtro por búsqueda (nombre)
+    if (query) {
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(query));
+    }
+
     renderProducts(filtered);
     noProductsMsg.style.display = filtered.length === 0 ? 'block' : 'none';
 }
@@ -139,16 +141,15 @@ async function loadProducts() {
     try {
         const response = await fetchWithAuth('/api/user/products');
         const products = await response.json();
-        // Simular categorías para demostración (si no vienen del backend)
-        const categories = ['netflix', 'spotify', 'amazon', 'other'];
-        products.forEach((p, index) => {
+        // Asignar categorías simuladas (por ahora, si no tienen, las asignamos aleatorias para demostración)
+        allProducts = products.map(p => {
             if (!p.category) {
-                p.category = categories[index % categories.length];
+                const cats = ['netflix', 'spotify', 'amazon', 'otros'];
+                p.category = cats[Math.floor(Math.random() * cats.length)];
             }
+            return p;
         });
-        allProducts = products;
-        renderProducts(products);
-        noProductsMsg.style.display = products.length === 0 ? 'block' : 'none';
+        applyFilters();
     } catch (error) {
         console.error('Error al cargar productos:', error);
     }
@@ -160,17 +161,22 @@ function renderProducts(products) {
     products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        const stockClass = p.stock > 0 ? 'in-stock' : 'out-of-stock';
-        const stockText = p.stock > 0 ? `${p.stock} disponibles` : 'Agotado';
-        const disabledAttr = p.stock <= 0 ? 'disabled' : '';
+        // Badge según categoría (simulado)
+        let badgeText = '';
+        if (p.category === 'netflix') badgeText = 'Netflix';
+        else if (p.category === 'spotify') badgeText = 'Spotify';
+        else if (p.category === 'amazon') badgeText = 'Amazon';
+        else badgeText = 'Otros';
+
         card.innerHTML = `
             <div class="product-name">${p.name}</div>
             <div class="product-price">${p.price} <small>créditos</small></div>
             <div class="product-stock">
                 <span><i class="fas fa-boxes"></i> Stock:</span>
-                <span class="stock-badge ${stockClass}">${stockText}</span>
+                <span class="stock-badge">${p.stock}</span>
+                <span style="margin-left:auto; font-size:0.7rem; color:var(--text-secondary);">${badgeText}</span>
             </div>
-            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})" ${disabledAttr}>
+            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
                 <i class="fas fa-shopping-cart"></i> Comprar ahora
             </button>
         `;

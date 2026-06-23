@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nix Sphere · Panel de usuario</title>
 
-    <!-- Font Awesome (iconos vectoriales) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <!-- Google Fonts: Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Estilos propios -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- Favicon (icono cuadrado de Nix) -->
+    <link rel="icon" type="image/png" href="imagenes/icono-nix.png" />
 </head>
 <body>
 
-    <!-- ===== OVERLAY (menú lateral) ===== -->
+    <!-- ===== OVERLAY MENÚ ===== -->
     <div id="menuOverlay" class="menu-overlay"></div>
 
     <!-- ===== MENÚ LATERAL ===== -->
     <aside id="sideMenu" class="side-menu">
         <div class="menu-header">
             <span class="menu-brand">
-                <i class="fas fa-circle-nodes" style="color: var(--accent-primary);"></i>
-                Nix Sphere
+                <img src="imagenes/logo-nix.png" alt="Nix Sphere" class="logo-img" height="32" />
+                <span class="brand-name">Nix Sphere</span>
             </span>
             <button id="closeMenuBtn" class="close-menu-btn">
                 <i class="fas fa-times"></i>
@@ -50,7 +51,7 @@
             <a href="#" class="menu-item" data-section="settings">
                 <i class="fas fa-sliders-h menu-icon"></i> Configuración
             </a>
-            <hr class="menu-divider">
+            <hr class="menu-divider" />
             <a href="#" id="logoutMenuBtn" class="menu-item logout">
                 <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
             </a>
@@ -66,14 +67,15 @@
                 <i class="fas fa-bars"></i>
             </button>
 
-            <div class="brand-wrapper">
-                <i class="fas fa-circle-nodes brand-icon"></i>
+            <!-- Logo + nombre -->
+            <div class="header-brand">
+                <img src="imagenes/logo-nix.png" alt="Nix Sphere" class="logo-img" height="32" />
                 <span class="brand-name">Nix Sphere</span>
             </div>
 
             <div class="search-wrapper">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input">
+                <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input" />
                 <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">
                     <i class="fas fa-times-circle"></i>
                 </button>
@@ -102,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    <hr />
                     <a href="#" class="dropdown-item" data-section="profile">
                         <i class="fas fa-user"></i> Mi perfil
                     </a>
@@ -112,7 +114,7 @@
                     <a href="#" class="dropdown-item" data-section="settings">
                         <i class="fas fa-sliders-h"></i> Configuración
                     </a>
-                    <hr>
+                    <hr />
                     <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
                         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                     </a>
@@ -123,54 +125,64 @@
         <!-- ===== CONTENIDO PRINCIPAL ===== -->
         <main class="main-content">
 
-            <!-- CATEGORÍAS (filtros) -->
-            <section class="categories-section">
-                <div class="categories-scroll">
-                    <button class="category-btn active" data-category="all">Todas</button>
-                    <button class="category-btn" data-category="netflix">Netflix</button>
-                    <button class="category-btn" data-category="spotify">Spotify</button>
-                    <button class="category-btn" data-category="amazon">Amazon</button>
-                    <button class="category-btn" data-category="other">Otros</button>
-                </div>
-            </section>
+            <!-- TARJETA PRINCIPAL (panel central) -->
+            <div class="main-card">
 
-            <!-- TARJETA PRINCIPAL (productos) -->
-            <section class="main-card">
-                <div class="card-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i>
-                        Productos disponibles
-                    </h2>
-                    <div class="card-badges">
-                        <span class="badge badge-new">Nuevo</span>
-                        <span class="badge badge-popular">Popular</span>
-                        <span class="badge badge-offer">Oferta</span>
+                <!-- Categorías -->
+                <section class="categories-section">
+                    <span class="categories-label">Categorías:</span>
+                    <div class="categories-list">
+                        <button class="category-btn active" data-category="all">Todas</button>
+                        <button class="category-btn" data-category="netflix">Netflix</button>
+                        <button class="category-btn" data-category="spotify">Spotify</button>
+                        <button class="category-btn" data-category="amazon">Amazon</button>
+                        <button class="category-btn" data-category="otros">Otros</button>
                     </div>
-                </div>
-                <div id="products" class="products-grid"></div>
-                <div id="noProductsMessage" class="message info" style="display:none;">
-                    <i class="fas fa-info-circle"></i> No hay productos disponibles
-                </div>
-            </section>
+                </section>
+
+                <!-- Título y productos -->
+                <section id="productsSection">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i>
+                            Productos disponibles
+                        </h2>
+                        <div class="section-badges">
+                            <span class="badge badge-new">Nuevo</span>
+                            <span class="badge badge-popular">Popular</span>
+                            <span class="badge badge-offer">Oferta</span>
+                        </div>
+                    </div>
+                    <div id="products" class="products-grid"></div>
+                    <div id="noProductsMessage" class="message info" style="display:none;">
+                        <i class="fas fa-info-circle"></i> No hay productos disponibles
+                    </div>
+                </section>
+
+            </div>
+            <!-- Fin tarjeta principal -->
 
         </main>
 
         <!-- ===== FOOTER ===== -->
         <footer class="footer">
-            <div class="footer-top">
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                </div>
-                <a href="creditos.html" class="btn-creditos">
-                    <i class="fas fa-bolt"></i> Adquirir créditos
+            <div class="footer-banner">
+                <a href="https://t.me/NixSphere" target="_blank">
+                    <img src="imagenes/bannerFOOTER.png" alt="Canal de Telegram" loading="lazy" />
                 </a>
             </div>
-            <div class="footer-bottom">
+            <div class="footer-content">
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-telegram-plane"></i></a>
+                </div>
                 <span class="footer-copy">
                     <i class="far fa-copyright"></i> Nix Sphere · Todos los derechos reservados
                 </span>
+                <a href="creditos.html" class="btn-creditos">
+                    <i class="fas fa-bolt"></i> Adquirir créditos
+                </a>
             </div>
         </footer>
     </div>
