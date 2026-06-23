@@ -6,32 +6,109 @@
     <title>Shadow - Usuario</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
+    <!-- Fuente Inter para mejor tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- ===== OVERLAY PARA EL MENÚ LATERAL ===== -->
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <!-- ===== MENÚ LATERAL (HAMBURGUESA) ===== -->
+    <aside id="sideMenu" class="side-menu">
+        <div class="menu-header">
+            <span class="menu-title">Shadow</span>
+            <button id="closeMenuBtn" class="close-menu-btn">&times;</button>
+        </div>
+        <nav class="menu-nav">
+            <a href="#" class="menu-item active" data-section="home">
+                <span class="menu-icon">🏠</span> Inicio
+            </a>
+            <a href="#" class="menu-item" data-section="search">
+                <span class="menu-icon">🔍</span> Buscar
+            </a>
+            <a href="#" class="menu-item" data-section="categories">
+                <span class="menu-icon">🏷️</span> Categorías
+            </a>
+            <a href="creditos.html" class="menu-item">
+                <span class="menu-icon">💰</span> Recargar
+            </a>
+            <a href="#" class="menu-item" data-section="purchases">
+                <span class="menu-icon">📦</span> Mis compras
+            </a>
+            <a href="#" class="menu-item" data-section="settings">
+                <span class="menu-icon">⚙️</span> Configuración
+            </a>
+            <hr class="menu-divider">
+            <a href="#" id="logoutMenuBtn" class="menu-item logout">
+                <span class="menu-icon">🚪</span> Cerrar sesión
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ===== CONTENEDOR PRINCIPAL ===== -->
     <div class="container">
-        <h1>SHADOW · USUARIO</h1>
-        <button id="logoutBtn">Cerrar sesión</button>
 
-        <div id="profile">
-            <p><strong>Usuario:</strong> <span id="username"></span></p>
-            <p><strong>Créditos disponibles:</strong> <span id="credits"></span></p>
-        </div>
+        <!-- HEADER -->
+        <header class="main-header">
+            <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-        <h2>Productos Disponibles</h2>
-        <div id="products" class="products-grid"></div>
-
-        <!-- Modal -->
-        <div id="codeModal" class="modal">
-            <div class="modal-content">
-                <span id="closeModal" class="close">&times;</span>
-                <h2>🎉 ¡Compra exitosa!</h2>
-                <p class="modal-message">Tu código es:</p>
-                <div class="code-box" id="purchasedCode">CÓDIGO</div>
-                <p class="remaining" id="remainingCredits"></p>
-                <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input">
+                <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">✕</button>
             </div>
-        </div>
 
+            <div class="profile-wrapper">
+                <button id="profileToggle" class="avatar-btn">
+                    <span class="avatar">👤</span>
+                    <span class="avatar-name" id="usernameDisplay"></span>
+                    <span class="avatar-arrow">▼</span>
+                </button>
+
+                <!-- Dropdown del perfil -->
+                <div id="profileDropdown" class="profile-dropdown">
+                    <div class="dropdown-header">
+                        <span class="dropdown-avatar">👤</span>
+                        <div>
+                            <div class="dropdown-username" id="dropdownUsername"></div>
+                            <div class="dropdown-credits">💰 <span id="dropdownCredits">0</span> créditos</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <a href="#" class="dropdown-item" data-section="profile">
+                        <span>👤</span> Mi perfil
+                    </a>
+                    <a href="#" class="dropdown-item" data-section="purchases">
+                        <span>📦</span> Mis compras
+                    </a>
+                    <a href="#" class="dropdown-item" data-section="settings">
+                        <span>⚙️</span> Configuración
+                    </a>
+                    <hr>
+                    <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
+                        <span>🚪</span> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CONTENIDO PRINCIPAL ===== -->
+        <main class="main-content">
+            <section id="productsSection">
+                <h2 class="section-title">🎯 Productos Disponibles</h2>
+                <div id="products" class="products-grid"></div>
+                <div id="noProductsMessage" class="message info" style="display:none;">No hay productos disponibles</div>
+            </section>
+        </main>
+
+        <!-- ===== FOOTER ===== -->
         <footer class="footer">
             <div class="footer-banner">
                 <a href="https://t.me/Shadow_ccs_Web" target="_blank">
@@ -39,11 +116,24 @@
                 </a>
             </div>
             <div class="footer-content">
-            
+                <span class="footer-copy">© Shadow - Todos los derechos reservados</span>
                 <a href="creditos.html" class="btn-creditos">⚡ Adquirir créditos</a>
             </div>
         </footer>
     </div>
+
+    <!-- ===== MODAL DE COMPRA ===== -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>🎉 ¡Compra exitosa!</h2>
+            <p class="modal-message">Tu código es:</p>
+            <div class="code-box" id="purchasedCode">CÓDIGO</div>
+            <p class="remaining" id="remainingCredits"></p>
+            <button class="copy-btn" onclick="copyCode()">📋 Copiar código</button>
+        </div>
+    </div>
+
     <script src="js/user.js"></script>
 </body>
 </html>
