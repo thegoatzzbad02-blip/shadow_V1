@@ -24,65 +24,7 @@ const noProductsMsg = document.getElementById('noProductsMessage');
 
 const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
-
-// ============================================================
-//  CARRUSEL
-// ============================================================
-const track = document.getElementById('carouselTrack');
-const slides = track.querySelectorAll('.carousel-slide');
-const prevBtn = document.getElementById('carouselPrev');
-const nextBtn = document.getElementById('carouselNext');
-const indicators = document.getElementById('carouselIndicators');
-
-let currentSlide = 0;
-let totalSlides = slides.length;
-let autoPlayInterval = null;
-
-// Crear indicadores (puntos)
-slides.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.dataset.index = i;
-    dot.addEventListener('click', () => goToSlide(i));
-    indicators.appendChild(dot);
-});
-
-function goToSlide(index) {
-    if (index < 0) index = totalSlides - 1;
-    if (index >= totalSlides) index = 0;
-    currentSlide = index;
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    // Actualizar indicadores
-    document.querySelectorAll('.dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-    });
-}
-
-function nextSlide() { goToSlide(currentSlide + 1); }
-function prevSlide() { goToSlide(currentSlide - 1); }
-
-prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
-nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
-
-function startAutoPlay() {
-    if (autoPlayInterval) clearInterval(autoPlayInterval);
-    autoPlayInterval = setInterval(nextSlide, 5000);
-}
-
-function stopAutoPlay() {
-    if (autoPlayInterval) {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = null;
-    }
-}
-
-// Iniciar auto-play
-startAutoPlay();
-
-// Pausar al pasar el mouse (opcional)
-const carouselContainer = document.querySelector('.carousel-container');
-carouselContainer.addEventListener('mouseenter', stopAutoPlay);
-carouselContainer.addEventListener('mouseleave', startAutoPlay);
+const categoryBtns = document.querySelectorAll('.category-btn');
 
 // ============================================================
 //  MOSTRAR DATOS DEL USUARIO
@@ -170,12 +112,40 @@ function filterProducts(query) {
 }
 
 // ============================================================
+//  CATEGORÍAS
+// ============================================================
+categoryBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const category = this.dataset.category;
+        filterByCategory(category);
+    });
+});
+
+function filterByCategory(category) {
+    if (!allProducts.length) return;
+    const filtered = category === 'all'
+        ? allProducts
+        : allProducts.filter(p => p.category && p.category.toLowerCase() === category);
+    renderProducts(filtered);
+    noProductsMsg.style.display = filtered.length === 0 ? 'block' : 'none';
+}
+
+// ============================================================
 //  CARGAR PRODUCTOS
 // ============================================================
 async function loadProducts() {
     try {
         const response = await fetchWithAuth('/api/user/products');
         const products = await response.json();
+        // Simular categorías para demostración (si no vienen del backend)
+        const categories = ['netflix', 'spotify', 'amazon', 'other'];
+        products.forEach((p, index) => {
+            if (!p.category) {
+                p.category = categories[index % categories.length];
+            }
+        });
         allProducts = products;
         renderProducts(products);
         noProductsMsg.style.display = products.length === 0 ? 'block' : 'none';
@@ -190,14 +160,17 @@ function renderProducts(products) {
     products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
+        const stockClass = p.stock > 0 ? 'in-stock' : 'out-of-stock';
+        const stockText = p.stock > 0 ? `${p.stock} disponibles` : 'Agotado';
+        const disabledAttr = p.stock <= 0 ? 'disabled' : '';
         card.innerHTML = `
             <div class="product-name">${p.name}</div>
             <div class="product-price">${p.price} <small>créditos</small></div>
             <div class="product-stock">
                 <span><i class="fas fa-boxes"></i> Stock:</span>
-                <span class="stock-badge">${p.stock}</span>
+                <span class="stock-badge ${stockClass}">${stockText}</span>
             </div>
-            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
+            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})" ${disabledAttr}>
                 <i class="fas fa-shopping-cart"></i> Comprar ahora
             </button>
         `;
