@@ -2,4 +2,4 @@ Flask
 Flask-CORS
 PyJWT
 python-dotenv
-pymongo[srv]
+Werkzeug

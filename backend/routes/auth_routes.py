@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from backend.models.user_model import UserModel
-from backend.utils.auth import check_password, generate_token
+from backend.utils.auth import generate_token
 import traceback
 
 auth_bp = Blueprint('auth', __name__)
@@ -12,11 +12,8 @@ def login():
         username = data.get('username')
         password = data.get('password')
 
-        user = UserModel.find_by_username(username)
+        user = UserModel.check_password(username, password)
         if not user:
-            return jsonify({'message': 'Credenciales inválidas'}), 401
-
-        if not check_password(user['password'], password):
             return jsonify({'message': 'Credenciales inválidas'}), 401
 
         token = generate_token(user['id'], user['role'])

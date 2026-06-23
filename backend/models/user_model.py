@@ -1,84 +1,91 @@
-import os
-from pymongo import MongoClient
+import sqlite3
+from backend.database import get_db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class UserModel:
-    _client = None
-    _db = None
-
-    @classmethod
-    def get_db(cls):
-        if cls._client is None:
-            uri = os.getenv('MONGO_URI')
-            dbname = os.getenv('MONGO_DB_NAME', 'shadow_platform')
-            print(f"[UserModel] Conectando con URI: {uri[:30] if uri else 'No URI'}...")
-            if not uri:
-                raise Exception("MONGO_URI no está definida en el entorno")
-            cls._client = MongoClient(uri)
-            cls._db = cls._client[dbname]
-        return cls._db
-
-    @classmethod
-    def get_collection(cls):
-        return cls.get_db().users
-
-    @classmethod
-    def _convert_id(cls, doc):
-        """Convierte _id a string en un documento si existe."""
-        if doc and '_id' in doc:
-            doc['_id'] = str(doc['_id'])
-        return doc
-
     @classmethod
     def find_by_username(cls, username):
-        doc = cls.get_collection().find_one({"username": username})
-        return cls._convert_id(doc)
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
 
     @classmethod
     def find_by_id(cls, user_id):
-        doc = cls.get_collection().find_one({"id": user_id})
-        return cls._convert_id(doc)
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    @classmethod
+    def check_password(cls, username, password):
+        user = cls.find_by_username(username)
+        if user and check_password_hash(user['password'], password):
+            return user
+        return None
 
     @classmethod
     def create_user(cls, username, password, role='user', credits=0):
-        collection = cls.get_collection()
-        last_user = collection.find_one(sort=[("id", -1)])
-        new_id = (last_user["id"] + 1) if last_user else 1
+        conn = get_db()
+        cursor = conn.cursor()
         hashed = generate_password_hash(password)
-        new_user = {
-            "id": new_id,
-            "username": username,
-            "password": hashed,
-            "role": role,
-            "credits": credits
-        }
-        collection.insert_one(new_user)
-        return new_user  # No contiene _id
+        try:
+            cursor.execute(
+                "INSERT INTO users (username, password, role, credits) VALUES (?, ?, ?, ?)",
+                (username, hashed, role, credits)
+            )
+            conn.commit()
+            user_id = cursor.lastrowid
+            conn.close()
+            return {
+                'id': user_id,
+                'username': username,
+                'role': role,
+                'credits': credits
+            }
+        except sqlite3.IntegrityError:
+            conn.close()
+            return None
 
     @classmethod
     def update_credits(cls, user_id, new_credits):
-        result = cls.get_collection().update_one(
-            {"id": user_id},
-            {"$set": {"credits": new_credits}}
-        )
-        return result.modified_count > 0
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET credits = ? WHERE id = ?", (new_credits, user_id))
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
 
     @classmethod
     def update_user(cls, user_id, new_username, new_credits):
-        result = cls.get_collection().update_one(
-            {"id": user_id},
-            {"$set": {"username": new_username, "credits": new_credits}}
-        )
-        return result.modified_count > 0
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET username = ?, credits = ? WHERE id = ?", (new_username, new_credits, user_id))
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
 
     @classmethod
     def delete_user(cls, user_id):
-        result = cls.get_collection().delete_one({"id": user_id})
-        return result.deleted_count > 0
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
 
     @classmethod
     def get_all_users(cls):
-        docs = list(cls.get_collection().find({}, {"password": 0}))
-        for doc in docs:
-            cls._convert_id(doc)
-        return docs
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, username, role, credits FROM users")
+        rows = cursor.fetchall()
+        conn.close()
+        return [dict(row) for row in rows]

@@ -1,94 +1,135 @@
-import os
-from pymongo import MongoClient
+import sqlite3
+import json
+from backend.database import get_db
 
 class ProductModel:
-    _client = None
-    _db = None
+    @classmethod
+    def _convert_codes(cls, codes):
+        if codes is None:
+            return '[]'
+        return json.dumps(codes)
 
     @classmethod
-    def get_db(cls):
-        if cls._client is None:
-            uri = os.getenv('MONGO_URI')
-            dbname = os.getenv('MONGO_DB_NAME', 'shadow_platform')
-            print(f"[ProductModel] Conectando con URI: {uri[:30] if uri else 'No URI'}...")
-            if not uri:
-                raise Exception("MONGO_URI no está definida en el entorno")
-            cls._client = MongoClient(uri)
-            cls._db = cls._client[dbname]
-        return cls._db
-
-    @classmethod
-    def get_collection(cls):
-        return cls.get_db().products
-
-    @classmethod
-    def _convert_id(cls, doc):
-        if doc and '_id' in doc:
-            doc['_id'] = str(doc['_id'])
-        return doc
+    def _parse_codes(cls, codes_str):
+        if codes_str is None:
+            return []
+        try:
+            return json.loads(codes_str)
+        except json.JSONDecodeError:
+            return []
 
     @classmethod
     def create_product(cls, name, price, stock, codes=None):
-        collection = cls.get_collection()
-        last_product = collection.find_one(sort=[("id", -1)])
-        new_id = (last_product["id"] + 1) if last_product else 1
-        new_product = {
-            "id": new_id,
-            "name": name,
-            "price": price,
-            "stock": stock,
-            "codes": codes if codes is not None else []
+        conn = get_db()
+        cursor = conn.cursor()
+        codes_json = cls._convert_codes(codes)
+        cursor.execute(
+            "INSERT INTO products (name, price, stock, codes) VALUES (?, ?, ?, ?)",
+            (name, price, stock, codes_json)
+        )
+        conn.commit()
+        product_id = cursor.lastrowid
+        conn.close()
+        return {
+            'id': product_id,
+            'name': name,
+            'price': price,
+            'stock': stock,
+            'codes': codes if codes is not None else []
         }
-        collection.insert_one(new_product)
-        return new_product  # No contiene _id
 
     @classmethod
     def get_by_id(cls, product_id):
-        doc = cls.get_collection().find_one({"id": product_id})
-        return cls._convert_id(doc)
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM products WHERE id = ?", (product_id,))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            product = dict(row)
+            product['codes'] = cls._parse_codes(product.get('codes'))
+            return product
+        return None
 
     @classmethod
     def get_all_products(cls):
-        docs = list(cls.get_collection().find())
-        for doc in docs:
-            cls._convert_id(doc)
-        return docs
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM products")
+        rows = cursor.fetchall()
+        conn.close()
+        products = []
+        for row in rows:
+            product = dict(row)
+            product['codes'] = cls._parse_codes(product.get('codes'))
+            products.append(product)
+        return products
 
     @classmethod
     def get_available(cls):
-        docs = list(cls.get_collection().find({"stock": {"$gt": 0}}))
-        for doc in docs:
-            cls._convert_id(doc)
-        return docs
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM products WHERE stock > 0")
+        rows = cursor.fetchall()
+        conn.close()
+        products = []
+        for row in rows:
+            product = dict(row)
+            product['codes'] = cls._parse_codes(product.get('codes'))
+            products.append(product)
+        return products
 
     @classmethod
     def purchase(cls, product_id):
-        collection = cls.get_collection()
-        product = collection.find_one({"id": product_id})
-        if not product or product["stock"] <= 0 or not product["codes"]:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT stock, codes FROM products WHERE id = ?", (product_id,))
+        row = cursor.fetchone()
+        if not row:
+            conn.close()
             return None
-        code = product["codes"].pop(0)
-        result = collection.update_one(
-            {"id": product_id},
-            {
-                "$set": {"codes": product["codes"]},
-                "$inc": {"stock": -1}
-            }
+        stock = row['stock']
+        codes = cls._parse_codes(row['codes'])
+        if stock <= 0 or not codes:
+            conn.close()
+            return None
+        code = codes.pop(0)
+        new_stock = stock - 1
+        new_codes_json = cls._convert_codes(codes)
+        cursor.execute(
+            "UPDATE products SET stock = ?, codes = ? WHERE id = ?",
+            (new_stock, new_codes_json, product_id)
         )
-        return code if result.modified_count > 0 else None
+        conn.commit()
+        conn.close()
+        return code
 
     @classmethod
     def update_product(cls, product_id, new_name, new_price, new_stock, new_codes=None):
-        update_data = {"name": new_name, "price": new_price, "stock": new_stock}
+        conn = get_db()
+        cursor = conn.cursor()
         if new_codes is not None:
-            update_data["codes"] = new_codes
-        result = cls.get_collection().update_one(
-            {"id": product_id},
-            {"$set": update_data}
-        )
-        return result.modified_count > 0
+            codes_json = cls._convert_codes(new_codes)
+            cursor.execute(
+                "UPDATE products SET name = ?, price = ?, stock = ?, codes = ? WHERE id = ?",
+                (new_name, new_price, new_stock, codes_json, product_id)
+            )
+        else:
+            cursor.execute(
+                "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?",
+                (new_name, new_price, new_stock, product_id)
+            )
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
 
     @classmethod
     def delete_product(cls, product_id):
-        result = cls.get_collection().delete_one({"id": product_id})
-        return result.deleted_count > 0
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM products WHERE id = ?", (product_id,))
+        conn.commit()
+        affected = cursor.rowcount
+        conn.close()
+        return affected > 0
