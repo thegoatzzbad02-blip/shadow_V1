@@ -1,4 +1,6 @@
-// ===== AUTENTICACIÓN =====
+// ============================================================
+//  AUTENTICACIÓN Y DATOS DEL USUARIO
+// ============================================================
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -6,7 +8,9 @@ if (!token || !user || user.role !== 'user') {
     window.location.href = 'index.html';
 }
 
-// ===== ELEMENTOS DOM =====
+// ============================================================
+//  ELEMENTOS DOM
+// ============================================================
 const menuToggle = document.getElementById('menuToggle');
 const sideMenu = document.getElementById('sideMenu');
 const menuOverlay = document.getElementById('menuOverlay');
@@ -17,20 +21,22 @@ const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const productsContainer = document.getElementById('products');
 const noProductsMsg = document.getElementById('noProductsMessage');
-const logoutBtn = document.getElementById('logoutBtn');
+
+// Botones de cerrar sesión (del menú y del dropdown)
 const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
 
-// ===== DATOS =====
-let allProducts = []; // Guardar todos los productos para filtrar
-
-// ===== MOSTRAR DATOS DEL USUARIO =====
+// ============================================================
+//  MOSTRAR DATOS DEL USUARIO
+// ============================================================
 document.getElementById('usernameDisplay').textContent = user.username;
 document.getElementById('dropdownUsername').textContent = user.username;
 document.getElementById('dropdownCredits').textContent = user.credits;
 document.getElementById('credits').textContent = user.credits;
 
-// ===== MENÚ HAMBURGUESA =====
+// ============================================================
+//  MENÚ HAMBURGUESA
+// ============================================================
 function openMenu() {
     sideMenu.classList.add('open');
     menuOverlay.classList.add('open');
@@ -55,7 +61,9 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// ===== DROPDOWN PERFIL =====
+// ============================================================
+//  DROPDOWN PERFIL
+// ============================================================
 function toggleDropdown(e) {
     e.stopPropagation();
     const isOpen = profileDropdown.classList.contains('open');
@@ -80,7 +88,11 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ===== BUSCADOR =====
+// ============================================================
+//  BUSCADOR
+// ============================================================
+let allProducts = [];
+
 searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     clearSearchBtn.style.display = query ? 'block' : 'none';
@@ -96,34 +108,23 @@ clearSearchBtn.addEventListener('click', function() {
 
 function filterProducts(query) {
     if (!allProducts.length) return;
-
     const filtered = query
         ? allProducts.filter(p => p.name.toLowerCase().includes(query))
         : allProducts;
-
     renderProducts(filtered);
-
-    if (filtered.length === 0) {
-        productsContainer.innerHTML = '';
-        noProductsMsg.style.display = 'block';
-    } else {
-        noProductsMsg.style.display = 'none';
-    }
+    noProductsMsg.style.display = filtered.length === 0 ? 'block' : 'none';
 }
 
-// ===== CARGAR PRODUCTOS =====
+// ============================================================
+//  CARGAR PRODUCTOS
+// ============================================================
 async function loadProducts() {
     try {
         const response = await fetchWithAuth('/api/user/products');
         const products = await response.json();
         allProducts = products;
         renderProducts(products);
-
-        if (products.length === 0) {
-            noProductsMsg.style.display = 'block';
-        } else {
-            noProductsMsg.style.display = 'none';
-        }
+        noProductsMsg.style.display = products.length === 0 ? 'block' : 'none';
     } catch (error) {
         console.error('Error al cargar productos:', error);
     }
@@ -132,7 +133,6 @@ async function loadProducts() {
 function renderProducts(products) {
     productsContainer.innerHTML = '';
     if (products.length === 0) return;
-
     products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
@@ -149,7 +149,9 @@ function renderProducts(products) {
     });
 }
 
-// ===== COMPRA =====
+// ============================================================
+//  COMPRA
+// ============================================================
 window.buyProduct = async function(productId, price) {
     if (user.credits < price) {
         alert('Créditos insuficientes');
@@ -178,7 +180,9 @@ window.buyProduct = async function(productId, price) {
     }
 };
 
-// ===== MODAL =====
+// ============================================================
+//  MODAL
+// ============================================================
 document.getElementById('closeModal').addEventListener('click', closeModal);
 window.addEventListener('click', (e) => {
     if (e.target === document.getElementById('codeModal')) {
@@ -199,7 +203,9 @@ window.copyCode = function() {
     });
 };
 
-// ===== FETCH CON AUTENTICACIÓN =====
+// ============================================================
+//  FETCH CON AUTENTICACIÓN
+// ============================================================
 async function fetchWithAuth(url, options = {}) {
     options.headers = {
         ...options.headers,
@@ -215,27 +221,32 @@ async function fetchWithAuth(url, options = {}) {
     return response;
 }
 
-// ===== CERRAR SESIÓN =====
+// ============================================================
+//  CERRAR SESIÓN
+// ============================================================
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     window.location.href = 'index.html';
 }
 
-logoutBtn.addEventListener('click', logout);
+// Asignar eventos a los botones de cerrar sesión (del menú y dropdown)
 logoutMenuBtn.addEventListener('click', logout);
 logoutDropdownBtn.addEventListener('click', logout);
 
-// ===== INICIALIZAR =====
+// ============================================================
+//  INICIALIZAR
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
 });
 
-// ===== CERRAR MENÚS AL HACER CLIC EN UN ITEM DEL MENÚ (OPCIONAL) =====
+// ============================================================
+//  OPCIONAL: CERRAR MENÚS AL HACER CLIC EN UN ITEM
+// ============================================================
 document.querySelectorAll('.menu-item[data-section]').forEach(item => {
     item.addEventListener('click', () => {
         closeMenu();
-        // Aquí puedes redirigir o mostrar secciones según el data-section
         console.log('Sección:', item.dataset.section);
     });
 });
