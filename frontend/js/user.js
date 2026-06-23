@@ -22,17 +22,23 @@ const clearSearchBtn = document.getElementById('clearSearchBtn');
 const productsContainer = document.getElementById('products');
 const noProductsMsg = document.getElementById('noProductsMessage');
 
-// Botones de cerrar sesión (del menú y del dropdown)
 const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
 
 // ============================================================
-//  MOSTRAR DATOS DEL USUARIO
+//  MOSTRAR DATOS DEL USUARIO (CORREGIDO)
 // ============================================================
-document.getElementById('usernameDisplay').textContent = user.username;
+// Avatar (usando clase)
+const avatarName = document.querySelector('.avatar-name');
+if (avatarName) avatarName.textContent = user.username;
+
+// Dropdown
 document.getElementById('dropdownUsername').textContent = user.username;
 document.getElementById('dropdownCredits').textContent = user.credits;
-document.getElementById('credits').textContent = user.credits;
+
+// Saldo principal (si existe)
+const creditsElement = document.getElementById('credits');
+if (creditsElement) creditsElement.textContent = user.credits;
 
 // ============================================================
 //  MENÚ HAMBURGUESA
@@ -53,7 +59,6 @@ menuToggle.addEventListener('click', openMenu);
 closeMenuBtn.addEventListener('click', closeMenu);
 menuOverlay.addEventListener('click', closeMenu);
 
-// Cerrar con tecla ESC
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeMenu();
@@ -66,11 +71,10 @@ document.addEventListener('keydown', (e) => {
 // ============================================================
 function toggleDropdown(e) {
     e.stopPropagation();
-    const isOpen = profileDropdown.classList.contains('open');
     profileDropdown.classList.toggle('open');
     profileToggle.classList.toggle('active');
-    if (!isOpen) {
-        closeMenu(); // Cerrar menú lateral si está abierto
+    if (profileDropdown.classList.contains('open')) {
+        closeMenu();
     }
 }
 
@@ -81,7 +85,6 @@ function closeDropdown() {
 
 profileToggle.addEventListener('click', toggleDropdown);
 
-// Cerrar dropdown al hacer clic fuera
 document.addEventListener('click', (e) => {
     if (!profileDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
         closeDropdown();
@@ -164,14 +167,17 @@ window.buyProduct = async function(productId, price) {
         if (response.ok) {
             user.credits -= price;
             localStorage.setItem('user', JSON.stringify(user));
-            document.getElementById('credits').textContent = user.credits;
+            
+            // Actualizar UI
             document.getElementById('dropdownCredits').textContent = user.credits;
+            const creditsEl = document.getElementById('credits');
+            if (creditsEl) creditsEl.textContent = user.credits;
 
             document.getElementById('purchasedCode').textContent = data.code;
             document.getElementById('remainingCredits').innerHTML = `Créditos restantes: <strong>${user.credits}</strong>`;
             document.getElementById('codeModal').style.display = 'flex';
 
-            loadProducts(); // Recargar para actualizar stock
+            loadProducts();
         } else {
             alert(data.message || 'Error al comprar');
         }
@@ -230,7 +236,6 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// Asignar eventos a los botones de cerrar sesión (del menú y dropdown)
 logoutMenuBtn.addEventListener('click', logout);
 logoutDropdownBtn.addEventListener('click', logout);
 
@@ -242,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-//  OPCIONAL: CERRAR MENÚS AL HACER CLIC EN UN ITEM
+//  CERRAR MENÚS AL HACER CLICK EN ITEMS
 // ============================================================
 document.querySelectorAll('.menu-item[data-section]').forEach(item => {
     item.addEventListener('click', () => {
