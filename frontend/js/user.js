@@ -1,5 +1,5 @@
 // ============================================================
-//  AUTENTICACIÓN Y DATOS DEL USUARIO
+//  AUTENTICACIÓN
 // ============================================================
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
@@ -26,19 +26,11 @@ const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
 
 // ============================================================
-//  MOSTRAR DATOS DEL USUARIO (CORREGIDO)
+//  MOSTRAR DATOS DEL USUARIO
 // ============================================================
-// Avatar (usando clase)
-const avatarName = document.querySelector('.avatar-name');
-if (avatarName) avatarName.textContent = user.username;
-
-// Dropdown
+document.getElementById('usernameDisplay').textContent = user.username;
 document.getElementById('dropdownUsername').textContent = user.username;
 document.getElementById('dropdownCredits').textContent = user.credits;
-
-// Saldo principal (si existe)
-const creditsElement = document.getElementById('credits');
-if (creditsElement) creditsElement.textContent = user.credits;
 
 // ============================================================
 //  MENÚ HAMBURGUESA
@@ -92,6 +84,82 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================================
+//  CARRUSEL
+// ============================================================
+const slides = document.querySelector('.carousel-slides');
+const prevBtn = document.getElementById('carouselPrev');
+const nextBtn = document.getElementById('carouselNext');
+const indicatorsContainer = document.getElementById('carouselIndicators');
+let currentIndex = 0;
+const totalSlides = document.querySelectorAll('.carousel-slide').length;
+let autoPlayInterval = null;
+
+function createIndicators() {
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.dataset.index = i;
+        dot.addEventListener('click', () => goToSlide(i));
+        indicatorsContainer.appendChild(dot);
+    }
+    updateIndicators();
+}
+
+function updateIndicators() {
+    document.querySelectorAll('.carousel-indicators span').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+    });
+}
+
+function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentIndex = index;
+    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    updateIndicators();
+}
+
+function nextSlide() {
+    goToSlide(currentIndex + 1);
+}
+
+function prevSlide() {
+    goToSlide(currentIndex - 1);
+}
+
+function startAutoPlay() {
+    if (autoPlayInterval) clearInterval(autoPlayInterval);
+    autoPlayInterval = setInterval(nextSlide, 5000);
+}
+
+function stopAutoPlay() {
+    if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+    }
+}
+
+prevBtn.addEventListener('click', () => {
+    prevSlide();
+    stopAutoPlay();
+    startAutoPlay();
+});
+
+nextBtn.addEventListener('click', () => {
+    nextSlide();
+    stopAutoPlay();
+    startAutoPlay();
+});
+
+// Pausar al hover
+const carouselContainer = document.querySelector('.carousel-container');
+carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+// Inicializar carrusel
+createIndicators();
+startAutoPlay();
+
+// ============================================================
 //  BUSCADOR
 // ============================================================
 let allProducts = [];
@@ -143,10 +211,12 @@ function renderProducts(products) {
             <div class="product-name">${p.name}</div>
             <div class="product-price">${p.price} <small>créditos</small></div>
             <div class="product-stock">
-                <span>Stock:</span>
+                <i class="fas fa-boxes"></i> Stock:
                 <span class="stock-badge">${p.stock}</span>
             </div>
-            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">Comprar ahora</button>
+            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
+                <i class="fas fa-shopping-cart"></i> Comprar ahora
+            </button>
         `;
         productsContainer.appendChild(card);
     });
@@ -168,10 +238,7 @@ window.buyProduct = async function(productId, price) {
             user.credits -= price;
             localStorage.setItem('user', JSON.stringify(user));
             
-            // Actualizar UI
             document.getElementById('dropdownCredits').textContent = user.credits;
-            const creditsEl = document.getElementById('credits');
-            if (creditsEl) creditsEl.textContent = user.credits;
 
             document.getElementById('purchasedCode').textContent = data.code;
             document.getElementById('remainingCredits').innerHTML = `Créditos restantes: <strong>${user.credits}</strong>`;
@@ -203,7 +270,7 @@ function closeModal() {
 window.copyCode = function() {
     const code = document.getElementById('purchasedCode').textContent;
     navigator.clipboard.writeText(code).then(() => {
-        alert('✅ Código copiado al portapapeles');
+        alert('Código copiado al portapapeles');
     }).catch(() => {
         alert('No se pudo copiar, selecciona manualmente');
     });
@@ -246,9 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
 });
 
-// ============================================================
-//  CERRAR MENÚS AL HACER CLICK EN ITEMS
-// ============================================================
+// Cerrar menús al hacer clic en items (opcional)
 document.querySelectorAll('.menu-item[data-section]').forEach(item => {
     item.addEventListener('click', () => {
         closeMenu();
