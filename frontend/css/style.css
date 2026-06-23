@@ -1,20 +1,22 @@
-/* ================================================================
-   SHADOW · ESTILO MODERNO PROFESIONAL
-   ================================================================ */
+/* ========================================================================
+   NIX SPHERE · Estilo moderno (inspirado en Kick) - Paleta azul marino
+   ======================================================================== */
 
 :root {
-    --bg-primary: #0a0c10;
-    --bg-secondary: #14171c;
-    --bg-card: #1e2229;
-    --bg-input: #2a2f3a;
-    --text-primary: #ffffff;
-    --text-secondary: #9aa2b5;
-    --accent: #3b82f6;
-    --accent-hover: #60a5fa;
-    --accent-bg: rgba(59, 130, 246, 0.12);
-    --border: #2a2f3a;
-    --success: #10b981;
-    --danger: #ef4444;
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: #1a2332;
+    --bg-input: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #60a5fa;
+    --accent-hover: #93c5fd;
+    --accent-bg: rgba(59, 130, 246, 0.10);
+    --border: #1e293b;
+    --success: #22d3ee;
+    --warning: #fbbf24;
+    --danger: #f87171;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
     --radius: 16px;
     --radius-sm: 10px;
@@ -27,7 +29,7 @@
 }
 
 body {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
@@ -35,6 +37,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     padding: 20px;
+    background-image: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 60%);
 }
 
 .container {
@@ -74,10 +77,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .hamburger-btn:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
     color: var(--text-primary);
 }
 
@@ -94,7 +98,7 @@ body {
 }
 
 .search-wrapper:focus-within {
-    border-color: var(--accent);
+    border-color: var(--accent-primary);
     background: var(--bg-secondary);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
@@ -138,7 +142,7 @@ body {
     color: var(--text-primary);
 }
 
-/* ===== PERFIL ===== */
+/* ===== PERFIL / AVATAR ===== */
 .profile-wrapper {
     position: relative;
     flex-shrink: 0;
@@ -158,7 +162,7 @@ body {
 }
 
 .avatar-btn:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
 }
 
 .avatar-circle {
@@ -169,7 +173,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--accent);
+    color: var(--accent-primary);
     font-size: 1.1rem;
 }
 
@@ -193,6 +197,7 @@ body {
     transform: rotate(180deg);
 }
 
+/* Dropdown perfil */
 .profile-dropdown {
     position: absolute;
     top: calc(100% + 12px);
@@ -255,7 +260,7 @@ body {
 }
 
 .dropdown-item:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
 }
 
 .dropdown-item.logout {
@@ -267,7 +272,7 @@ body {
 }
 
 .dropdown-item.logout:hover {
-    background: rgba(239, 68, 68, 0.08);
+    background: rgba(248, 113, 113, 0.08);
 }
 
 .profile-dropdown hr {
@@ -280,7 +285,7 @@ body {
 .menu-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     z-index: 999;
     display: none;
     backdrop-filter: blur(4px);
@@ -328,7 +333,7 @@ body {
 
 .menu-brand i {
     font-size: 1.3rem;
-    color: var(--accent);
+    color: var(--accent-primary);
 }
 
 .close-menu-btn {
@@ -374,16 +379,16 @@ body {
 }
 
 .menu-item:hover {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
 }
 
 .menu-item.active {
     background: var(--accent-bg);
-    color: var(--accent);
+    color: var(--accent-primary);
 }
 
 .menu-item.active .menu-icon {
-    color: var(--accent);
+    color: var(--accent-primary);
 }
 
 .menu-item.logout {
@@ -395,7 +400,7 @@ body {
 }
 
 .menu-item.logout:hover {
-    background: rgba(239, 68, 68, 0.08);
+    background: rgba(248, 113, 113, 0.08);
 }
 
 .menu-divider {
@@ -406,93 +411,84 @@ body {
 
 /* ===== CARRUSEL ===== */
 .carousel-section {
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .carousel-container {
     position: relative;
     border-radius: var(--radius);
     overflow: hidden;
-    background: var(--bg-card);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.carousel-slides {
+.carousel-track {
     display: flex;
-    transition: transform 0.5s ease;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
 }
 
 .carousel-slide {
-    min-width: 100%;
-    height: 240px;
+    flex: 0 0 100%;
+    min-height: 180px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
-    padding: 30px;
+    padding: 30px 40px;
     color: white;
-}
-
-.carousel-slide:nth-child(2) {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-}
-
-.carousel-slide:nth-child(3) {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    position: relative;
 }
 
 .slide-content {
-    max-width: 600px;
-    text-align: left;
+    max-width: 60%;
 }
 
 .slide-content h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 8px;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.3px;
 }
 
 .slide-content p {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 18px;
+    font-size: 1rem;
+    opacity: 0.85;
+    margin-bottom: 12px;
 }
 
-.slide-btn {
+.slide-tag {
     display: inline-block;
-    background: var(--accent);
-    color: white;
-    padding: 10px 28px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(4px);
+    padding: 4px 16px;
     border-radius: 40px;
-    text-decoration: none;
+    font-size: 0.8rem;
     font-weight: 600;
-    transition: background 0.2s, transform 0.15s;
-}
-
-.slide-btn:hover {
-    background: var(--accent-hover);
-    transform: scale(1.03);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .carousel-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
     border: none;
     color: white;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    font-size: 1.2rem;
     cursor: pointer;
+    font-size: 1.2rem;
     transition: background 0.2s;
     z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .carousel-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .carousel-btn.prev {
@@ -505,26 +501,26 @@ body {
 
 .carousel-indicators {
     position: absolute;
-    bottom: 16px;
+    bottom: 14px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
+    gap: 8px;
     z-index: 10;
 }
 
-.carousel-indicators span {
+.carousel-indicators .dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: rgba(255,255,255,0.3);
     cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
+    transition: background 0.25s, transform 0.25s;
 }
 
-.carousel-indicators span.active {
+.carousel-indicators .dot.active {
     background: white;
-    transform: scale(1.2);
+    transform: scale(1.15);
 }
 
 /* ===== PRODUCTOS ===== */
@@ -554,7 +550,7 @@ body {
 }
 
 .product-card:hover {
-    border-color: var(--accent);
+    border-color: var(--accent-primary);
     transform: translateY(-4px);
     box-shadow: 0 8px 25px rgba(59, 130, 246, 0.10);
 }
@@ -568,7 +564,7 @@ body {
 .product-price {
     font-size: 1.6rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-primary);
     margin-bottom: 6px;
 }
 
@@ -588,7 +584,7 @@ body {
 }
 
 .stock-badge {
-    background: rgba(16, 185, 129, 0.12);
+    background: rgba(34, 211, 238, 0.12);
     color: var(--success);
     padding: 3px 12px;
     border-radius: 40px;
@@ -597,7 +593,7 @@ body {
 }
 
 .buy-btn {
-    background: var(--accent);
+    background: var(--accent-primary);
     color: white;
     border: none;
     border-radius: 40px;
@@ -615,8 +611,12 @@ body {
 }
 
 .buy-btn:hover {
-    background: var(--accent-hover);
+    background: var(--accent-secondary);
     transform: scale(1.02);
+}
+
+.buy-btn:active {
+    transform: scale(0.97);
 }
 
 .message.info {
@@ -702,7 +702,7 @@ body {
 }
 
 .copy-btn {
-    background: var(--accent);
+    background: var(--accent-primary);
     color: white;
     border: none;
     border-radius: 40px;
@@ -717,7 +717,7 @@ body {
 }
 
 .copy-btn:hover {
-    background: var(--accent-hover);
+    background: var(--accent-secondary);
 }
 
 /* ===== FOOTER ===== */
@@ -756,7 +756,7 @@ body {
 }
 
 .btn-creditos {
-    background: var(--accent);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     color: white;
     font-weight: 600;
     padding: 10px 26px;
@@ -786,9 +786,9 @@ body {
     .products-grid { grid-template-columns: 1fr; }
     .footer-content { flex-direction: column; align-items: stretch; }
     .btn-creditos { justify-content: center; }
-    .carousel-slide { height: 180px; }
-    .slide-content h2 { font-size: 1.5rem; }
-    .carousel-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+    .carousel-slide { min-height: 140px; padding: 20px; }
+    .slide-content { max-width: 80%; }
+    .slide-content h2 { font-size: 1.3rem; }
 }
 
 @media (max-width: 480px) {
@@ -796,6 +796,8 @@ body {
     .avatar-btn { padding: 4px 8px; }
     .profile-dropdown { right: -8px; min-width: 180px; }
     .modal-content { padding: 28px 20px; }
-    .carousel-slide { height: 150px; }
-    .slide-content h2 { font-size: 1.2rem; }
+    .carousel-slide { min-height: 120px; padding: 16px; }
+    .slide-content h2 { font-size: 1.1rem; }
+    .slide-content p { font-size: 0.85rem; }
+    .carousel-btn { width: 32px; height: 32px; font-size: 0.9rem; }
 }

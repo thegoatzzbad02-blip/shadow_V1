@@ -1,204 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shadow · Panel de usuario</title>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <!-- Google Font: Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nix Sphere · Panel de usuario</title>
+
+    <!-- Font Awesome 6 (iconos vectoriales) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts: Plus Jakarta Sans (moderna, profesional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png" />
 </head>
 <body>
 
-  <!-- Overlay -->
-  <div id="menuOverlay" class="menu-overlay"></div>
+    <!-- ===== OVERLAY (menú lateral) ===== -->
+    <div id="menuOverlay" class="menu-overlay"></div>
 
-  <!-- Menú lateral -->
-  <aside id="sideMenu" class="side-menu">
-    <div class="menu-header">
-      <span class="menu-brand">
-        <i class="fas fa-bolt" style="color: var(--accent);"></i> Shadow
-      </span>
-      <button id="closeMenuBtn" class="close-menu-btn">
-        <i class="fas fa-times"></i>
-      </button>
+    <!-- ===== MENÚ LATERAL ===== -->
+    <aside id="sideMenu" class="side-menu">
+        <div class="menu-header">
+            <span class="menu-brand">
+                <i class="fas fa-circle-nodes" style="color: var(--accent-primary);"></i>
+                Nix Sphere
+            </span>
+            <button id="closeMenuBtn" class="close-menu-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="menu-nav">
+            <a href="#" class="menu-item active" data-section="home">
+                <i class="fas fa-home menu-icon"></i> Inicio
+            </a>
+            <a href="#" class="menu-item" data-section="search">
+                <i class="fas fa-search menu-icon"></i> Buscar
+            </a>
+            <a href="#" class="menu-item" data-section="categories">
+                <i class="fas fa-tags menu-icon"></i> Categorías
+            </a>
+            <a href="creditos.html" class="menu-item">
+                <i class="fas fa-coins menu-icon"></i> Recargar
+            </a>
+            <a href="#" class="menu-item" data-section="purchases">
+                <i class="fas fa-shopping-bag menu-icon"></i> Mis compras
+            </a>
+            <a href="#" class="menu-item" data-section="settings">
+                <i class="fas fa-sliders-h menu-icon"></i> Configuración
+            </a>
+            <hr class="menu-divider" />
+            <a href="#" id="logoutMenuBtn" class="menu-item logout">
+                <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
+            </a>
+        </nav>
+    </aside>
+
+    <!-- ===== CONTENEDOR PRINCIPAL ===== -->
+    <div class="container">
+
+        <!-- HEADER -->
+        <header class="main-header">
+            <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menú">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input" />
+                <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            </div>
+
+            <div class="profile-wrapper">
+                <button id="profileToggle" class="avatar-btn">
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="avatar-name" id="usernameDisplay"></span>
+                    <i class="fas fa-chevron-down avatar-arrow"></i>
+                </button>
+
+                <!-- Dropdown perfil -->
+                <div id="profileDropdown" class="profile-dropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div>
+                            <div class="dropdown-username" id="dropdownUsername"></div>
+                            <div class="dropdown-credits">
+                                <i class="fas fa-coins" style="color: var(--accent-primary);"></i>
+                                <span id="dropdownCredits">0</span> créditos
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <a href="#" class="dropdown-item" data-section="profile">
+                        <i class="fas fa-user"></i> Mi perfil
+                    </a>
+                    <a href="#" class="dropdown-item" data-section="purchases">
+                        <i class="fas fa-shopping-bag"></i> Mis compras
+                    </a>
+                    <a href="#" class="dropdown-item" data-section="settings">
+                        <i class="fas fa-sliders-h"></i> Configuración
+                    </a>
+                    <hr />
+                    <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CONTENIDO PRINCIPAL ===== -->
+        <main class="main-content">
+
+            <!-- CARRUSEL DE BANNERS -->
+            <section class="carousel-section">
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Cada slide es un div con fondo de gradiente y texto -->
+                        <div class="carousel-slide" style="background: linear-gradient(135deg, #0a1628, #1a365d);">
+                            <div class="slide-content">
+                                <h2>Productos destacados</h2>
+                                <p>Las mejores gift cards y cuentas premium al mejor precio.</p>
+                                <span class="slide-tag">Nuevo</span>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="background: linear-gradient(135deg, #0f2b3d, #1a4a6b);">
+                            <div class="slide-content">
+                                <h2>Recarga tu saldo</h2>
+                                <p>Obtén créditos al instante y disfruta de tus productos favoritos.</p>
+                                <span class="slide-tag">Popular</span>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" style="background: linear-gradient(135deg, #1a1a2e, #2d2a5e);">
+                            <div class="slide-content">
+                                <h2>Netflix, Spotify, Amazon</h2>
+                                <p>Una amplia selección de productos digitales para ti.</p>
+                                <span class="slide-tag">Oferta</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Controles -->
+                    <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+                    <!-- Indicadores (puntos) -->
+                    <div class="carousel-indicators" id="carouselIndicators"></div>
+                </div>
+            </section>
+
+            <!-- LISTA DE PRODUCTOS -->
+            <section id="productsSection">
+                <h2 class="section-title">
+                    <i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i>
+                    Productos disponibles
+                </h2>
+                <div id="products" class="products-grid"></div>
+                <div id="noProductsMessage" class="message info" style="display:none;">
+                    <i class="fas fa-info-circle"></i> No hay productos disponibles
+                </div>
+            </section>
+        </main>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="footer-banner">
+                <a href="https://t.me/NixSphere" target="_blank">
+                    <img src="imagenes/bannerFOOTER.png" alt="Canal de Telegram" loading="lazy" />
+                </a>
+            </div>
+            <div class="footer-content">
+                <span class="footer-copy">
+                    <i class="far fa-copyright"></i> Nix Sphere · Todos los derechos reservados
+                </span>
+                <a href="creditos.html" class="btn-creditos">
+                    <i class="fas fa-bolt"></i> Adquirir créditos
+                </a>
+            </div>
+        </footer>
     </div>
-    <nav class="menu-nav">
-      <a href="#" class="menu-item active" data-section="home">
-        <i class="fas fa-home menu-icon"></i> Inicio
-      </a>
-      <a href="#" class="menu-item" data-section="search">
-        <i class="fas fa-search menu-icon"></i> Buscar
-      </a>
-      <a href="#" class="menu-item" data-section="categories">
-        <i class="fas fa-tags menu-icon"></i> Categorías
-      </a>
-      <a href="creditos.html" class="menu-item">
-        <i class="fas fa-coins menu-icon"></i> Recargar
-      </a>
-      <a href="#" class="menu-item" data-section="purchases">
-        <i class="fas fa-shopping-bag menu-icon"></i> Mis compras
-      </a>
-      <a href="#" class="menu-item" data-section="settings">
-        <i class="fas fa-cog menu-icon"></i> Configuración
-      </a>
-      <hr class="menu-divider" />
-      <a href="#" id="logoutMenuBtn" class="menu-item logout">
-        <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
-      </a>
-    </nav>
-  </aside>
 
-  <!-- Contenedor principal -->
-  <div class="container">
-
-    <!-- Header -->
-    <header class="main-header">
-      <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menú">
-        <i class="fas fa-bars"></i>
-      </button>
-
-      <div class="search-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input" />
-        <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">
-          <i class="fas fa-times-circle"></i>
-        </button>
-      </div>
-
-      <div class="profile-wrapper">
-        <button id="profileToggle" class="avatar-btn">
-          <div class="avatar-circle">
-            <i class="fas fa-user"></i>
-          </div>
-          <span class="avatar-name" id="usernameDisplay"></span>
-          <i class="fas fa-chevron-down avatar-arrow"></i>
-        </button>
-
-        <!-- Dropdown perfil -->
-        <div id="profileDropdown" class="profile-dropdown">
-          <div class="dropdown-header">
-            <div class="dropdown-avatar">
-              <i class="fas fa-user-circle"></i>
-            </div>
-            <div>
-              <div class="dropdown-username" id="dropdownUsername"></div>
-              <div class="dropdown-credits">
-                <i class="fas fa-coins" style="color: var(--accent);"></i>
-                <span id="dropdownCredits">0</span> créditos
-              </div>
-            </div>
-          </div>
-          <hr />
-          <a href="#" class="dropdown-item" data-section="profile">
-            <i class="fas fa-user"></i> Mi perfil
-          </a>
-          <a href="#" class="dropdown-item" data-section="purchases">
-            <i class="fas fa-shopping-bag"></i> Mis compras
-          </a>
-          <a href="#" class="dropdown-item" data-section="settings">
-            <i class="fas fa-cog"></i> Configuración
-          </a>
-          <hr />
-          <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
-            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-          </a>
+    <!-- ===== MODAL DE COMPRA ===== -->
+    <div id="codeModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close"><i class="fas fa-times"></i></span>
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Compra exitosa</h2>
+            <p class="modal-message">Tu código es:</p>
+            <div class="code-box" id="purchasedCode">CÓDIGO</div>
+            <p class="remaining" id="remainingCredits"></p>
+            <button class="copy-btn" onclick="copyCode()">
+                <i class="fas fa-copy"></i> Copiar código
+            </button>
         </div>
-      </div>
-    </header>
-
-    <!-- Contenido principal -->
-    <main class="main-content">
-
-      <!-- Carrusel de banners -->
-      <section class="carousel-section">
-        <div class="carousel-container" id="carouselContainer">
-          <div class="carousel-slides" id="carouselSlides">
-            <div class="carousel-slide">
-              <div class="slide-content">
-                <h2>Productos destacados</h2>
-                <p>Las mejores gift cards al mejor precio</p>
-                <a href="#" class="slide-btn">Ver ofertas</a>
-              </div>
-            </div>
-            <div class="carousel-slide">
-              <div class="slide-content">
-                <h2>Recarga tu saldo</h2>
-                <p>Obtén créditos al instante</p>
-                <a href="creditos.html" class="slide-btn">Recargar ahora</a>
-              </div>
-            </div>
-            <div class="carousel-slide">
-              <div class="slide-content">
-                <h2>Netflix, Spotify, Amazon</h2>
-                <p>Y muchos más productos digitales</p>
-                <a href="#" class="slide-btn">Explorar</a>
-              </div>
-            </div>
-          </div>
-          <!-- Controles -->
-          <button class="carousel-btn prev" id="carouselPrev">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button class="carousel-btn next" id="carouselNext">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-          <!-- Indicadores -->
-          <div class="carousel-indicators" id="carouselIndicators"></div>
-        </div>
-      </section>
-
-      <!-- Productos -->
-      <section id="productsSection">
-        <h2 class="section-title">
-          <i class="fas fa-gem" style="color: var(--accent); margin-right: 12px;"></i>
-          Productos disponibles
-        </h2>
-        <div id="products" class="products-grid"></div>
-        <div id="noProductsMessage" class="message info" style="display:none;">
-          <i class="fas fa-info-circle"></i> No hay productos disponibles
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-banner">
-        <a href="https://t.me/Shadow_ccs_Web" target="_blank">
-          <img src="imagenes/bannerFOOTER.png" alt="Canal de Telegram" loading="lazy" />
-        </a>
-      </div>
-      <div class="footer-content">
-        <span class="footer-copy">
-          <i class="far fa-copyright"></i> Shadow · Todos los derechos reservados
-        </span>
-        <a href="creditos.html" class="btn-creditos">
-          <i class="fas fa-bolt"></i> Adquirir créditos
-        </a>
-      </div>
-    </footer>
-  </div>
-
-  <!-- Modal de compra -->
-  <div id="codeModal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close"><i class="fas fa-times"></i></span>
-      <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
-      <h2>¡Compra exitosa!</h2>
-      <p class="modal-message">Tu código es:</p>
-      <div class="code-box" id="purchasedCode">CÓDIGO</div>
-      <p class="remaining" id="remainingCredits"></p>
-      <button class="copy-btn" onclick="copyCode()">
-        <i class="fas fa-copy"></i> Copiar código
-      </button>
     </div>
-  </div>
 
-  <script src="js/user.js"></script>
+    <script src="js/user.js"></script>
 </body>
 </html>

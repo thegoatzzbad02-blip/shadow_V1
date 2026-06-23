@@ -26,6 +26,65 @@ const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
 
 // ============================================================
+//  CARRUSEL
+// ============================================================
+const track = document.getElementById('carouselTrack');
+const slides = track.querySelectorAll('.carousel-slide');
+const prevBtn = document.getElementById('carouselPrev');
+const nextBtn = document.getElementById('carouselNext');
+const indicators = document.getElementById('carouselIndicators');
+
+let currentSlide = 0;
+let totalSlides = slides.length;
+let autoPlayInterval = null;
+
+// Crear indicadores (puntos)
+slides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.dataset.index = i;
+    dot.addEventListener('click', () => goToSlide(i));
+    indicators.appendChild(dot);
+});
+
+function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentSlide = index;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    // Actualizar indicadores
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+function nextSlide() { goToSlide(currentSlide + 1); }
+function prevSlide() { goToSlide(currentSlide - 1); }
+
+prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
+nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
+
+function startAutoPlay() {
+    if (autoPlayInterval) clearInterval(autoPlayInterval);
+    autoPlayInterval = setInterval(nextSlide, 5000);
+}
+
+function stopAutoPlay() {
+    if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+    }
+}
+
+// Iniciar auto-play
+startAutoPlay();
+
+// Pausar al pasar el mouse (opcional)
+const carouselContainer = document.querySelector('.carousel-container');
+carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+// ============================================================
 //  MOSTRAR DATOS DEL USUARIO
 // ============================================================
 document.getElementById('usernameDisplay').textContent = user.username;
@@ -84,82 +143,6 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================================
-//  CARRUSEL
-// ============================================================
-const slides = document.querySelector('.carousel-slides');
-const prevBtn = document.getElementById('carouselPrev');
-const nextBtn = document.getElementById('carouselNext');
-const indicatorsContainer = document.getElementById('carouselIndicators');
-let currentIndex = 0;
-const totalSlides = document.querySelectorAll('.carousel-slide').length;
-let autoPlayInterval = null;
-
-function createIndicators() {
-    for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('span');
-        dot.dataset.index = i;
-        dot.addEventListener('click', () => goToSlide(i));
-        indicatorsContainer.appendChild(dot);
-    }
-    updateIndicators();
-}
-
-function updateIndicators() {
-    document.querySelectorAll('.carousel-indicators span').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentIndex);
-    });
-}
-
-function goToSlide(index) {
-    if (index < 0) index = totalSlides - 1;
-    if (index >= totalSlides) index = 0;
-    currentIndex = index;
-    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-    updateIndicators();
-}
-
-function nextSlide() {
-    goToSlide(currentIndex + 1);
-}
-
-function prevSlide() {
-    goToSlide(currentIndex - 1);
-}
-
-function startAutoPlay() {
-    if (autoPlayInterval) clearInterval(autoPlayInterval);
-    autoPlayInterval = setInterval(nextSlide, 5000);
-}
-
-function stopAutoPlay() {
-    if (autoPlayInterval) {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = null;
-    }
-}
-
-prevBtn.addEventListener('click', () => {
-    prevSlide();
-    stopAutoPlay();
-    startAutoPlay();
-});
-
-nextBtn.addEventListener('click', () => {
-    nextSlide();
-    stopAutoPlay();
-    startAutoPlay();
-});
-
-// Pausar al hover
-const carouselContainer = document.querySelector('.carousel-container');
-carouselContainer.addEventListener('mouseenter', stopAutoPlay);
-carouselContainer.addEventListener('mouseleave', startAutoPlay);
-
-// Inicializar carrusel
-createIndicators();
-startAutoPlay();
-
-// ============================================================
 //  BUSCADOR
 // ============================================================
 let allProducts = [];
@@ -211,7 +194,7 @@ function renderProducts(products) {
             <div class="product-name">${p.name}</div>
             <div class="product-price">${p.price} <small>créditos</small></div>
             <div class="product-stock">
-                <i class="fas fa-boxes"></i> Stock:
+                <span><i class="fas fa-boxes"></i> Stock:</span>
                 <span class="stock-badge">${p.stock}</span>
             </div>
             <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
@@ -313,7 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
 });
 
-// Cerrar menús al hacer clic en items (opcional)
+// ============================================================
+//  CERRAR MENÚS AL HACER CLICK EN ITEMS
+// ============================================================
 document.querySelectorAll('.menu-item[data-section]').forEach(item => {
     item.addEventListener('click', () => {
         closeMenu();
