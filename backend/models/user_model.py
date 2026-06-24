@@ -23,6 +23,7 @@ class UserModel:
 
     @classmethod
     def check_password(cls, username, password):
+        """Verifica las credenciales y devuelve el usuario si son correctas."""
         user = cls.find_by_username(username)
         if user and check_password_hash(user['password'], password):
             return user
@@ -30,6 +31,7 @@ class UserModel:
 
     @classmethod
     def create_user(cls, username, password, role='user', credits=0):
+        """Crea un nuevo usuario con contraseña hasheada."""
         conn = get_db()
         cursor = conn.cursor()
         hashed = generate_password_hash(password)
@@ -49,7 +51,7 @@ class UserModel:
             }
         except sqlite3.IntegrityError:
             conn.close()
-            return None
+            return None  # Usuario duplicado
 
     @classmethod
     def update_credits(cls, user_id, new_credits):

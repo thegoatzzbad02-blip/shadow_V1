@@ -22,9 +22,65 @@ const clearSearchBtn = document.getElementById('clearSearchBtn');
 const productsContainer = document.getElementById('products');
 const noProductsMsg = document.getElementById('noProductsMessage');
 const categoryBtns = document.querySelectorAll('.category-btn');
+const sectionTitle = document.getElementById('sectionTitle');
 
 const logoutMenuBtn = document.getElementById('logoutMenuBtn');
 const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
+
+// ============================================================
+//  CARRUSEL
+// ============================================================
+const track = document.getElementById('carouselTrack');
+const slides = track.querySelectorAll('.carousel-slide');
+const prevBtn = document.getElementById('carouselPrev');
+const nextBtn = document.getElementById('carouselNext');
+const indicators = document.getElementById('carouselIndicators');
+
+let currentSlide = 0;
+const totalSlides = slides.length;
+let autoPlayInterval = null;
+
+// Crear indicadores
+slides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.dataset.index = i;
+    dot.addEventListener('click', () => goToSlide(i));
+    indicators.appendChild(dot);
+});
+
+function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentSlide = index;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+function nextSlide() { goToSlide(currentSlide + 1); }
+function prevSlide() { goToSlide(currentSlide - 1); }
+
+prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
+nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
+
+function startAutoPlay() {
+    if (autoPlayInterval) clearInterval(autoPlayInterval);
+    autoPlayInterval = setInterval(nextSlide, 5000);
+}
+
+function stopAutoPlay() {
+    if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+    }
+}
+
+const carouselContainer = document.querySelector('.carousel-container');
+carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+carouselContainer.addEventListener('mouseleave', startAutoPlay);
+startAutoPlay();
 
 // ============================================================
 //  MOSTRAR DATOS DEL USUARIO
@@ -34,7 +90,7 @@ document.getElementById('dropdownUsername').textContent = user.username;
 document.getElementById('dropdownCredits').textContent = user.credits;
 
 // ============================================================
-//  MENÚ HAMBURGUESA
+//  MENÚ HAMBURGUESA (funcional en móvil y PC)
 // ============================================================
 function openMenu() {
     sideMenu.classList.add('open');
@@ -85,18 +141,35 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================================
-//  CATEGORÍAS
+//  CATEGORÍAS (desde URL)
 // ============================================================
 let currentCategory = 'all';
 
-categoryBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        categoryBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentCategory = btn.dataset.category;
-        applyFilters();
+function getCategoryFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('category') || 'all';
+}
+
+function updateTitle(category) {
+    const titles = {
+        'all': 'Productos disponibles',
+        'streaming': 'Cuentas Streaming',
+        'giftcards': 'Gift Cards',
+        'cursos': 'Cursos',
+        'otros': 'Otros productos'
+    };
+    const titleText = titles[category] || 'Productos disponibles';
+    sectionTitle.innerHTML = `<i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i> ${titleText}`;
+}
+
+function activateCategoryButton(category) {
+    categoryBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category === category) {
+            btn.classList.add('active');
+        }
     });
-});
+}
 
 // ============================================================
 //  BUSCADOR
@@ -120,12 +193,10 @@ function applyFilters() {
     const query = searchInput.value.trim().toLowerCase();
     let filtered = allProducts;
 
-    // Filtro por categoría (simulado con una propiedad 'category' en el producto)
     if (currentCategory !== 'all') {
         filtered = filtered.filter(p => p.category && p.category.toLowerCase() === currentCategory);
     }
 
-    // Filtro por búsqueda (nombre)
     if (query) {
         filtered = filtered.filter(p => p.name.toLowerCase().includes(query));
     }
@@ -141,10 +212,9 @@ async function loadProducts() {
     try {
         const response = await fetchWithAuth('/api/user/products');
         const products = await response.json();
-        // Asignar categorías simuladas (por ahora, si no tienen, las asignamos aleatorias para demostración)
         allProducts = products.map(p => {
             if (!p.category) {
-                const cats = ['netflix', 'spotify', 'amazon', 'otros'];
+                const cats = ['streaming', 'giftcards', 'cursos', 'otros'];
                 p.category = cats[Math.floor(Math.random() * cats.length)];
             }
             return p;
@@ -161,12 +231,11 @@ function renderProducts(products) {
     products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        // Badge según categoría (simulado)
-        let badgeText = '';
-        if (p.category === 'netflix') badgeText = 'Netflix';
-        else if (p.category === 'spotify') badgeText = 'Spotify';
-        else if (p.category === 'amazon') badgeText = 'Amazon';
-        else badgeText = 'Otros';
+        let catLabel = '';
+        if (p.category === 'streaming') catLabel = 'Streaming';
+        else if (p.category === 'giftcards') catLabel = 'Gift Card';
+        else if (p.category === 'cursos') catLabel = 'Curso';
+        else catLabel = 'Otros';
 
         card.innerHTML = `
             <div class="product-name">${p.name}</div>
@@ -174,10 +243,10 @@ function renderProducts(products) {
             <div class="product-stock">
                 <span><i class="fas fa-boxes"></i> Stock:</span>
                 <span class="stock-badge">${p.stock}</span>
-                <span style="margin-left:auto; font-size:0.7rem; color:var(--text-secondary);">${badgeText}</span>
+                <span style="margin-left:auto; font-size:0.6rem; color:var(--text-secondary);">${catLabel}</span>
             </div>
             <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
-                <i class="fas fa-shopping-cart"></i> Comprar ahora
+                <i class="fas fa-shopping-cart"></i> Comprar
             </button>
         `;
         productsContainer.appendChild(card);
@@ -272,22 +341,36 @@ logoutDropdownBtn.addEventListener('click', logout);
 //  INICIALIZAR
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
+    const category = getCategoryFromURL();
+    currentCategory = category;
+    activateCategoryButton(category);
+    updateTitle(category);
     loadProducts();
+
+    document.querySelectorAll('.menu-item[data-section]').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.section === category || (category === 'all' && item.dataset.section === 'home')) {
+            item.classList.add('active');
+        }
+    });
 });
 
 // ============================================================
 //  CERRAR MENÚS AL HACER CLICK EN ITEMS
 // ============================================================
 document.querySelectorAll('.menu-item[data-section]').forEach(item => {
-    item.addEventListener('click', () => {
-        closeMenu();
-        console.log('Sección:', item.dataset.section);
-    });
+    item.addEventListener('click', () => closeMenu());
 });
 
 document.querySelectorAll('.dropdown-item[data-section]').forEach(item => {
-    item.addEventListener('click', () => {
-        closeDropdown();
-        console.log('Sección:', item.dataset.section);
+    item.addEventListener('click', () => closeDropdown());
+});
+
+categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const cat = btn.dataset.category;
+        const url = new URL(window.location);
+        url.searchParams.set('category', cat);
+        window.location.href = url.toString();
     });
 });

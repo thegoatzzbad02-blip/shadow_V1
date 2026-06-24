@@ -9,9 +9,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend')
+FRONTEND_DIR = os.path.join(BASE_DIR, '..', 'frontend')
+
 app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # Permite peticiones desde cualquier origen en desarrollo
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave_secreta_por_defecto')
 
@@ -25,7 +26,7 @@ def handle_error(e):
     print("Error interno:", traceback.format_exc())
     return jsonify({'message': 'Error interno del servidor'}), 500
 
-# Ruta de depuración
+# Ruta de depuración (opcional)
 @app.route('/debug/env')
 def debug_env():
     return jsonify({
@@ -42,22 +43,25 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(admin_bp, url_prefix='/api/admin')
 app.register_blueprint(user_bp, url_prefix='/api/user')
 
-# Servir frontend
+# Servir frontend (para cualquier ruta no API)
 @app.route('/')
 def serve_index():
     return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
+    # Evitar que las rutas API caigan aquí
     if path.startswith('api/'):
         return "Not found", 404
+    # Intentar servir el archivo exacto
     file_path = os.path.join(app.static_folder, path)
     if os.path.isfile(file_path):
         return send_from_directory(app.static_folder, path)
+    # Si no existe, probar con .html
+    elif os.path.isfile(file_path + '.html'):
+        return send_from_directory(app.static_folder, path + '.html')
     else:
-        if os.path.isfile(file_path + '.html'):
-            return send_from_directory(app.static_folder, path + '.html')
         return "Not found", 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

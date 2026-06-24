@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nix Sphere · Iniciar sesión</title>
+    <title>Nix Sphere · Registrarse</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -24,38 +24,47 @@
                 <i class="fas fa-circle-nodes"></i>
             </div>
             <h1 class="auth-logo-text">Nix Sphere</h1>
-            <p class="auth-logo-slogan">Tu tienda de productos digitales</p>
+            <p class="auth-logo-slogan">Únete a nuestra comunidad</p>
         </div>
 
-        <!-- ===== TARJETA DE LOGIN ===== -->
+        <!-- ===== TARJETA DE REGISTRO ===== -->
         <div class="auth-card">
             <div class="auth-header">
-                <h2>Iniciar sesión</h2>
-                <p class="auth-subtitle">Accede a tu cuenta</p>
+                <h2>Crear cuenta</h2>
+                <p class="auth-subtitle">Completa tus datos para registrarte</p>
             </div>
 
-            <!-- Formulario de login -->
-            <form id="loginForm" class="auth-form">
+            <!-- Formulario de registro -->
+            <form id="registerForm" class="auth-form">
                 <div class="form-group">
-                    <label for="loginUsername"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="loginUsername" placeholder="Ingresa tu usuario" required />
+                    <label for="regUsername"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="regUsername" placeholder="Elige un nombre de usuario" required />
                 </div>
 
                 <div class="form-group">
-                    <label for="loginPassword"><i class="fas fa-lock"></i> Contraseña</label>
-                    <input type="password" id="loginPassword" placeholder="Ingresa tu contraseña" required />
+                    <label for="regEmail"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                    <input type="email" id="regEmail" placeholder="tu@email.com" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="regConfirmPassword"><i class="fas fa-check-circle"></i> Confirmar contraseña</label>
+                    <input type="password" id="regConfirmPassword" placeholder="Repite tu contraseña" required />
                 </div>
 
                 <button type="submit" class="auth-btn">
-                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                    <i class="fas fa-user-plus"></i> Registrarse
                 </button>
 
-                <div id="loginMessage" class="auth-message"></div>
+                <div id="registerMessage" class="auth-message"></div>
             </form>
 
             <div class="auth-footer">
-                <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
-                <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+                <p>¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a></p>
             </div>
         </div>
 
@@ -91,6 +100,6 @@
         </footer>
     </div>
 
-    <script src="js/login.js"></script>
+    <script src="js/register.js"></script>
 </body>
 </html>
