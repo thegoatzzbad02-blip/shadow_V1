@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nix Sphere · Iniciar sesión</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+
+        <!-- ===== LOGO ===== -->
+        <div class="auth-logo" style="display: block !important; text-align: center; padding: 12px 0; min-height: 70px;">
+            <div style="font-size: 2.8rem; color: #3b82f6; display: block;">
+                <i class="fas fa-circle-nodes"></i>
+            </div>
+            <h1 style="font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg, #3b82f6, #22d3ee, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0; display: block;">
+                Nix Sphere
+            </h1>
+            <p style="font-size: 1rem; color: #94a3b8; margin-top: 2px; display: block;">
+                Tu tienda de productos digitales
+            </p>
+        </div>
+
+        <!-- ===== TARJETA DE LOGIN ===== -->
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Iniciar sesión</h2>
+                <p class="auth-subtitle">Accede a tu cuenta</p>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginUsername"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="loginUsername" placeholder="Ingresa tu usuario" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="Ingresa tu contraseña" required />
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                </button>
+
+                <div id="loginMessage" class="auth-message"></div>
+            </form>
+
+            <div class="auth-footer">
+                <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+                <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="auth-footer-bottom">
+            <div class="auth-footer-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+            <p class="auth-copyright">
+                <i class="far fa-copyright"></i> 2025 Nix Sphere · Todos los derechos reservados
+            </p>
+        </footer>
+    </div>
+
+    <script src="js/login.js"></script>
+</body>
+</html>

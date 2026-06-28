@@ -3,79 +3,287 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nix Sphere · Iniciar sesión</title>
+    <title>Nix Sphere · Productos digitales</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <!-- Estilos -->
     <link rel="stylesheet" href="css/style.css" />
+    <style>
+        /* Estilos específicos para la landing page */
+        .landing-hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+        }
+        .landing-hero .hero-icon {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            margin-bottom: 16px;
+        }
+        .landing-hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #3b82f6, #22d3ee, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .landing-hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+        .landing-hero .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .landing-hero .hero-buttons a {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .landing-hero .hero-buttons .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+        }
+        .landing-hero .hero-buttons .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 25px rgba(59,130,246,0.5);
+        }
+        .landing-hero .hero-buttons .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+        .landing-hero .hero-buttons .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            background: rgba(59,130,246,0.05);
+        }
+
+        .landing-section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .landing-section-title i {
+            color: var(--accent-primary);
+        }
+
+        .landing-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            padding: 40px 0;
+        }
+        .landing-features .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .landing-features .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+        }
+        .landing-features .feature-card i {
+            font-size: 2.4rem;
+            color: var(--accent-primary);
+            margin-bottom: 12px;
+        }
+        .landing-features .feature-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .landing-features .feature-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .landing-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            padding: 20px 0 40px;
+        }
+        .landing-products .product-preview {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .landing-products .product-preview:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+        .landing-products .product-preview i {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+        .landing-products .product-preview h4 {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .landing-products .product-preview span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .landing-cta {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            margin: 20px 0 30px;
+        }
+        .landing-cta h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .landing-cta p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .landing-cta .btn-cta {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 14px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+        }
+        .landing-cta .btn-cta:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 25px rgba(59,130,246,0.5);
+        }
+
+        @media (max-width: 480px) {
+            .landing-hero h1 {
+                font-size: 2.2rem;
+            }
+            .landing-hero p {
+                font-size: 1rem;
+            }
+            .landing-hero .hero-buttons a {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+            .landing-features {
+                grid-template-columns: 1fr;
+            }
+            .landing-cta h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
 </head>
-<body class="auth-page">
+<body>
 
     <div class="auth-container">
 
-        <!-- ===== LOGO PROMINENTE ===== -->
-        <div class="auth-logo">
-            <div class="auth-logo-icon">
+        <!-- ===== HERO ===== -->
+        <div class="landing-hero">
+            <div class="hero-icon">
                 <i class="fas fa-circle-nodes"></i>
             </div>
-            <h1 class="auth-logo-text">Nix Sphere</h1>
-            <p class="auth-logo-slogan">Tu tienda de productos digitales</p>
-        </div>
-
-        <!-- ===== TARJETA DE LOGIN ===== -->
-        <div class="auth-card">
-            <div class="auth-header">
-                <h2>Iniciar sesión</h2>
-                <p class="auth-subtitle">Accede a tu cuenta</p>
-            </div>
-
-            <!-- Formulario de login -->
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="loginUsername"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="loginUsername" placeholder="Ingresa tu usuario" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="loginPassword"><i class="fas fa-lock"></i> Contraseña</label>
-                    <input type="password" id="loginPassword" placeholder="Ingresa tu contraseña" required />
-                </div>
-
-                <button type="submit" class="auth-btn">
-                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
-                </button>
-
-                <div id="loginMessage" class="auth-message"></div>
-            </form>
-
-            <div class="auth-footer">
-                <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
-                <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+            <h1>Nix Sphere</h1>
+            <p>La mejor plataforma para comprar gift cards, cuentas de streaming y productos digitales al mejor precio.</p>
+            <div class="hero-buttons">
+                <a href="login.html" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                <a href="register.html" class="btn-secondary"><i class="fas fa-user-plus"></i> Registrarse</a>
             </div>
         </div>
 
-        <!-- ===== BURBUJAS PROMOCIONALES ===== -->
-        <div class="auth-bubbles">
-            <a href="creditos.html" class="auth-bubble bubble-credits">
-                <i class="fas fa-coins"></i>
-                <span>Comprar créditos</span>
-                <small>Recarga al instante</small>
-            </a>
-            <a href="user.html?category=ofertas" class="auth-bubble bubble-offers">
-                <i class="fas fa-tags"></i>
-                <span>Ofertas especiales</span>
-                <small>Descuentos exclusivos</small>
-            </a>
-            <a href="user.html?category=giftcards" class="auth-bubble bubble-giftcards">
+        <!-- ===== PRODUCTOS DESTACADOS ===== -->
+        <h2 class="landing-section-title">
+            <i class="fas fa-gem"></i> Productos destacados
+        </h2>
+        <div class="landing-products">
+            <div class="product-preview">
+                <i class="fas fa-film"></i>
+                <h4>Streaming</h4>
+                <span>Netflix, Spotify, Disney+</span>
+            </div>
+            <div class="product-preview">
                 <i class="fas fa-gift"></i>
-                <span>Gift cards destacadas</span>
-                <small>Las más populares</small>
-            </a>
+                <h4>Gift Cards</h4>
+                <span>Amazon, Google Play, Steam</span>
+            </div>
+            <div class="product-preview">
+                <i class="fas fa-graduation-cap"></i>
+                <h4>Cursos</h4>
+                <span>Aprende con los mejores</span>
+            </div>
+            <div class="product-preview">
+                <i class="fas fa-coins"></i>
+                <h4>Créditos</h4>
+                <span>Recarga al instante</span>
+            </div>
+        </div>
+
+        <!-- ===== VENTAJAS ===== -->
+        <h2 class="landing-section-title">
+            <i class="fas fa-star"></i> ¿Por qué elegir Nix Sphere?
+        </h2>
+        <div class="landing-features">
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Entrega instantánea</h3>
+                <p>Recibe tus productos al momento de la compra.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>100% seguro</h3>
+                <p>Plataforma confiable con miles de usuarios.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h3>Mejores precios</h3>
+                <p>Las ofertas más competitivas del mercado.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-headset"></i>
+                <h3>Soporte 24/7</h3>
+                <p>Atención al cliente siempre disponible.</p>
+            </div>
+        </div>
+
+        <!-- ===== CALL TO ACTION ===== -->
+        <div class="landing-cta">
+            <h2>¿Listo para empezar?</h2>
+            <p>Únete a Nix Sphere y accede a los mejores productos digitales.</p>
+            <a href="register.html" class="btn-cta"><i class="fas fa-user-plus"></i> Crear cuenta gratis</a>
         </div>
 
         <!-- ===== FOOTER ===== -->
@@ -91,6 +299,5 @@
         </footer>
     </div>
 
-    <script src="js/login.js"></script>
 </body>
 </html>

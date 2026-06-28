@@ -124,48 +124,56 @@
         <!-- ===== CONTENIDO PRINCIPAL ===== -->
         <main class="main-content">
 
-            <!-- CARRUSEL -->
-            <section class="carousel-section">
-                <div class="carousel-container">
-                    <div class="carousel-track" id="carouselTrack">
-                        <div class="carousel-slide" style="background: linear-gradient(135deg, #0a1628, #1a365d);">
-                            <div class="slide-content">
-                                <h2>Productos destacados</h2>
-                                <p>Las mejores gift cards y cuentas premium al mejor precio.</p>
-                                <span class="slide-tag"><i class="fas fa-star"></i> Nuevo</span>
-                            </div>
-                        </div>
-                        <div class="carousel-slide" style="background: linear-gradient(135deg, #0f2b3d, #1a4a6b);">
-                            <div class="slide-content">
-                                <h2>Recarga tu saldo</h2>
-                                <p>Obtén créditos al instante y disfruta de tus productos favoritos.</p>
-                                <span class="slide-tag"><i class="fas fa-bolt"></i> Popular</span>
-                            </div>
-                        </div>
-                        <div class="carousel-slide" style="background: linear-gradient(135deg, #1a1a2e, #2d2a5e);">
-                            <div class="slide-content">
-                                <h2>Netflix, Spotify, Amazon</h2>
-                                <p>Una amplia selección de productos digitales para ti.</p>
-                                <span class="slide-tag"><i class="fas fa-tag"></i> Oferta</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
-                    <div class="carousel-indicators" id="carouselIndicators"></div>
-                </div>
-            </section>
-
-            <!-- CATEGORÍAS -->
-            <section class="categories-section">
-                <div class="categories-scroll">
-                    <button class="category-btn active" data-category="all">Todas</button>
-                    <button class="category-btn" data-category="streaming">Streaming</button>
-                    <button class="category-btn" data-category="giftcards">Gift Cards</button>
-                    <button class="category-btn" data-category="cursos">Cursos</button>
-                    <button class="category-btn" data-category="otros">Otros</button>
-                </div>
-            </section>
+         <!-- CARRUSEL DE IMÁGENES -->
+<section class="carousel-section">
+    <div class="carousel-container">
+        <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide" style="background-image: url('imagenes/nili.png');"></div>
+            <div class="carousel-slide" style="background-image: url('imagenes/nix-publi-netflix.png');"></div>
+            <div class="carousel-slide" style="background-image: url('imagenes/banner-giftcards.png');"></div>
+            <div class="carousel-slide" style="background-image: url('imagenes/banner-ofertas.png');"></div>
+        </div>
+        <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+    </div>
+</section>
+            <!-- ===== TICKER DE ESTADÍSTICAS ===== -->
+<div class="stats-ticker">
+    <div class="stats-ticker-track">
+        <span class="stat-item">
+            <i class="fas fa-box"></i> Productos disponibles: <strong>24</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-users"></i> Usuarios activos: <strong>150</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-trophy"></i> Gift card más popular: <strong>Amazon</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-fire"></i> Ofertas activas: <strong>12</strong>
+        </span>
+        <!-- Repetir los mismos elementos para efecto infinito -->
+        <span class="stat-item">
+            <i class="fas fa-box"></i> Productos disponibles: <strong>24</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-users"></i> Usuarios activos: <strong>150</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-trophy"></i> Gift card más popular: <strong>Amazon</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong>
+        </span>
+        <span class="stat-item">
+            <i class="fas fa-fire"></i> Ofertas activas: <strong>12</strong>
+        </span>
+    </div>
+</div>
 
             <!-- TARJETA PRINCIPAL (productos) -->
             <section class="main-card">

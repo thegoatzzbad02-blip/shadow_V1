@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from backend.utils.decorators import token_required, admin_required
 from backend.models.user_model import UserModel
 from backend.models.product_model import ProductModel
+from backend.models.voucher_model import VoucherModel  # 👈 importar
 import traceback
 
 admin_bp = Blueprint('admin', __name__)
@@ -98,12 +99,14 @@ def create_product():
         name = data.get('name')
         price = data.get('price')
         stock = data.get('stock')
+        category = data.get('category', 'otros')
+        description = data.get('description', '')
         codes = data.get('codes', [])
 
         if not name or price is None or stock is None:
             return jsonify({'message': 'Faltan datos del producto'}), 400
 
-        product = ProductModel.create_product(name, price, stock, codes)
+        product = ProductModel.create_product(name, price, stock, category, description, codes)
         return jsonify(product), 201
     except Exception as e:
         print("Error en create_product:", traceback.format_exc())
@@ -118,12 +121,23 @@ def update_product(product_id):
         name = data.get('name')
         price = data.get('price')
         stock = data.get('stock')
-        codes = data.get('codes')  # optional
+        category = data.get('category')
+        description = data.get('description')
+        codes = data.get('codes')
 
         if not name or price is None or stock is None:
             return jsonify({'message': 'Faltan datos'}), 400
 
-        if ProductModel.update_product(product_id, name, price, stock, codes):
+        updated = ProductModel.update_product(
+            product_id,
+            name,
+            price,
+            stock,
+            category=category,
+            description=description,
+            codes=codes
+        )
+        if updated:
             return jsonify({'message': 'Producto actualizado'}), 200
         return jsonify({'message': 'Producto no encontrado'}), 404
     except Exception as e:
@@ -141,3 +155,46 @@ def delete_product(product_id):
     except Exception as e:
         print("Error en delete_product:", traceback.format_exc())
         return jsonify({'message': 'Error interno al eliminar producto'}), 500
+
+# ================== VOUCHERS (CÓDIGOS PROMOCIONALES) ==================
+
+@admin_bp.route('/vouchers', methods=['GET'])
+@token_required
+@admin_required
+def get_vouchers():
+    try:
+        vouchers = VoucherModel.get_all_vouchers()
+        return jsonify(vouchers), 200
+    except Exception as e:
+        print("Error en get_vouchers:", traceback.format_exc())
+        return jsonify({'message': 'Error interno al obtener códigos'}), 500
+
+@admin_bp.route('/vouchers', methods=['POST'])
+@token_required
+@admin_required
+def create_voucher():
+    try:
+        data = request.get_json()
+        amount = data.get('amount')
+        expires_days = data.get('expires_days')  # opcional
+        if not amount or amount <= 0:
+            return jsonify({'message': 'El monto debe ser mayor a 0'}), 400
+        voucher = VoucherModel.create_voucher(amount, expires_days, request.user['id'])
+        if not voucher:
+            return jsonify({'message': 'Error al generar el código'}), 500
+        return jsonify(voucher), 201
+    except Exception as e:
+        print("Error en create_voucher:", traceback.format_exc())
+        return jsonify({'message': 'Error interno al crear código'}), 500
+
+@admin_bp.route('/vouchers/<int:voucher_id>', methods=['DELETE'])
+@token_required
+@admin_required
+def delete_voucher(voucher_id):
+    try:
+        if VoucherModel.delete_voucher(voucher_id):
+            return jsonify({'message': 'Código eliminado'}), 200
+        return jsonify({'message': 'Código no encontrado'}), 404
+    except Exception as e:
+        print("Error en delete_voucher:", traceback.format_exc())
+        return jsonify({'message': 'Error interno al eliminar código'}), 500

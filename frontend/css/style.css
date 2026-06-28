@@ -1288,3 +1288,306 @@ body.auth-page {
         font-size: 1.2rem;
     }
 }
+/* ================================================================
+   CARRUSEL SIN ALTURA FIJA (RESPONSIVE)
+   ================================================================ */
+
+.carousel-section {
+    margin-bottom: 28px;
+}
+
+.carousel-container {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow);
+    width: 100%;
+    /* ⚠️ SIN ALTURA FIJA: solo la relación de aspecto */
+    aspect-ratio: 16 / 5.3; /* Proporción 3:1 (1200/400) */
+    background-color: var(--bg-primary);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.6s ease-in-out;
+    will-change: transform;
+    height: 100%;
+}
+
+.carousel-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* ===== FLECHAS ===== */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.3s, transform 0.2s;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.4) !important;
+    transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-btn.prev { left: 16px; }
+.carousel-btn.next { right: 16px; }
+
+/* ===== INDICADORES ===== */
+.carousel-indicators {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.carousel-indicators .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.carousel-indicators .dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* ================================================================
+   RESPONSIVE: AJUSTE DE PROPORCIÓN EN CADA DISPOSITIVO
+   ================================================================ */
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
+    .carousel-container {
+        aspect-ratio: 16 / 5.5;
+        border-radius: 16px;
+    }
+}
+
+/* Móviles grandes */
+@media (max-width: 768px) {
+    .carousel-container {
+        aspect-ratio: 16 / 6; /* Más alta para mejor visibilidad */
+        border-radius: 14px;
+    }
+    .carousel-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1rem !important;
+    }
+    .carousel-btn.prev { left: 12px; }
+    .carousel-btn.next { right: 12px; }
+}
+
+/* Móviles pequeños (donde la imagen se recortaba) */
+@media (max-width: 480px) {
+    .carousel-container {
+        aspect-ratio: 16 / 7 !important; /* Mucho más alta */
+        border-radius: 12px;
+    }
+    /* En móviles: mostrar la imagen completa (contenida) */
+    .carousel-slide {
+        background-size: contain !important;
+        background-color: var(--bg-primary);
+    }
+    .carousel-btn {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.8rem !important;
+    }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+    .carousel-indicators .dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* En móviles pequeños */
+@media (max-width: 480px) {
+    .carousel-container {
+        aspect-ratio: 16 / 7.5 !important; /* Aún más alto */
+    }
+}
+/* ================================================================
+   PARCHE: FORZAR VISIBILIDAD DEL LOGO EN MÓVILES
+   ================================================================ */
+
+/* Asegurar que el logo siempre sea visible */
+.auth-logo {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 80px !important;
+    padding: 10px 0 !important;
+}
+
+.auth-logo-icon {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 2.8rem !important;
+    color: var(--accent-primary) !important;
+}
+
+.auth-logo-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 2.2rem !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #3b82f6, #22d3ee, #a78bfa) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+}
+
+.auth-logo-slogan {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 1rem !important;
+    color: var(--text-secondary) !important;
+    margin-top: 4px !important;
+}
+
+/* En móviles, ajustar tamaños sin ocultar */
+@media (max-width: 480px) {
+    .auth-logo {
+        min-height: 60px !important;
+        padding: 6px 0 !important;
+    }
+    .auth-logo-icon {
+        font-size: 2rem !important;
+    }
+    .auth-logo-text {
+        font-size: 1.6rem !important;
+    }
+    .auth-logo-slogan {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* En tablets, mantener visible */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .auth-logo-text {
+        font-size: 2rem !important;
+    }
+}
+/* ================================================================
+   TICKER DE ESTADÍSTICAS (cinta informativa)
+   ================================================================ */
+
+.stats-ticker {
+    width: 100%;
+    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 8px 0;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+}
+
+.stats-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: max-content;
+    animation: tickerScroll 25s linear infinite;
+    white-space: nowrap;
+    padding: 0 20px;
+}
+
+.stats-ticker-track:hover {
+    animation-play-state: paused;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.stat-item i {
+    color: var(--accent-primary);
+    font-size: 1.1rem;
+}
+
+.stat-item strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+@keyframes tickerScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-ticker-track {
+        gap: 24px;
+        animation-duration: 20s;
+    }
+    .stat-item {
+        font-size: 0.8rem;
+    }
+    .stat-item i {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-ticker {
+        padding: 6px 0;
+        border-radius: 12px;
+    }
+    .stats-ticker-track {
+        gap: 16px;
+        animation-duration: 18s;
+        padding: 0 12px;
+    }
+    .stat-item {
+        font-size: 0.7rem;
+        gap: 4px;
+    }
+    .stat-item i {
+        font-size: 0.8rem;
+    }
+}

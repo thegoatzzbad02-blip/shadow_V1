@@ -19,13 +19,13 @@ class ProductModel:
             return []
 
     @classmethod
-    def create_product(cls, name, price, stock, codes=None):
+    def create_product(cls, name, price, stock, category='otros', description='', codes=None):
         conn = get_db()
         cursor = conn.cursor()
         codes_json = cls._convert_codes(codes)
         cursor.execute(
-            "INSERT INTO products (name, price, stock, codes) VALUES (?, ?, ?, ?)",
-            (name, price, stock, codes_json)
+            "INSERT INTO products (name, price, stock, category, description, codes) VALUES (?, ?, ?, ?, ?, ?)",
+            (name, price, stock, category, description, codes_json)
         )
         conn.commit()
         product_id = cursor.lastrowid
@@ -35,6 +35,8 @@ class ProductModel:
             'name': name,
             'price': price,
             'stock': stock,
+            'category': category,
+            'description': description,
             'codes': codes if codes is not None else []
         }
 
@@ -66,10 +68,13 @@ class ProductModel:
         return products
 
     @classmethod
-    def get_available(cls):
+    def get_available(cls, category=None):
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM products WHERE stock > 0")
+        if category:
+            cursor.execute("SELECT * FROM products WHERE stock > 0 AND category = ?", (category,))
+        else:
+            cursor.execute("SELECT * FROM products WHERE stock > 0")
         rows = cursor.fetchall()
         conn.close()
         products = []
@@ -105,20 +110,23 @@ class ProductModel:
         return code
 
     @classmethod
-    def update_product(cls, product_id, new_name, new_price, new_stock, new_codes=None):
+    def update_product(cls, product_id, name, price, stock, category=None, description=None, codes=None):
         conn = get_db()
         cursor = conn.cursor()
-        if new_codes is not None:
-            codes_json = cls._convert_codes(new_codes)
-            cursor.execute(
-                "UPDATE products SET name = ?, price = ?, stock = ?, codes = ? WHERE id = ?",
-                (new_name, new_price, new_stock, codes_json, product_id)
-            )
-        else:
-            cursor.execute(
-                "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?",
-                (new_name, new_price, new_stock, product_id)
-            )
+        updates = ["name = ?", "price = ?", "stock = ?"]
+        params = [name, price, stock]
+        if category is not None:
+            updates.append("category = ?")
+            params.append(category)
+        if description is not None:
+            updates.append("description = ?")
+            params.append(description)
+        if codes is not None:
+            updates.append("codes = ?")
+            params.append(cls._convert_codes(codes))
+        params.append(product_id)
+        query = f"UPDATE products SET {', '.join(updates)} WHERE id = ?"
+        cursor.execute(query, params)
         conn.commit()
         affected = cursor.rowcount
         conn.close()

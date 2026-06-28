@@ -1,6 +1,6 @@
 import sys
 import os
-from flask import Flask, send_from_directory, jsonify
+from flask import Flask, send_from_directory, jsonify, abort
 from flask_cors import CORS
 from dotenv import load_dotenv
 from backend.database import init_db
@@ -9,32 +9,32 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.join(BASE_DIR, '..', 'frontend')
+FRONTEND_DIR = '/workspaces/shadow_V1/frontend'  # RUTA ABSOLUTA
 
-app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path='')
-CORS(app, resources={r"/api/*": {"origins": "*"}})  # Permite peticiones desde cualquier origen en desarrollo
+print(f"[INFO] Sirviendo frontend desde: {FRONTEND_DIR}")
 
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave_secreta_por_defecto')
-
-# Inicializar base de datos SQLite
 init_db()
 
-# Manejador global de errores
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({'message': 'Recurso no encontrado'}), 404
+
 @app.errorhandler(Exception)
 def handle_error(e):
     import traceback
     print("Error interno:", traceback.format_exc())
     return jsonify({'message': 'Error interno del servidor'}), 500
 
-# Ruta de depuración (opcional)
 @app.route('/debug/env')
 def debug_env():
     return jsonify({
-        'SECRET_KEY': '****' if app.config.get('SECRET_KEY') else 'no configurada',
-        'DB_PATH': os.path.join(os.path.dirname(__file__), '..', 'instance', 'shadow.db')
+        'FRONTEND_DIR': FRONTEND_DIR,
+        'BASE_DIR': BASE_DIR
     })
 
-# Blueprints
 from backend.routes.auth_routes import auth_bp
 from backend.routes.admin_routes import admin_bp
 from backend.routes.user_routes import user_bp
@@ -43,25 +43,22 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(admin_bp, url_prefix='/api/admin')
 app.register_blueprint(user_bp, url_prefix='/api/user')
 
-# Servir frontend (para cualquier ruta no API)
 @app.route('/')
 def serve_index():
-    return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(FRONTEND_DIR, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
-    # Evitar que las rutas API caigan aquí
     if path.startswith('api/'):
-        return "Not found", 404
-    # Intentar servir el archivo exacto
-    file_path = os.path.join(app.static_folder, path)
-    if os.path.isfile(file_path):
-        return send_from_directory(app.static_folder, path)
-    # Si no existe, probar con .html
-    elif os.path.isfile(file_path + '.html'):
-        return send_from_directory(app.static_folder, path + '.html')
-    else:
-        return "Not found", 404
+        abort(404)
+    return send_from_directory(FRONTEND_DIR, path)
+
+@app.route('/favicon.ico')
+def favicon():
+    try:
+        return send_from_directory(FRONTEND_DIR, 'favicon.ico')
+    except Exception:
+        return '', 204
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

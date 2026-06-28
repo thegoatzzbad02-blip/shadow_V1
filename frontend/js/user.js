@@ -1,225 +1,131 @@
-// ============================================================
-//  AUTENTICACIÓN
-// ============================================================
+// ================================================================
+//  USER · NIX SPHERE (con menú lateral y secciones)
+// ================================================================
+
 const token = localStorage.getItem('token');
 const user = JSON.parse(localStorage.getItem('user'));
 
 if (!token || !user || user.role !== 'user') {
-    window.location.href = 'index.html';
+    window.location.href = 'login.html';
 }
 
-// ============================================================
+// ================================================================
 //  ELEMENTOS DOM
-// ============================================================
-const menuToggle = document.getElementById('menuToggle');
-const sideMenu = document.getElementById('sideMenu');
-const menuOverlay = document.getElementById('menuOverlay');
-const closeMenuBtn = document.getElementById('closeMenuBtn');
-const profileToggle = document.getElementById('profileToggle');
-const profileDropdown = document.getElementById('profileDropdown');
+// ================================================================
+
+// Menú lateral
+const sidebar = document.getElementById('userSidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const hamburgerToggle = document.getElementById('hamburgerToggle');
+const navItems = document.querySelectorAll('.sidebar-nav .nav-item[data-section]');
+const sections = document.querySelectorAll('.user-section');
+const pageTitle = document.getElementById('pageTitle');
+const headerCredits = document.getElementById('headerCredits');
+
+// Productos
 const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const productsContainer = document.getElementById('products');
 const noProductsMsg = document.getElementById('noProductsMessage');
-const categoryBtns = document.querySelectorAll('.category-btn');
-const sectionTitle = document.getElementById('sectionTitle');
 
-const logoutMenuBtn = document.getElementById('logoutMenuBtn');
-const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
+// Canje
+const redeemInput = document.getElementById('redeemCodeInput');
+const redeemBtn = document.getElementById('redeemBtn');
+const redeemMessage = document.getElementById('redeemMessage');
 
-// ============================================================
-//  CARRUSEL
-// ============================================================
-const track = document.getElementById('carouselTrack');
-const slides = track.querySelectorAll('.carousel-slide');
-const prevBtn = document.getElementById('carouselPrev');
-const nextBtn = document.getElementById('carouselNext');
-const indicators = document.getElementById('carouselIndicators');
+// Cerrar sesión (sidebar)
+const logoutSidebarBtn = document.getElementById('logoutSidebarBtn');
 
-let currentSlide = 0;
-const totalSlides = slides.length;
-let autoPlayInterval = null;
+// ================================================================
+//  MENÚ LATERAL
+// ================================================================
 
-// Crear indicadores
-slides.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.className = 'dot' + (i === 0 ? ' active' : '');
-    dot.dataset.index = i;
-    dot.addEventListener('click', () => goToSlide(i));
-    indicators.appendChild(dot);
-});
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+}
 
-function goToSlide(index) {
-    if (index < 0) index = totalSlides - 1;
-    if (index >= totalSlides) index = 0;
-    currentSlide = index;
-    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-    document.querySelectorAll('.dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
+function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+}
+
+hamburgerToggle.addEventListener('click', toggleSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+// Navegación por secciones
+navItems.forEach(item => {
+    item.addEventListener('click', function() {
+        navItems.forEach(n => n.classList.remove('active'));
+        this.classList.add('active');
+
+        const section = this.dataset.section;
+        sections.forEach(s => s.classList.remove('active'));
+        const target = document.getElementById(`section-${section}`);
+        if (target) target.classList.add('active');
+
+        const titles = {
+            'inicio': 'Inicio',
+            'canjear': 'Canjear código',
+            'combos': 'Combos',
+            'config': 'Configuración'
+        };
+        pageTitle.textContent = titles[section] || 'Inicio';
+        closeSidebar();
     });
-}
-
-function nextSlide() { goToSlide(currentSlide + 1); }
-function prevSlide() { goToSlide(currentSlide - 1); }
-
-prevBtn.addEventListener('click', () => { stopAutoPlay(); prevSlide(); startAutoPlay(); });
-nextBtn.addEventListener('click', () => { stopAutoPlay(); nextSlide(); startAutoPlay(); });
-
-function startAutoPlay() {
-    if (autoPlayInterval) clearInterval(autoPlayInterval);
-    autoPlayInterval = setInterval(nextSlide, 5000);
-}
-
-function stopAutoPlay() {
-    if (autoPlayInterval) {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = null;
-    }
-}
-
-const carouselContainer = document.querySelector('.carousel-container');
-carouselContainer.addEventListener('mouseenter', stopAutoPlay);
-carouselContainer.addEventListener('mouseleave', startAutoPlay);
-startAutoPlay();
-
-// ============================================================
-//  MOSTRAR DATOS DEL USUARIO
-// ============================================================
-document.getElementById('usernameDisplay').textContent = user.username;
-document.getElementById('dropdownUsername').textContent = user.username;
-document.getElementById('dropdownCredits').textContent = user.credits;
-
-// ============================================================
-//  MENÚ HAMBURGUESA (funcional en móvil y PC)
-// ============================================================
-function openMenu() {
-    sideMenu.classList.add('open');
-    menuOverlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeMenu() {
-    sideMenu.classList.remove('open');
-    menuOverlay.classList.remove('open');
-    document.body.style.overflow = '';
-}
-
-menuToggle.addEventListener('click', openMenu);
-closeMenuBtn.addEventListener('click', closeMenu);
-menuOverlay.addEventListener('click', closeMenu);
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeMenu();
-        closeDropdown();
-    }
 });
 
-// ============================================================
-//  DROPDOWN PERFIL
-// ============================================================
-function toggleDropdown(e) {
-    e.stopPropagation();
-    profileDropdown.classList.toggle('open');
-    profileToggle.classList.toggle('active');
-    if (profileDropdown.classList.contains('open')) {
-        closeMenu();
-    }
-}
-
-function closeDropdown() {
-    profileDropdown.classList.remove('open');
-    profileToggle.classList.remove('active');
-}
-
-profileToggle.addEventListener('click', toggleDropdown);
-
-document.addEventListener('click', (e) => {
-    if (!profileDropdown.contains(e.target) && !profileToggle.contains(e.target)) {
-        closeDropdown();
-    }
+// Cerrar sesión desde el sidebar
+logoutSidebarBtn.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = 'login.html';
 });
 
-// ============================================================
-//  CATEGORÍAS (desde URL)
-// ============================================================
-let currentCategory = 'all';
+// ================================================================
+//  MOSTRAR CRÉDITOS
+// ================================================================
 
-function getCategoryFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('category') || 'all';
-}
+headerCredits.textContent = user.credits;
 
-function updateTitle(category) {
-    const titles = {
-        'all': 'Productos disponibles',
-        'streaming': 'Cuentas Streaming',
-        'giftcards': 'Gift Cards',
-        'cursos': 'Cursos',
-        'otros': 'Otros productos'
-    };
-    const titleText = titles[category] || 'Productos disponibles';
-    sectionTitle.innerHTML = `<i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i> ${titleText}`;
-}
+// ================================================================
+//  BUSCADOR DE PRODUCTOS
+// ================================================================
 
-function activateCategoryButton(category) {
-    categoryBtns.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.category === category) {
-            btn.classList.add('active');
-        }
-    });
-}
-
-// ============================================================
-//  BUSCADOR
-// ============================================================
 let allProducts = [];
 
 searchInput.addEventListener('input', function() {
     const query = this.value.trim().toLowerCase();
     clearSearchBtn.style.display = query ? 'block' : 'none';
-    applyFilters();
+    filterProducts(query);
 });
 
 clearSearchBtn.addEventListener('click', function() {
     searchInput.value = '';
     this.style.display = 'none';
-    applyFilters();
+    filterProducts('');
     searchInput.focus();
 });
 
-function applyFilters() {
-    const query = searchInput.value.trim().toLowerCase();
-    let filtered = allProducts;
-
-    if (currentCategory !== 'all') {
-        filtered = filtered.filter(p => p.category && p.category.toLowerCase() === currentCategory);
-    }
-
-    if (query) {
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(query));
-    }
-
+function filterProducts(query) {
+    if (!allProducts.length) return;
+    const filtered = query ? allProducts.filter(p => p.name.toLowerCase().includes(query)) : allProducts;
     renderProducts(filtered);
     noProductsMsg.style.display = filtered.length === 0 ? 'block' : 'none';
 }
 
-// ============================================================
+// ================================================================
 //  CARGAR PRODUCTOS
-// ============================================================
+// ================================================================
+
 async function loadProducts() {
     try {
-        const response = await fetchWithAuth('/api/user/products');
-        const products = await response.json();
-        allProducts = products.map(p => {
-            if (!p.category) {
-                const cats = ['streaming', 'giftcards', 'cursos', 'otros'];
-                p.category = cats[Math.floor(Math.random() * cats.length)];
-            }
-            return p;
+        const response = await fetch('/api/user/products', {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
-        applyFilters();
+        const products = await response.json();
+        allProducts = products;
+        renderProducts(products);
+        noProductsMsg.style.display = products.length === 0 ? 'block' : 'none';
     } catch (error) {
         console.error('Error al cargar productos:', error);
     }
@@ -228,149 +134,128 @@ async function loadProducts() {
 function renderProducts(products) {
     productsContainer.innerHTML = '';
     if (products.length === 0) return;
+
     products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
-        let catLabel = '';
-        if (p.category === 'streaming') catLabel = 'Streaming';
-        else if (p.category === 'giftcards') catLabel = 'Gift Card';
-        else if (p.category === 'cursos') catLabel = 'Curso';
-        else catLabel = 'Otros';
-
         card.innerHTML = `
             <div class="product-name">${p.name}</div>
             <div class="product-price">${p.price} <small>créditos</small></div>
             <div class="product-stock">
                 <span><i class="fas fa-boxes"></i> Stock:</span>
                 <span class="stock-badge">${p.stock}</span>
-                <span style="margin-left:auto; font-size:0.6rem; color:var(--text-secondary);">${catLabel}</span>
             </div>
-            <button class="buy-btn" onclick="buyProduct(${p.id}, ${p.price})">
-                <i class="fas fa-shopping-cart"></i> Comprar
-            </button>
+            <div style="display: flex; gap: 8px; margin-top: 12px;">
+                <button class="btn-detail" onclick="verDetalles(${p.id})">
+                    <i class="fas fa-eye"></i> Ver detalles
+                </button>
+                <button class="buy-btn" onclick="comprarProducto(${p.id}, ${p.price})">
+                    <i class="fas fa-shopping-cart"></i> Comprar
+                </button>
+            </div>
         `;
         productsContainer.appendChild(card);
     });
 }
 
-// ============================================================
-//  COMPRA
-// ============================================================
-window.buyProduct = async function(productId, price) {
+// ================================================================
+//  FUNCIONES GLOBALES (detalles y compra)
+// ================================================================
+
+window.verDetalles = function(id) {
+    window.location.href = `detalle-producto.html?id=${id}`;
+};
+
+window.comprarProducto = async function(productId, price) {
     if (user.credits < price) {
         alert('Créditos insuficientes');
         return;
     }
 
+    if (!confirm(`¿Confirmas la compra de este producto por ${price} créditos?`)) return;
+
     try {
-        const response = await fetchWithAuth(`/api/user/buy/${productId}`, { method: 'POST' });
+        const response = await fetch(`/api/user/buy/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         const data = await response.json();
+
         if (response.ok) {
-            user.credits -= price;
+            user.credits = data.credits_remaining;
             localStorage.setItem('user', JSON.stringify(user));
-            
-            document.getElementById('dropdownCredits').textContent = user.credits;
+            headerCredits.textContent = user.credits;
 
-            document.getElementById('purchasedCode').textContent = data.code;
-            document.getElementById('remainingCredits').innerHTML = `Créditos restantes: <strong>${user.credits}</strong>`;
-            document.getElementById('codeModal').style.display = 'flex';
-
-            loadProducts();
+            sessionStorage.setItem('productoComprado', JSON.stringify({
+                nombre: data.product_name || 'Producto',
+                contenido: data.code
+            }));
+            window.location.href = 'producto-comprado.html';
         } else {
             alert(data.message || 'Error al comprar');
+            loadProducts();
         }
     } catch (error) {
         console.error('Error en compra:', error);
+        alert('Error de conexión');
     }
 };
 
-// ============================================================
-//  MODAL
-// ============================================================
-document.getElementById('closeModal').addEventListener('click', closeModal);
-window.addEventListener('click', (e) => {
-    if (e.target === document.getElementById('codeModal')) {
-        closeModal();
+// ================================================================
+//  CANJEAR CÓDIGO
+// ================================================================
+
+redeemBtn.addEventListener('click', async function() {
+    const code = redeemInput.value.trim().toUpperCase();
+    if (!code) {
+        redeemMessage.textContent = '❌ Ingresa un código.';
+        redeemMessage.style.color = 'var(--danger)';
+        return;
     }
-});
 
-function closeModal() {
-    document.getElementById('codeModal').style.display = 'none';
-}
+    try {
+        const response = await fetch('/api/user/redeem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ code })
+        });
 
-window.copyCode = function() {
-    const code = document.getElementById('purchasedCode').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-        alert('Código copiado al portapapeles');
-    }).catch(() => {
-        alert('No se pudo copiar, selecciona manualmente');
-    });
-};
+        const data = await response.json();
 
-// ============================================================
-//  FETCH CON AUTENTICACIÓN
-// ============================================================
-async function fetchWithAuth(url, options = {}) {
-    options.headers = {
-        ...options.headers,
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };
-    const response = await fetch(url, options);
-    if (response.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        window.location.href = 'index.html';
-    }
-    return response;
-}
-
-// ============================================================
-//  CERRAR SESIÓN
-// ============================================================
-function logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    window.location.href = 'index.html';
-}
-
-logoutMenuBtn.addEventListener('click', logout);
-logoutDropdownBtn.addEventListener('click', logout);
-
-// ============================================================
-//  INICIALIZAR
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-    const category = getCategoryFromURL();
-    currentCategory = category;
-    activateCategoryButton(category);
-    updateTitle(category);
-    loadProducts();
-
-    document.querySelectorAll('.menu-item[data-section]').forEach(item => {
-        item.classList.remove('active');
-        if (item.dataset.section === category || (category === 'all' && item.dataset.section === 'home')) {
-            item.classList.add('active');
+        if (response.ok) {
+            redeemMessage.textContent = '✅ ' + data.message;
+            redeemMessage.style.color = 'var(--success)';
+            user.credits += data.amount;
+            localStorage.setItem('user', JSON.stringify(user));
+            headerCredits.textContent = user.credits;
+            redeemInput.value = '';
+            setTimeout(() => {
+                redeemMessage.textContent = '';
+            }, 4000);
+        } else {
+            redeemMessage.textContent = '❌ ' + data.message;
+            redeemMessage.style.color = 'var(--danger)';
         }
-    });
+    } catch (error) {
+        console.error('Error al canjear:', error);
+        redeemMessage.textContent = '❌ Error de conexión.';
+        redeemMessage.style.color = 'var(--danger)';
+    }
 });
 
-// ============================================================
-//  CERRAR MENÚS AL HACER CLICK EN ITEMS
-// ============================================================
-document.querySelectorAll('.menu-item[data-section]').forEach(item => {
-    item.addEventListener('click', () => closeMenu());
+redeemInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') redeemBtn.click();
 });
 
-document.querySelectorAll('.dropdown-item[data-section]').forEach(item => {
-    item.addEventListener('click', () => closeDropdown());
-});
+// ================================================================
+//  INICIALIZAR
+// ================================================================
 
-categoryBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const cat = btn.dataset.category;
-        const url = new URL(window.location);
-        url.searchParams.set('category', cat);
-        window.location.href = url.toString();
-    });
-});
+loadProducts();

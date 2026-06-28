@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nix Sphere · Detalle del producto</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+        .detail-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .detail-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: color 0.2s;
+        }
+        .detail-back:hover { color: var(--text-primary); }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+        }
+        .detail-image {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 40px;
+            min-height: 300px;
+            border: 1px solid var(--border-light);
+        }
+        .detail-image .product-icon { font-size: 8rem; color: var(--accent-primary); margin-bottom: 16px; opacity: 0.9; }
+        .detail-image .product-badge {
+            background: var(--accent-bg);
+            color: var(--accent-primary);
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 1px solid var(--accent-primary);
+        }
+        .detail-image .stock-badge {
+            margin-top: 12px;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .stock-badge.in-stock { background: rgba(34,211,238,0.15); color: var(--success); border: 1px solid var(--success); }
+        .stock-badge.out-of-stock { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .detail-info { display: flex; flex-direction: column; gap: 16px; }
+        .detail-info .product-name { font-size: 2.4rem; font-weight: 800; margin: 0; line-height: 1.2; }
+        .detail-info .product-category {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-secondary);
+            padding: 4px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border-light);
+            width: fit-content;
+        }
+        .detail-info .product-price { font-size: 2.6rem; font-weight: 800; color: var(--accent-primary); margin: 8px 0; }
+        .detail-info .product-price small { font-size: 1.2rem; color: var(--text-secondary); font-weight: 400; }
+        .detail-info .product-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding: 16px 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            margin: 4px 0;
+        }
+        .detail-info .product-balance { font-size: 1rem; color: var(--text-secondary); }
+        .detail-info .product-balance strong { color: var(--text-primary); }
+        .detail-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+        .detail-actions .btn-buy {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+            flex: 1;
+            justify-content: center;
+        }
+        .detail-actions .btn-buy:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 6px 25px rgba(59,130,246,0.5); }
+        .detail-actions .btn-buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .detail-actions .btn-fav {
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-secondary);
+            padding: 16px 20px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 56px;
+        }
+        .detail-actions .btn-fav:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+        .detail-actions .btn-fav.active { color: var(--danger); border-color: var(--danger); }
+        .detail-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 8px;
+        }
+        .detail-features .feature { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); }
+        .detail-features .feature i { color: var(--accent-primary); width: 20px; }
+        .detail-message { margin: 12px 0; padding: 12px 16px; border-radius: var(--radius-sm); text-align: center; font-weight: 500; }
+        .detail-message.success { background: rgba(34,211,238,0.15); color: var(--success); border: 1px solid var(--success); }
+        .detail-message.error { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid var(--danger); }
+        .detail-message.info { background: rgba(59,130,246,0.15); color: var(--accent-primary); border: 1px solid var(--accent-primary); }
+
+        @media (max-width: 992px) {
+            .detail-grid { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+            .detail-image { min-height: 200px; padding: 24px; }
+            .detail-image .product-icon { font-size: 5rem; }
+            .detail-info .product-name { font-size: 2rem; }
+            .detail-info .product-price { font-size: 2.2rem; }
+        }
+        @media (max-width: 480px) {
+            .detail-grid { padding: 16px; border-radius: 16px; }
+            .detail-image { min-height: 140px; padding: 16px; }
+            .detail-image .product-icon { font-size: 3.6rem; }
+            .detail-info .product-name { font-size: 1.6rem; }
+            .detail-info .product-price { font-size: 1.8rem; }
+            .detail-actions { flex-direction: column; }
+            .detail-actions .btn-buy { flex: none; width: 100%; }
+            .detail-features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container detail-wrapper">
+
+        <a href="user.html" class="detail-back">
+            <i class="fas fa-arrow-left"></i> Volver al catálogo
+        </a>
+
+        <div class="detail-grid">
+
+            <div class="detail-image">
+                <div class="product-icon" id="productIcon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <span class="product-badge" id="productCategoryBadge">Categoría</span>
+                <span class="stock-badge in-stock" id="stockBadge">En stock</span>
+            </div>
+
+            <div class="detail-info">
+                <h1 class="product-name" id="productName">Nombre del producto</h1>
+                <span class="product-category"><i class="fas fa-tag"></i> <span id="productCategory">Categoría</span></span>
+
+                <div class="product-price" id="productPrice">
+                    0 <small>créditos</small>
+                </div>
+
+                <div class="product-description" id="productDescription">
+                    Descripción detallada del producto...
+                </div>
+
+                <div class="product-balance">
+                    <i class="fas fa-wallet"></i> Tu saldo: <strong id="userBalance">0</strong> créditos
+                </div>
+
+                <div id="detailMessage" class="detail-message" style="display:none;"></div>
+
+                <div class="detail-actions">
+                    <button class="btn-buy" id="btnBuy">
+                        <i class="fas fa-shopping-cart"></i> Comprar ahora
+                    </button>
+                    <button class="btn-fav" id="btnFav" title="Agregar a favoritos">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+
+                <div class="detail-features">
+                    <div class="feature"><i class="fas fa-bolt"></i> Entrega instantánea</div>
+                    <div class="feature"><i class="fas fa-shield-alt"></i> 100% seguro</div>
+                    <div class="feature"><i class="fas fa-lock"></i> Datos encriptados</div>
+                    <div class="feature"><i class="fas fa-headset"></i> Soporte 24/7</div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="auth-footer-bottom" style="margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border-light);">
+            <div class="auth-footer-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+            <p class="auth-copyright">
+                <i class="far fa-copyright"></i> 2025 Nix Sphere · Todos los derechos reservados
+            </p>
+        </footer>
+    </div>
+
+    <script src="js/detalle-producto.js"></script>
+</body>
+</html>
