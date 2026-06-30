@@ -1,102 +1,56 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NX7G SHOP · Panel de usuario</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
-</head>
-<body>
-
-    <!-- ===== OVERLAY (menú lateral) ===== -->
-    <div id="menuOverlay" class="menu-overlay"></div>
+<div class="user-body">
 
     <!-- ===== MENÚ LATERAL ===== -->
-    <aside id="sideMenu" class="side-menu">
-        <div class="menu-header">
-            <span class="menu-brand">NX7G SHOP</span>
-            <button id="closeMenuBtn" class="close-menu-btn">
-                <i class="fas fa-times"></i>
-            </button>
+    <aside class="user-sidebar" id="userSidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-circle-nodes"></i> NX7G SHOP
         </div>
-        <nav class="menu-nav">
-            <a href="user.html" class="menu-item active" data-section="home">
-                <i class="fas fa-home menu-icon"></i> Catálogo
-            </a>
-            <a href="#" id="menuCanjear" class="menu-item" data-section="canjear">
-                <i class="fas fa-ticket-alt menu-icon"></i> Canjear código
-            </a>
-            <a href="creditos.html" class="menu-item" data-section="creditos">
-                <i class="fas fa-coins menu-icon"></i> Recargar créditos
-            </a>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" data-section="solicitar">
+                <i class="fas fa-paper-plane"></i> Solicitar cuenta
+            </button>
+            <button class="nav-item" data-section="catalogo">
+                <i class="fas fa-store"></i> Catálogo
+            </button>
+            <button class="nav-item" data-section="historial">
+                <i class="fas fa-history"></i> Historial
+            </button>
+            <button class="nav-item" data-section="perfil">
+                <i class="fas fa-user"></i> Mi perfil
+            </button>
+            <button class="nav-item" data-section="config">
+                <i class="fas fa-cog"></i> Configuración
+            </button>
             <hr class="menu-divider">
-            <a href="#" id="logoutMenuBtn" class="menu-item logout">
-                <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
-            </a>
+            <button class="nav-item logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+            </button>
         </nav>
     </aside>
 
-    <!-- ===== CONTENEDOR PRINCIPAL ===== -->
-    <div class="container">
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main class="user-main">
 
         <!-- HEADER -->
         <header class="main-header">
             <div class="header-top">
-                <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menú">
+                <button class="hamburger-toggle" id="hamburgerToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-
                 <div class="brand-wrapper">
                     <span class="brand-name">NX7G SHOP</span>
                 </div>
-
                 <div class="profile-wrapper">
                     <button id="profileToggle" class="avatar-btn">
-                        <div class="avatar-circle">
-                            <i class="fas fa-user"></i>
-                        </div>
+                        <div class="avatar-circle"><i class="fas fa-user"></i></div>
                         <span class="avatar-name" id="usernameDisplay"></span>
                         <i class="fas fa-chevron-down avatar-arrow"></i>
                     </button>
-
                     <div id="profileDropdown" class="profile-dropdown">
-                        <div class="dropdown-header">
-                            <div class="dropdown-avatar">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <div>
-                                <div class="dropdown-username" id="dropdownUsername"></div>
-                                <div class="dropdown-credits">
-                                    <i class="fas fa-coins"></i>
-                                    <span id="dropdownCredits">0</span> créditos
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <a href="#" class="dropdown-item" data-section="profile">
-                            <i class="fas fa-user"></i> Mi perfil
-                        </a>
-                        <a href="#" class="dropdown-item" data-section="purchases">
-                            <i class="fas fa-shopping-bag"></i> Mis compras
-                        </a>
-                        <a href="#" class="dropdown-item" data-section="settings">
-                            <i class="fas fa-sliders-h"></i> Configuración
-                        </a>
-                        <hr>
-                        <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                        </a>
+                        <!-- opciones de perfil -->
                     </div>
                 </div>
             </div>
-
-            <!-- Buscador -->
             <div class="header-bottom">
                 <div class="search-wrapper">
                     <i class="fas fa-search search-icon"></i>
@@ -108,80 +62,126 @@
             </div>
         </header>
 
-        <!-- ===== CATEGORÍAS ===== -->
-        <div class="categories-scroll-wrapper">
-            <button class="category-btn active" data-category="all">Todas</button>
-            <button class="category-btn" data-category="streaming">Streaming</button>
-            <button class="category-btn" data-category="giftcards">Gift Cards</button>
-            <button class="category-btn" data-category="cursos">Cursos</button>
-            <button class="category-btn" data-category="otros">Otros</button>
-        </div>
+        <!-- ===== SECCIONES ===== -->
 
-        <!-- ===== TICKER ===== -->
-        <div class="ticker-container">
-            <div class="ticker-track">
-                <span>🔥 Ofertas especiales · Recarga ahora y obtén 10% extra · Gift cards desde 5 créditos · ¡No te lo pierdas!</span>
-                <span>🔥 Ofertas especiales · Recarga ahora y obtén 10% extra · Gift cards desde 5 créditos · ¡No te lo pierdas!</span>
+        <!-- SECCIÓN 1: SOLICITAR CUENTA (principal) -->
+        <div id="section-solicitar" class="user-section active">
+            <div class="section-header">
+                <h2><i class="fas fa-paper-plane"></i> Solicitar cuenta</h2>
+                <p>Elige el servicio, ingresa tus datos y solicita una cuenta personalizada.</p>
             </div>
-        </div>
 
-        <!-- ===== PRODUCTOS ===== -->
-        <div id="products" class="products-list"></div>
-        <div id="noProductsMessage" class="message info" style="display:none;">
-            <i class="fas fa-info-circle"></i> No hay productos disponibles
-        </div>
+            <div class="request-card">
+                <form id="requestForm" class="request-form">
+                    <div class="form-group">
+                        <label><i class="fas fa-film"></i> Servicio *</label>
+                        <select id="serviceSelect" required>
+                            <option value="netflix">Netflix</option>
+                            <option value="spotify">Spotify</option>
+                            <option value="disney">Disney+</option>
+                            <option value="hbo">HBO Max</option>
+                            <option value="amazon">Amazon Prime</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Correo *</label>
+                        <input type="email" id="requestEmail" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Contraseña (opcional)</label>
+                        <input type="password" id="requestPassword" placeholder="Deja en blanco para que la generemos">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-coins"></i> Costo</label>
+                            <span class="price-display" id="requestPrice">15 créditos</span>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-wallet"></i> Tu saldo</label>
+                            <span class="balance-display" id="requestBalance">100 créditos</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-request">
+                        <i class="fas fa-paper-plane"></i> Solicitar cuenta
+                    </button>
+                    <div id="requestMessage" class="request-message"></div>
+                </form>
+            </div>
 
-        <!-- ===== BOTÓN VER MÁS ===== -->
-        <div style="text-align:center; margin: 12px 0 20px;">
-            <button id="loadMoreBtn" class="load-more-btn">
-                <i class="fas fa-chevron-down"></i> Ver más productos
-            </button>
-        </div>
-
-        <!-- ===== FOOTER ===== -->
-        <footer class="footer">
-            <div class="footer-top">
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            <!-- Historial rápido -->
+            <div class="request-history">
+                <h3><i class="fas fa-history"></i> Últimas solicitudes</h3>
+                <div id="recentRequests" class="requests-list">
+                    <p style="color: var(--text-secondary);">No hay solicitudes recientes.</p>
                 </div>
-                <a href="creditos.html" class="btn-creditos">
-                    <i class="fas fa-bolt"></i> Adquirir créditos
-                </a>
+                <button class="btn-view-all" onclick="navigateTo('historial')">
+                    Ver todas <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
-            <div class="footer-bottom">
-                <span class="footer-copy">
-                    <i class="far fa-copyright"></i> 2025 NX7G SHOP · Todos los derechos reservados
-                </span>
+        </div>
+
+        <!-- SECCIÓN 2: CATÁLOGO (secundaria) -->
+        <div id="section-catalogo" class="user-section">
+            <div class="section-header">
+                <h2><i class="fas fa-store"></i> Catálogo</h2>
+                <p>Gift cards, cursos y productos digitales.</p>
             </div>
-        </footer>
-    </div>
 
-    <!-- ===== MODALES ===== -->
-    <div id="codeModal" class="modal">
-        <div class="modal-content">
-            <span id="closeModal" class="close"><i class="fas fa-times"></i></span>
-            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
-            <h2>Compra exitosa</h2>
-            <p class="modal-message">Tu código es:</p>
-            <div class="code-box" id="purchasedCode">CÓDIGO</div>
-            <p class="remaining" id="remainingCredits"></p>
-            <button class="copy-btn" onclick="copyCode()"><i class="fas fa-copy"></i> Copiar código</button>
+            <!-- Categorías -->
+            <div class="categories-scroll-wrapper">
+                <button class="category-btn active" data-category="all">Todas</button>
+                <button class="category-btn" data-category="giftcards">Gift Cards</button>
+                <button class="category-btn" data-category="cursos">Cursos</button>
+                <button class="category-btn" data-category="otros">Otros</button>
+            </div>
+
+            <!-- Productos -->
+            <div id="products" class="products-grid"></div>
+            <div id="noProductsMessage" class="message info" style="display:none;">
+                <i class="fas fa-info-circle"></i> No hay productos disponibles
+            </div>
         </div>
-    </div>
 
-    <div id="redeemModal" class="modal" style="display:none; align-items:center; justify-content:center;">
-        <div class="modal-content" style="max-width:420px;">
-            <span class="close" onclick="cerrarRedeemModal()">&times;</span>
-            <h2 style="margin-bottom:8px;"><i class="fas fa-ticket-alt" style="color:var(--accent-primary);"></i> Canjear código</h2>
-            <p style="color:var(--text-secondary); margin-bottom:16px;">Ingresa el código promocional para recibir créditos extras.</p>
-            <input type="text" id="redeemCodeInput" placeholder="Ej: ABC123XYZ" style="width:100%; padding:12px; border-radius:8px; background:var(--bg-input); border:1px solid var(--border-light); color:var(--text-primary); font-size:1rem; text-transform:uppercase; text-align:center;">
-            <button id="redeemBtn" style="width:100%; margin-top:12px; background:linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color:white; border:none; padding:12px; border-radius:40px; font-weight:700; cursor:pointer;">Canjear</button>
-            <div id="redeemMessage" style="margin-top:12px; text-align:center; font-weight:500;"></div>
+        <!-- SECCIÓN 3: HISTORIAL -->
+        <div id="section-historial" class="user-section">
+            <div class="section-header">
+                <h2><i class="fas fa-history"></i> Historial de solicitudes</h2>
+                <p>Todas tus solicitudes de cuentas.</p>
+            </div>
+            <div id="allRequests" class="requests-list">
+                <p style="color: var(--text-secondary);">No hay solicitudes.</p>
+            </div>
         </div>
-    </div>
 
-    <script src="js/user.js"></script>
-</body>
-</html>
+        <!-- SECCIÓN 4: PERFIL -->
+        <div id="section-perfil" class="user-section">
+            <div class="section-header">
+                <h2><i class="fas fa-user"></i> Mi perfil</h2>
+                <p>Información de tu cuenta.</p>
+            </div>
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <p><strong>Usuario:</strong> <span id="profileUsername"></span></p>
+                    <p><strong>Créditos:</strong> <span id="profileCredits"></span></p>
+                    <p><strong>Miembro desde:</strong> <span id="profileSince">--</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5: CONFIGURACIÓN -->
+        <div id="section-config" class="user-section">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Configuración</h2>
+                <p>Preferencias de tu cuenta.</p>
+            </div>
+            <div class="config-card">
+                <p style="color: var(--text-secondary);">Próximamente: opciones de configuración.</p>
+            </div>
+        </div>
+
+    </main>
+</div>
