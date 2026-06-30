@@ -1,0 +1,76 @@
+<!-- ===== SOLICITAR CUENTA ===== -->
+<div class="solicitar-container">
+
+    <!-- Encabezado -->
+    <div class="solicitar-header">
+        <div class="solicitar-badge"><i class="fas fa-crown"></i> PREMIUM</div>
+        <h1 class="solicitar-title">STREAMING <span>PREMIUM</span></h1>
+        <p class="solicitar-subtitle">Tus series y pelis favoritas</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="solicitar-body">
+        <div class="solicitar-section-title">
+            <i class="fas fa-film"></i> ¡Tu menú de streaming!
+        </div>
+        <p class="solicitar-desc">Venta de cuentas premium · Disfruta hoy mismo</p>
+
+        <form id="requestForm" class="solicitar-form">
+            <div class="form-group">
+                <label><i class="fas fa-tv"></i> Selecciona tu plataforma</label>
+                <div class="platform-selector">
+                    <button type="button" class="platform-btn active" data-platform="netflix">
+                        <i class="fab fa-netflix"></i> NETFLIX
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="disney">
+                        <i class="fab fa-disney"></i> DISNEY+
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="paramount">
+                        <i class="fas fa-play-circle"></i> PARAMOUNT+
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="hbo">
+                        <i class="fas fa-video"></i> HBO MAX
+                    </button>
+                </div>
+                <input type="hidden" id="serviceSelect" value="netflix">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Ingresa tu correo electrónico</label>
+                <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Ingresa tu contraseña</label>
+                <input type="password" id="requestPassword" placeholder="Tu contraseña">
+            </div>
+
+            <div class="solicitar-summary">
+                <div class="summary-item">
+                    <span class="summary-label"><i class="fas fa-coins"></i> Costo:</span>
+                    <span class="summary-value" id="requestPrice">15 créditos</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label"><i class="fas fa-wallet"></i> Tu saldo:</span>
+                    <span class="summary-value balance" id="requestBalance">100 créditos</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-solicitar">
+                <i class="fas fa-paper-plane"></i> SOLICITAR AHORA
+            </button>
+            <div id="requestMessage" class="request-message"></div>
+        </form>
+    </div>
+
+    <!-- Historial rápido -->
+    <div class="solicitar-history">
+        <h4><i class="fas fa-clock"></i> Mis solicitudes recientes</h4>
+        <div id="recentRequests" class="requests-list">
+            <p style="color: var(--text-secondary);">No hay solicitudes recientes.</p>
+        </div>
+        <button class="btn-view-all" onclick="navigateTo('historial')">
+            Ver todas <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+<!-- ===== DASHBOARD (inicio) ===== -->
+<div class="dashboard">
+
+    <!-- Carrusel de imágenes -->
+    <section class="carousel-section">
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide" style="background-image: url('imagenes/banner-nix-sphere.png');"></div>
+                <div class="carousel-slide" style="background-image: url('imagenes/banner-streaming.png');"></div>
+                <div class="carousel-slide" style="background-image: url('imagenes/banner-giftcards.png');"></div>
+                <div class="carousel-slide" style="background-image: url('imagenes/banner-ofertas.png');"></div>
+            </div>
+            <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </div>
+    </section>
+
+    <!-- Ticker de estadísticas -->
+    <div class="stats-ticker">
+        <div class="stats-ticker-track">
+            <span class="stat-item"><i class="fas fa-box"></i> Productos: <strong>24</strong></span>
+            <span class="stat-item"><i class="fas fa-users"></i> Usuarios activos: <strong>150</strong></span>
+            <span class="stat-item"><i class="fas fa-trophy"></i> Más popular: <strong>Amazon</strong></span>
+            <span class="stat-item"><i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong></span>
+            <span class="stat-item"><i class="fas fa-fire"></i> Ofertas: <strong>12</strong></span>
+            <!-- repetir para efecto infinito -->
+            <span class="stat-item"><i class="fas fa-box"></i> Productos: <strong>24</strong></span>
+            <span class="stat-item"><i class="fas fa-users"></i> Usuarios activos: <strong>150</strong></span>
+            <span class="stat-item"><i class="fas fa-trophy"></i> Más popular: <strong>Amazon</strong></span>
+            <span class="stat-item"><i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong></span>
+            <span class="stat-item"><i class="fas fa-fire"></i> Ofertas: <strong>12</strong></span>
+        </div>
+    </div>
+
+    <!-- Tarjetas promocionales -->
+    <div class="dashboard-cards">
+        <!-- Card 1: Solicitar cuenta -->
+        <div class="dash-card" onclick="navigateTo('solicitar')">
+            <div class="dash-card-icon" style="background: linear-gradient(135deg, #3b82f6, #7c3aed);">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <div class="dash-card-content">
+                <h3>Solicita tu cuenta</h3>
+                <p>Netflix, Disney+, HBO Max y más</p>
+                <span class="dash-card-tag">Nuevo</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Gift Cards -->
+        <div class="dash-card" onclick="navigateTo('catalogo')">
+            <div class="dash-card-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                <i class="fas fa-gift"></i>
+            </div>
+            <div class="dash-card-content">
+                <h3>Gift Cards</h3>
+                <p>Amazon, Google Play, Steam y más</p>
+                <span class="dash-card-tag">Popular</span>
+            </div>
+        </div>
+
+        <!-- Card 3: Cursos -->
+        <div class="dash-card" onclick="navigateTo('catalogo')">
+            <div class="dash-card-icon" style="background: linear-gradient(135deg, #22d3ee, #0891b2);">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="dash-card-content">
+                <h3>Cursos digitales</h3>
+                <p>Aprende con los mejores</p>
+                <span class="dash-card-tag">Oferta</span>
+            </div>
+        </div>
+
+        <!-- Card 4: Ofertas especiales -->
+        <div class="dash-card" onclick="navigateTo('catalogo')">
+            <div class="dash-card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="dash-card-content">
+                <h3>Ofertas especiales</h3>
+                <p>Hasta 50% de descuento</p>
+                <span class="dash-card-tag">Limitado</span>
+            </div>
+        </div>
+    </div>
+</div>
