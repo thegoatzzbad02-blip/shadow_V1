@@ -5,7 +5,6 @@ from backend.database import get_db
 class SolicitudModel:
     @classmethod
     def create(cls, usuario_id, username, plataforma, email, password=None, mensaje=None):
-        """Crea una nueva solicitud de cuenta a dominio."""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute('''
@@ -28,7 +27,6 @@ class SolicitudModel:
 
     @classmethod
     def get_all(cls, estado=None):
-        """Obtiene todas las solicitudes, opcionalmente filtradas por estado."""
         conn = get_db()
         cursor = conn.cursor()
         if estado:
@@ -41,7 +39,6 @@ class SolicitudModel:
 
     @classmethod
     def get_by_user(cls, usuario_id):
-        """Obtiene las solicitudes de un usuario específico."""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM solicitudes WHERE usuario_id = ? ORDER BY creado_en DESC", (usuario_id,))
@@ -51,7 +48,6 @@ class SolicitudModel:
 
     @classmethod
     def update_status(cls, solicitud_id, estado):
-        """Actualiza el estado de una solicitud (pending, completed, cancelled)."""
         conn = get_db()
         cursor = conn.cursor()
         completado_en = datetime.now().isoformat() if estado == 'completed' else None
@@ -77,7 +73,6 @@ class SolicitudModel:
 
     @classmethod
     def count_by_status(cls):
-        """Cuenta solicitudes por estado."""
         conn = get_db()
         cursor = conn.cursor()
         cursor.execute("""
