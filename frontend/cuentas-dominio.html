@@ -46,39 +46,10 @@
             <label class="form-label">
                 <i class="fas fa-tv"></i> Selecciona tu plataforma
             </label>
-            <div class="platform-grid">
-                <button type="button" class="platform-card active" data-platform="netflix">
-                    <i class="fab fa-netflix"></i>
-                    <span>Netflix</span>
-                    <small>15 créditos</small>
-                </button>
-                <button type="button" class="platform-card" data-platform="disney">
-                    <i class="fab fa-disney"></i>
-                    <span>Disney+</span>
-                    <small>18 créditos</small>
-                </button>
-                <button type="button" class="platform-card" data-platform="hbo">
-                    <i class="fas fa-video"></i>
-                    <span>HBO Max</span>
-                    <small>20 créditos</small>
-                </button>
-                <button type="button" class="platform-card" data-platform="spotify">
-                    <i class="fab fa-spotify"></i>
-                    <span>Spotify</span>
-                    <small>10 créditos</small>
-                </button>
-                <button type="button" class="platform-card" data-platform="amazon">
-                    <i class="fab fa-amazon"></i>
-                    <span>Amazon Prime</span>
-                    <small>22 créditos</small>
-                </button>
-                <button type="button" class="platform-card" data-platform="paramount">
-                    <i class="fas fa-play-circle"></i>
-                    <span>Paramount+</span>
-                    <small>16 créditos</small>
-                </button>
+            <div class="platform-grid" id="platformOptions">
+                <p style="color:var(--text-secondary);">Cargando plataformas...</p>
             </div>
-            <input type="hidden" id="serviceSelect" value="netflix">
+            <input type="hidden" id="serviceSelect" value="">
         </div>
 
         <!-- Datos del usuario -->
@@ -139,57 +110,3 @@
 
 </div>
 
-<script>
-    // ================================================================
-    //  SELECTOR DE PLATAFORMAS
-    // ================================================================
-
-    document.querySelectorAll('.platform-card').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.platform-card').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            document.getElementById('serviceSelect').value = this.dataset.platform;
-            
-            // Actualizar precio según plataforma
-            const prices = {
-                'netflix': 15,
-                'disney': 18,
-                'hbo': 20,
-                'spotify': 10,
-                'amazon': 22,
-                'paramount': 16
-            };
-            const price = prices[this.dataset.platform] || 15;
-            document.getElementById('requestPrice').textContent = price + ' créditos';
-        });
-    });
-
-    // ================================================================
-    //  ENVIAR SOLICITUD
-    // ================================================================
-
-    document.getElementById('solicitarBtn').addEventListener('click', function() {
-        const email = document.getElementById('requestEmail').value.trim();
-        const password = document.getElementById('requestPassword').value.trim();
-        const platform = document.getElementById('serviceSelect').value;
-        const msg = document.getElementById('requestMessage');
-
-        if (!email) {
-            msg.textContent = '❌ El correo electrónico es obligatorio.';
-            msg.style.color = 'var(--danger)';
-            return;
-        }
-
-        // Simulación de envío
-        msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
-        msg.style.color = 'var(--success)';
-        
-        // Limpiar campos
-        document.getElementById('requestEmail').value = '';
-        document.getElementById('requestPassword').value = '';
-        
-        setTimeout(() => {
-            msg.textContent = '';
-        }, 4000);
-    });
-</script>

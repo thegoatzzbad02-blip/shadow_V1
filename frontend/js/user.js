@@ -1,9 +1,9 @@
 // ================================================================
-//  USER · NX7G SHOP (con "Cuentas a dominio")
+//  USER · CONEXIÓN REAL CON EL BACKEND
 // ================================================================
 
 const token = localStorage.getItem('token');
-const user = JSON.parse(localStorage.getItem('user'));
+let user = JSON.parse(localStorage.getItem('user'));
 
 if (!token || !user || user.role !== 'user') {
     window.location.href = 'login.html';
@@ -28,9 +28,17 @@ const logoutDropdownBtn = document.getElementById('logoutDropdownBtn');
 //  MOSTRAR DATOS DEL USUARIO
 // ================================================================
 
-document.getElementById('usernameDisplay').textContent = user.username;
-document.getElementById('dropdownUsername').textContent = user.username;
-document.getElementById('dropdownCredits').textContent = user.credits;
+function updateUserHeader() {
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    const dropdownUsername = document.getElementById('dropdownUsername');
+    const dropdownCredits = document.getElementById('dropdownCredits');
+
+    if (usernameDisplay) usernameDisplay.textContent = user.username;
+    if (dropdownUsername) dropdownUsername.textContent = user.username;
+    if (dropdownCredits) dropdownCredits.textContent = user.credits;
+}
+
+updateUserHeader();
 
 // ================================================================
 //  MENÚ HAMBURGUESA
@@ -205,38 +213,252 @@ document.addEventListener('DOMContentLoaded', function() {
 //  SCRIPTS POR SECCIÓN
 // ================================================================
 
-function executeSectionScripts(section) {
-    if (section === 'cuentas-dominio') {
-        // Selector de plataformas
-        document.querySelectorAll('.platform-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                document.getElementById('serviceSelect').value = this.dataset.platform;
+async function loadUserProfile() {
+    try {
+        const response = await fetch('/api/user/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            user = data;
+            localStorage.setItem('user', JSON.stringify(user));
+            updateUserHeader();
+        }
+    } catch (error) {
+        console.error('Error cargando perfil:', error);
+    }
+}
+
+async function loadProductsBySection(section) {
+    const container = document.getElementById('products');
+    if (!container) return;
+
+    container.innerHTML = '<p style="text-align:center; color:var(--text-secondary); padding:20px;">Cargando productos...</p>';
+
+    try {
+        const response = await fetch(`/api/user/products`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const products = await response.json();
+        const filtered = products.filter(product => product.category === section);
+
+        if (!filtered.length) {
+            container.innerHTML = '<p style="text-align:center; color:var(--text-secondary); padding:20px;">No hay productos disponibles por ahora.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+        filtered.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="product-card-body">
+                    <h3>${product.name}</h3>
+                    <p>${product.description || 'Producto disponible'}</p>
+                    <div class="product-meta">
+                        <span><i class="fas fa-coins"></i> ${product.price} créditos</span>
+                        <span><i class="fas fa-boxes"></i> Stock: ${product.stock}</span>
+                    </div>
+                </div>
+                <button class="btn-buy" onclick="comprarProducto(${product.id}, ${product.price})">
+                    <i class="fas fa-shopping-cart"></i> Comprar
+                </button>
+            `;
+            container.appendChild(card);
+        });
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        container.innerHTML = '<p style="text-align:center; color:var(--danger); padding:20px;">No se pudieron cargar los productos.</p>';
+    }
+}
+
+async function loadPlatforms() {
+    try {
+        const response = await fetch('/api/user/plataformas', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const plataformas = await response.json();
+        const container = document.getElementById('platformOptions');
+        const hiddenInput = document.getElementById('serviceSelect');
+        const priceLabel = document.getElementById('requestPrice');
+        const balanceLabel = document.getElementById('requestBalance');
+
+        if (!container) return;
+
+        container.innerHTML = '';
+        plataformas.forEach((platform, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = `platform-card ${index === 0 ? 'active' : ''}`;
+            button.dataset.platform = platform.nombre;
+            button.dataset.price = platform.precio;
+            button.innerHTML = `
+                <i class="${platform.icono}" style="color:${platform.color};"></i>
+                <span>${platform.nombre}</span>
+                <small>${platform.precio} créditos</small>
+            `;
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.platform-card').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                hiddenInput.value = platform.nombre;
+                priceLabel.textContent = `${platform.precio} créditos`;
+                balanceLabel.textContent = `${user.credits || 0} créditos`;
             });
+            container.appendChild(button);
         });
 
-        // Formulario
-        const requestForm = document.getElementById('requestForm');
-        if (requestForm) {
-            requestForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const msg = document.getElementById('requestMessage');
-                msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
-                msg.style.color = 'var(--success)';
-                setTimeout(() => { msg.textContent = ''; }, 4000);
+        if (plataformas.length) {
+            hiddenInput.value = plataformas[0].nombre;
+            priceLabel.textContent = `${plataformas[0].precio} créditos`;
+        }
+    } catch (error) {
+        console.error('Error cargando plataformas:', error);
+    }
+}
+
+async function loadRecentRequests() {
+    try {
+        const response = await fetch('/api/user/mis-solicitudes', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const solicitudes = await response.json();
+        const container = document.getElementById('recentRequests');
+        if (!container) return;
+
+        if (!solicitudes.length) {
+            container.innerHTML = '<div class="request-empty"><i class="fas fa-inbox"></i><p>No hay solicitudes recientes</p></div>';
+            return;
+        }
+
+        container.innerHTML = '';
+        solicitudes.slice(0, 4).forEach(solicitud => {
+            const item = document.createElement('div');
+            item.className = 'request-item';
+            item.innerHTML = `
+                <div><strong>${solicitud.plataforma}</strong></div>
+                <div>${solicitud.email}</div>
+                <div class="status-badge ${solicitud.estado}">${solicitud.estado === 'pending' ? 'Pendiente' : solicitud.estado === 'completed' ? 'Completada' : 'Cancelada'}</div>
+            `;
+            container.appendChild(item);
+        });
+    } catch (error) {
+        console.error('Error cargando solicitudes:', error);
+    }
+}
+
+async function loadUserHistory() {
+    try {
+        const response = await fetch('/api/user/historial', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        const historyContainer = document.getElementById('allRequests');
+        if (!historyContainer) return;
+
+        if (!data.compras.length && !data.solicitudes.length) {
+            historyContainer.innerHTML = '<p style="color:var(--text-secondary);">No hay actividad aún.</p>';
+            return;
+        }
+
+        historyContainer.innerHTML = '';
+        const combined = [
+            ...data.compras.map(item => ({ type: 'compra', ...item })),
+            ...data.solicitudes.map(item => ({ type: 'solicitud', ...item }))
+        ].sort((a, b) => new Date(b.purchased_at || b.creado_en || 0) - new Date(a.purchased_at || a.creado_en || 0));
+
+        combined.forEach(item => {
+            const block = document.createElement('div');
+            block.className = 'request-item';
+            if (item.type === 'compra') {
+                block.innerHTML = `
+                    <div><strong>${item.product_name}</strong></div>
+                    <div>Compra realizada · ${item.code}</div>
+                    <div class="status-badge completed">Comprado</div>
+                `;
+            } else {
+                block.innerHTML = `
+                    <div><strong>${item.plataforma}</strong></div>
+                    <div>${item.email}</div>
+                    <div class="status-badge ${item.estado}">${item.estado === 'pending' ? 'Pendiente' : item.estado === 'completed' ? 'Completada' : 'Cancelada'}</div>
+                `;
+            }
+            historyContainer.appendChild(block);
+        });
+    } catch (error) {
+        console.error('Error cargando historial:', error);
+    }
+}
+
+function executeSectionScripts(section) {
+    if (section === 'giftcards') loadProductsBySection('giftcards');
+    if (section === 'cuentas-hit') loadProductsBySection('cuentas-hit');
+    if (section === 'cursos') loadProductsBySection('cursos');
+
+    if (section === 'cuentas-dominio') {
+        loadPlatforms();
+        loadRecentRequests();
+
+        const requestBtn = document.getElementById('solicitarBtn');
+        const requestEmail = document.getElementById('requestEmail');
+        const requestPassword = document.getElementById('requestPassword');
+        const serviceSelect = document.getElementById('serviceSelect');
+        const msg = document.getElementById('requestMessage');
+
+        if (requestBtn) {
+            requestBtn.addEventListener('click', async function() {
+                const email = requestEmail.value.trim();
+                const password = requestPassword.value.trim();
+                const plataforma = serviceSelect.value;
+
+                if (!email) {
+                    msg.textContent = '❌ El correo electrónico es obligatorio.';
+                    msg.style.color = 'var(--danger)';
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/user/solicitar-cuenta', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ plataforma, email, password, mensaje: 'Solicitud creada desde el panel de usuario' })
+                    });
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
+                        msg.style.color = 'var(--success)';
+                        requestEmail.value = '';
+                        requestPassword.value = '';
+                        loadRecentRequests();
+                    } else {
+                        msg.textContent = '❌ ' + (data.message || 'No se pudo crear la solicitud');
+                        msg.style.color = 'var(--danger)';
+                    }
+                } catch (error) {
+                    console.error('Error creando solicitud:', error);
+                    msg.textContent = '❌ Error de conexión.';
+                    msg.style.color = 'var(--danger)';
+                }
             });
         }
     }
 
     if (section === 'perfil') {
+        loadUserProfile();
         document.getElementById('profileUsername').textContent = user.username;
         document.getElementById('profileCredits').textContent = user.credits;
+    }
+
+    if (section === 'historial') {
+        loadUserHistory();
     }
 }
 
 // ================================================================
-//  COMPRA, DETALLES, CANJE (sin cambios)
+//  COMPRA, DETALLES, CANJE
 // ================================================================
 
 window.verDetalles = function(id) {
@@ -265,13 +487,13 @@ window.comprarProducto = async function(productId, price) {
         if (response.ok) {
             user.credits = data.credits_remaining;
             localStorage.setItem('user', JSON.stringify(user));
-            document.getElementById('dropdownCredits').textContent = user.credits;
+            updateUserHeader();
 
             sessionStorage.setItem('productoComprado', JSON.stringify({
-                nombre: data.product_name || 'Producto',
+                nombre: 'Producto comprado',
                 contenido: data.code
             }));
-            window.location.href = 'producto-comprado.html';
+            window.location.href = 'confirmacion.html';
         } else {
             alert(data.message || 'Error al comprar');
         }
@@ -343,7 +565,7 @@ redeemBtn.addEventListener('click', async function() {
             redeemMessage.style.color = 'var(--success)';
             user.credits += data.amount;
             localStorage.setItem('user', JSON.stringify(user));
-            document.getElementById('dropdownCredits').textContent = user.credits;
+            updateUserHeader();
             redeemInput.value = '';
             setTimeout(() => {
                 cerrarRedeemModal();

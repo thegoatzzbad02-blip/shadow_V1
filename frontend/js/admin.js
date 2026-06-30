@@ -151,10 +151,13 @@ async function loadProductsByCategory(category) {
                     </div>
                 </div>
                 <div class="product-admin-actions">
-                    <button class="btn-edit" onclick="editProduct(${p.id})">
+                    <button class="btn-view" onclick="viewProduct(${p.id})" title="Ver detalle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="btn-edit" onclick="editProduct(${p.id})" title="Editar producto">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn-delete" onclick="deleteProduct(${p.id})">
+                    <button class="btn-delete" onclick="deleteProduct(${p.id})" title="Eliminar producto">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -217,6 +220,71 @@ async function saveProduct(data) {
     }
 }
 
+window.viewProduct = function(id) {
+    window.location.href = `detalle-producto.html?id=${id}`;
+};
+
+window.editProduct = async function(id) {
+    try {
+        const response = await fetch('/api/admin/products', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const products = await response.json();
+        const product = products.find(item => item.id === id);
+        if (!product) {
+            alert('No se encontró el producto');
+            return;
+        }
+
+        const name = prompt('Nombre del producto:', product.name);
+        if (name === null) return;
+        const price = prompt('Precio (créditos):', product.price);
+        if (price === null) return;
+        const stock = prompt('Stock:', product.stock);
+        if (stock === null) return;
+        const description = prompt('Descripción:', product.description || '');
+        if (description === null) return;
+        const codes = prompt('Códigos (uno por línea):', (product.codes || []).join('\n'));
+        if (codes === null) return;
+
+        const payload = {
+            name: name.trim(),
+            price: parseInt(price) || 0,
+            stock: parseInt(stock) || 0,
+            category: product.category,
+            description: description.trim(),
+            codes: codes.split('\n').map(item => item.trim()).filter(Boolean)
+        };
+
+        const updateResponse = await fetch(`/api/admin/products/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (updateResponse.ok) {
+            alert('✅ Producto actualizado');
+            loadDashboard();
+            const activeSection = document.querySelector('.admin-section.active');
+            if (activeSection) {
+                const category = activeSection.id.replace('section-', '');
+                if (['giftcards', 'cuentas-hit', 'cursos'].includes(category)) {
+                    loadProductsByCategory(category);
+                }
+            }
+        } else {
+            const error = await updateResponse.json();
+            alert('❌ ' + (error.message || 'No se pudo actualizar'));
+        }
+    } catch (error) {
+        console.error('Error editando producto:', error);
+        alert('❌ Error de conexión');
+    }
+};
+
 window.deleteProduct = async function(id) {
     if (!confirm('¿Eliminar este producto permanentemente?')) return;
 
@@ -228,7 +296,7 @@ window.deleteProduct = async function(id) {
 
         if (response.ok) {
             alert('✅ Producto eliminado');
-            // Recargar la categoría actual
+            loadDashboard();
             const activeSection = document.querySelector('.admin-section.active');
             if (activeSection) {
                 const category = activeSection.id.replace('section-', '');
@@ -250,21 +318,26 @@ window.deleteProduct = async function(id) {
 // ================================================================
 
 // ===== CONFIGURACIÓN DE PLATAFORMAS =====
-let platforms = [
-    { id: 1, name: 'Netflix', price: 15, icon: 'fab fa-netflix', color: '#e50914' },
-    { id: 2, name: 'Disney+', price: 18, icon: 'fab fa-disney', color: '#0063e5' },
-    { id: 3, name: 'HBO Max', price: 20, icon: 'fas fa-video', color: '#5822b4' },
-    { id: 4, name: 'Spotify', price: 10, icon: 'fab fa-spotify', color: '#1db954' },
-    { id: 5, name: 'Amazon Prime', price: 22, icon: 'fab fa-amazon', color: '#ff9900' },
-    { id: 6, name: 'Paramount+', price: 16, icon: 'fas fa-play-circle', color: '#0063e5' },
-];
-
+let platforms = [];
 let solicitudes = [];
 let currentFilter = 'all';
+
+async function loadPlatformsConfig() {
+    try {
+        const response = await fetch('/api/admin/plataformas', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        platforms = await response.json();
+        renderPlatforms();
+    } catch (error) {
+        console.error('Error cargando plataformas:', error);
+    }
+}
 
 // ===== RENDERIZAR CONFIGURACIÓN =====
 function renderPlatforms() {
     const container = document.getElementById('platformsConfig');
+    if (!container) return;
     container.innerHTML = '';
     
     platforms.forEach(p => {
@@ -272,9 +345,9 @@ function renderPlatforms() {
         div.className = 'config-item';
         div.innerHTML = `
             <div class="platform-info">
-                <i class="${p.icon}" style="color: ${p.color};"></i>
-                <span class="platform-name">${p.name}</span>
-                <span class="platform-price">${p.price} cr</span>
+                <i class="${p.icono || 'fas fa-tv'}" style="color: ${p.color || '#3b82f6'};"></i>
+                <span class="platform-name">${p.nombre}</span>
+                <span class="platform-price">${p.precio} cr</span>
             </div>
             <div class="platform-actions">
                 <button class="btn-edit-platform" onclick="editPlatform(${p.id})">
@@ -304,7 +377,7 @@ function closeAddPlatformModal() {
     document.getElementById('addPlatformModal').classList.remove('active');
 }
 
-document.getElementById('savePlatformBtn').addEventListener('click', function() {
+document.getElementById('savePlatformBtn').addEventListener('click', async function() {
     const name = document.getElementById('newPlatformName').value.trim();
     const price = parseInt(document.getElementById('newPlatformPrice').value);
     const icon = document.getElementById('newPlatformIcon').value.trim() || 'fas fa-circle';
@@ -314,42 +387,74 @@ document.getElementById('savePlatformBtn').addEventListener('click', function() 
         alert('Nombre y precio son obligatorios');
         return;
     }
-    
-    const newPlatform = {
-        id: platforms.length + 1,
-        name: name,
-        price: price,
-        icon: icon,
-        color: color
-    };
-    
-    platforms.push(newPlatform);
-    renderPlatforms();
-    closeAddPlatformModal();
-    alert('✅ Plataforma agregada correctamente');
+
+    try {
+        const response = await fetch('/api/admin/plataformas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ nombre: name, precio: price, icono: icon, color })
+        });
+        if (response.ok) {
+            closeAddPlatformModal();
+            await loadPlatformsConfig();
+            alert('✅ Plataforma agregada correctamente');
+        } else {
+            const error = await response.json();
+            alert('❌ ' + (error.message || 'No se pudo guardar'));
+        }
+    } catch (error) {
+        console.error('Error creando plataforma:', error);
+        alert('❌ Error de conexión');
+    }
 });
 
 // ===== EDITAR PLATAFORMA =====
-window.editPlatform = function(id) {
+window.editPlatform = async function(id) {
     const platform = platforms.find(p => p.id === id);
     if (!platform) return;
     
-    const newName = prompt('Nombre de la plataforma:', platform.name);
+    const newName = prompt('Nombre de la plataforma:', platform.nombre);
     if (newName !== null) {
-        const newPrice = prompt('Precio (créditos):', platform.price);
+        const newPrice = prompt('Precio (créditos):', platform.precio);
         if (newPrice !== null) {
-            platform.name = newName.trim() || platform.name;
-            platform.price = parseInt(newPrice) || platform.price;
-            renderPlatforms();
+            try {
+                const response = await fetch(`/api/admin/plataformas/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nombre: newName.trim() || platform.nombre, precio: parseInt(newPrice) || platform.precio })
+                });
+                if (response.ok) {
+                    await loadPlatformsConfig();
+                    alert('✅ Plataforma actualizada');
+                }
+            } catch (error) {
+                console.error('Error editando plataforma:', error);
+            }
         }
     }
 };
 
 // ===== ELIMINAR PLATAFORMA =====
-window.deletePlatform = function(id) {
+window.deletePlatform = async function(id) {
     if (!confirm('¿Eliminar esta plataforma?')) return;
-    platforms = platforms.filter(p => p.id !== id);
-    renderPlatforms();
+    try {
+        const response = await fetch(`/api/admin/plataformas/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            await loadPlatformsConfig();
+            alert('✅ Plataforma eliminada');
+        }
+    } catch (error) {
+        console.error('Error eliminando plataforma:', error);
+    }
 };
 
 // ===== SOLICITUDES =====
@@ -357,50 +462,10 @@ async function loadSolicitudes() {
     const container = document.getElementById('solicitudesList');
     
     try {
-        // Datos de prueba (simulados)
-        solicitudes = [
-            { 
-                id: 1, 
-                usuario: 'juan123', 
-                plataforma: 'Netflix', 
-                email: 'juan@correo.com', 
-                password: 'MiClave123',
-                estado: 'pending', 
-                fecha: '2025-06-28',
-                mensaje: 'Quiero una cuenta para ver series'
-            },
-            { 
-                id: 2, 
-                usuario: 'ana456', 
-                plataforma: 'Spotify', 
-                email: 'ana@correo.com', 
-                password: '********',
-                estado: 'completed', 
-                fecha: '2025-06-27',
-                mensaje: 'Para escuchar música'
-            },
-            { 
-                id: 3, 
-                usuario: 'pedro789', 
-                plataforma: 'Disney+', 
-                email: 'pedro@correo.com', 
-                password: 'pedro2024',
-                estado: 'pending', 
-                fecha: '2025-06-26',
-                mensaje: 'Para los niños'
-            },
-            { 
-                id: 4, 
-                usuario: 'lucia321', 
-                plataforma: 'HBO Max', 
-                email: 'lucia@correo.com', 
-                password: 'luciaMax',
-                estado: 'cancelled', 
-                fecha: '2025-06-25',
-                mensaje: 'Cancelé porque encontré otra'
-            },
-        ];
-        
+        const response = await fetch('/api/admin/solicitudes', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        solicitudes = await response.json();
         updateStats();
         applyFilter(currentFilter);
         
@@ -443,12 +508,12 @@ function applyFilter(filter) {
             <div class="solicitud-info">
                 <div class="solicitud-user">
                     <i class="fas fa-user-circle"></i>
-                    <span>@${s.usuario}</span>
+                    <span>@${s.username || 'usuario'}</span>
                 </div>
                 <div class="solicitud-details">
                     <span class="solicitud-platform"><i class="fas fa-tag"></i> ${s.plataforma}</span>
                     <span class="solicitud-email"><i class="fas fa-envelope"></i> ${s.email}</span>
-                    <span class="solicitud-date"><i class="fas fa-calendar-alt"></i> ${s.fecha}</span>
+                    <span class="solicitud-date"><i class="fas fa-calendar-alt"></i> ${s.creado_en || ''}</span>
                 </div>
             </div>
             <div class="solicitud-status">
@@ -486,25 +551,47 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 // ===== ACCIONES DE SOLICITUDES =====
-window.completeSolicitud = function(id) {
+window.completeSolicitud = async function(id) {
     if (!confirm('¿Marcar esta solicitud como completada?')) return;
-    const solicitud = solicitudes.find(s => s.id === id);
-    if (solicitud) {
-        solicitud.estado = 'completed';
-        updateStats();
-        applyFilter(currentFilter);
-        alert('✅ Solicitud completada. El cliente ha sido notificado.');
+    try {
+        const response = await fetch(`/api/admin/solicitudes/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ estado: 'completed' })
+        });
+        if (response.ok) {
+            await loadSolicitudes();
+            alert('✅ Solicitud completada.');
+        } else {
+            alert('❌ No se pudo actualizar');
+        }
+    } catch (error) {
+        console.error('Error actualizando solicitud:', error);
     }
 };
 
-window.cancelSolicitud = function(id) {
+window.cancelSolicitud = async function(id) {
     if (!confirm('¿Cancelar esta solicitud?')) return;
-    const solicitud = solicitudes.find(s => s.id === id);
-    if (solicitud) {
-        solicitud.estado = 'cancelled';
-        updateStats();
-        applyFilter(currentFilter);
-        alert('❌ Solicitud cancelada.');
+    try {
+        const response = await fetch(`/api/admin/solicitudes/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ estado: 'cancelled' })
+        });
+        if (response.ok) {
+            await loadSolicitudes();
+            alert('❌ Solicitud cancelada.');
+        } else {
+            alert('❌ No se pudo actualizar');
+        }
+    } catch (error) {
+        console.error('Error cancelando solicitud:', error);
     }
 };
 
@@ -526,7 +613,7 @@ window.viewSolicitudDetail = function(id) {
         <div class="solicitud-detalle">
             <div class="detalle-row">
                 <span class="detalle-label"><i class="fas fa-user"></i> Usuario</span>
-                <span class="detalle-value">@${solicitud.usuario}</span>
+                <span class="detalle-value">@${solicitud.username || 'usuario'}</span>
             </div>
             <div class="detalle-row">
                 <span class="detalle-label"><i class="fas fa-tag"></i> Plataforma</span>
@@ -542,7 +629,7 @@ window.viewSolicitudDetail = function(id) {
             </div>
             <div class="detalle-row">
                 <span class="detalle-label"><i class="fas fa-calendar-alt"></i> Fecha</span>
-                <span class="detalle-value">${solicitud.fecha}</span>
+                <span class="detalle-value">${solicitud.creado_en || 'Sin fecha'}</span>
             </div>
             ${solicitud.mensaje ? `
                 <div class="detalle-row">
@@ -780,10 +867,33 @@ window.deleteUser = async function(id) {
     }
 };
 
-window.editUser = function(id) {
-    const newCredits = prompt('Nuevos créditos para el usuario:');
-    if (newCredits !== null && !isNaN(newCredits)) {
-        alert(`Funcionalidad en desarrollo. Créditos: ${newCredits}`);
+window.editUser = async function(id) {
+    const userToEdit = (await fetch(`/api/admin/users`, { headers: { 'Authorization': `Bearer ${token}` } })).json();
+    const selected = (await userToEdit).find(u => u.id === id);
+    if (!selected) return;
+
+    const newUsername = prompt('Nuevo nombre de usuario:', selected.username);
+    const newCredits = prompt('Nuevos créditos:', selected.credits);
+    if (newUsername === null || newCredits === null) return;
+
+    try {
+        const response = await fetch(`/api/admin/users/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ username: newUsername.trim(), credits: parseInt(newCredits) || 0 })
+        });
+        if (response.ok) {
+            await loadUsers();
+            alert('✅ Usuario actualizado');
+        } else {
+            const error = await response.json();
+            alert('❌ ' + (error.message || 'No se pudo actualizar'));
+        }
+    } catch (error) {
+        console.error('Error editando usuario:', error);
     }
 };
 
@@ -803,6 +913,10 @@ document.getElementById('logoutAdminBtn').addEventListener('click', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar dashboard por defecto
     loadDashboard();
+    loadPlatformsConfig();
+    loadSolicitudes();
+    loadVouchers();
+    loadUsers();
     
     // Si la URL tiene hash, mostrar sección correspondiente
     const hash = window.location.hash.replace('#', '');
