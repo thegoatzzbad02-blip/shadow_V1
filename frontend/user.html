@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nix Sphere · Panel de usuario</title>
+    <title>NX7G SHOP · Panel de usuario</title>
 
-    <!-- Font Awesome (iconos vectoriales) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Estilos propios -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
 </head>
@@ -23,30 +20,21 @@
     <!-- ===== MENÚ LATERAL ===== -->
     <aside id="sideMenu" class="side-menu">
         <div class="menu-header">
-            <span class="menu-brand">Nix Sphere</span>
+            <span class="menu-brand">NX7G SHOP</span>
             <button id="closeMenuBtn" class="close-menu-btn">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <nav class="menu-nav">
             <a href="user.html" class="menu-item active" data-section="home">
-                <i class="fas fa-home menu-icon"></i> Inicio
+                <i class="fas fa-home menu-icon"></i> Catálogo
             </a>
-
-            <span class="menu-section-label">Categorías</span>
-            <a href="user.html?category=streaming" class="menu-item" data-section="streaming">
-                <i class="fas fa-film menu-icon"></i> Streaming
+            <a href="#" id="menuCanjear" class="menu-item" data-section="canjear">
+                <i class="fas fa-ticket-alt menu-icon"></i> Canjear código
             </a>
-            <a href="user.html?category=giftcards" class="menu-item" data-section="giftcards">
-                <i class="fas fa-gift menu-icon"></i> Gift Cards
+            <a href="creditos.html" class="menu-item" data-section="creditos">
+                <i class="fas fa-coins menu-icon"></i> Recargar créditos
             </a>
-            <a href="user.html?category=cursos" class="menu-item" data-section="cursos">
-                <i class="fas fa-graduation-cap menu-icon"></i> Cursos
-            </a>
-            <a href="user.html?category=otros" class="menu-item" data-section="otros">
-                <i class="fas fa-ellipsis-h menu-icon"></i> Otros
-            </a>
-
             <hr class="menu-divider">
             <a href="#" id="logoutMenuBtn" class="menu-item logout">
                 <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
@@ -65,7 +53,7 @@
                 </button>
 
                 <div class="brand-wrapper">
-                    <span class="brand-name">Nix Sphere</span>
+                    <span class="brand-name">NX7G SHOP</span>
                 </div>
 
                 <div class="profile-wrapper">
@@ -77,7 +65,6 @@
                         <i class="fas fa-chevron-down avatar-arrow"></i>
                     </button>
 
-                    <!-- Dropdown perfil -->
                     <div id="profileDropdown" class="profile-dropdown">
                         <div class="dropdown-header">
                             <div class="dropdown-avatar">
@@ -109,7 +96,7 @@
                 </div>
             </div>
 
-            <!-- Buscador (debajo del header) -->
+            <!-- Buscador -->
             <div class="header-bottom">
                 <div class="search-wrapper">
                     <i class="fas fa-search search-icon"></i>
@@ -121,80 +108,35 @@
             </div>
         </header>
 
-        <!-- ===== CONTENIDO PRINCIPAL ===== -->
-        <main class="main-content">
-
-         <!-- CARRUSEL DE IMÁGENES -->
-<section class="carousel-section">
-    <div class="carousel-container">
-        <div class="carousel-track" id="carouselTrack">
-            <div class="carousel-slide" style="background-image: url('imagenes/nili.png');"></div>
-            <div class="carousel-slide" style="background-image: url('imagenes/nix-publi-netflix.png');"></div>
-            <div class="carousel-slide" style="background-image: url('imagenes/banner-giftcards.png');"></div>
-            <div class="carousel-slide" style="background-image: url('imagenes/banner-ofertas.png');"></div>
+        <!-- ===== CATEGORÍAS ===== -->
+        <div class="categories-scroll-wrapper">
+            <button class="category-btn active" data-category="all">Todas</button>
+            <button class="category-btn" data-category="streaming">Streaming</button>
+            <button class="category-btn" data-category="giftcards">Gift Cards</button>
+            <button class="category-btn" data-category="cursos">Cursos</button>
+            <button class="category-btn" data-category="otros">Otros</button>
         </div>
-        <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
-        <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
-        <div class="carousel-indicators" id="carouselIndicators"></div>
-    </div>
-</section>
-            <!-- ===== TICKER DE ESTADÍSTICAS ===== -->
-<div class="stats-ticker">
-    <div class="stats-ticker-track">
-        <span class="stat-item">
-            <i class="fas fa-box"></i> Productos disponibles: <strong>24</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-users"></i> Usuarios activos: <strong>150</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-trophy"></i> Gift card más popular: <strong>Amazon</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-fire"></i> Ofertas activas: <strong>12</strong>
-        </span>
-        <!-- Repetir los mismos elementos para efecto infinito -->
-        <span class="stat-item">
-            <i class="fas fa-box"></i> Productos disponibles: <strong>24</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-users"></i> Usuarios activos: <strong>150</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-trophy"></i> Gift card más popular: <strong>Amazon</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong>
-        </span>
-        <span class="stat-item">
-            <i class="fas fa-fire"></i> Ofertas activas: <strong>12</strong>
-        </span>
-    </div>
-</div>
 
-            <!-- TARJETA PRINCIPAL (productos) -->
-            <section class="main-card">
-                <div class="card-header">
-                    <h2 class="section-title" id="sectionTitle">
-                        <i class="fas fa-gem" style="color: var(--accent-primary); margin-right: 12px;"></i>
-                        Productos disponibles
-                    </h2>
-                    <div class="card-badges">
-                        <span class="badge badge-new">Nuevo</span>
-                        <span class="badge badge-popular">Popular</span>
-                        <span class="badge badge-offer">Oferta</span>
-                    </div>
-                </div>
-                <div id="products" class="products-grid"></div>
-                <div id="noProductsMessage" class="message info" style="display:none;">
-                    <i class="fas fa-info-circle"></i> No hay productos disponibles en esta categoría
-                </div>
-            </section>
+        <!-- ===== TICKER ===== -->
+        <div class="ticker-container">
+            <div class="ticker-track">
+                <span>🔥 Ofertas especiales · Recarga ahora y obtén 10% extra · Gift cards desde 5 créditos · ¡No te lo pierdas!</span>
+                <span>🔥 Ofertas especiales · Recarga ahora y obtén 10% extra · Gift cards desde 5 créditos · ¡No te lo pierdas!</span>
+            </div>
+        </div>
 
-        </main>
+        <!-- ===== PRODUCTOS ===== -->
+        <div id="products" class="products-list"></div>
+        <div id="noProductsMessage" class="message info" style="display:none;">
+            <i class="fas fa-info-circle"></i> No hay productos disponibles
+        </div>
+
+        <!-- ===== BOTÓN VER MÁS ===== -->
+        <div style="text-align:center; margin: 12px 0 20px;">
+            <button id="loadMoreBtn" class="load-more-btn">
+                <i class="fas fa-chevron-down"></i> Ver más productos
+            </button>
+        </div>
 
         <!-- ===== FOOTER ===== -->
         <footer class="footer">
@@ -210,13 +152,13 @@
             </div>
             <div class="footer-bottom">
                 <span class="footer-copy">
-                    <i class="far fa-copyright"></i> Nix Sphere · Todos los derechos reservados
+                    <i class="far fa-copyright"></i> 2025 NX7G SHOP · Todos los derechos reservados
                 </span>
             </div>
         </footer>
     </div>
 
-    <!-- ===== MODAL DE COMPRA ===== -->
+    <!-- ===== MODALES ===== -->
     <div id="codeModal" class="modal">
         <div class="modal-content">
             <span id="closeModal" class="close"><i class="fas fa-times"></i></span>
@@ -225,9 +167,18 @@
             <p class="modal-message">Tu código es:</p>
             <div class="code-box" id="purchasedCode">CÓDIGO</div>
             <p class="remaining" id="remainingCredits"></p>
-            <button class="copy-btn" onclick="copyCode()">
-                <i class="fas fa-copy"></i> Copiar código
-            </button>
+            <button class="copy-btn" onclick="copyCode()"><i class="fas fa-copy"></i> Copiar código</button>
+        </div>
+    </div>
+
+    <div id="redeemModal" class="modal" style="display:none; align-items:center; justify-content:center;">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close" onclick="cerrarRedeemModal()">&times;</span>
+            <h2 style="margin-bottom:8px;"><i class="fas fa-ticket-alt" style="color:var(--accent-primary);"></i> Canjear código</h2>
+            <p style="color:var(--text-secondary); margin-bottom:16px;">Ingresa el código promocional para recibir créditos extras.</p>
+            <input type="text" id="redeemCodeInput" placeholder="Ej: ABC123XYZ" style="width:100%; padding:12px; border-radius:8px; background:var(--bg-input); border:1px solid var(--border-light); color:var(--text-primary); font-size:1rem; text-transform:uppercase; text-align:center;">
+            <button id="redeemBtn" style="width:100%; margin-top:12px; background:linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); color:white; border:none; padding:12px; border-radius:40px; font-weight:700; cursor:pointer;">Canjear</button>
+            <div id="redeemMessage" style="margin-top:12px; text-align:center; font-weight:500;"></div>
         </div>
     </div>
 
