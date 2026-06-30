@@ -107,11 +107,14 @@ const sectionMap = {
     'giftcards': 'giftcards.html',
     'cuentas-hit': 'cuentas-hit.html',
     'cursos': 'cursos.html',
+    'canjear': 'canjear.html',
+    'generador': 'generador.html',
+    'soporte': 'soporte.html',
+    'terminos': 'terminos.html',
     'config': 'config.html',
     'perfil': 'perfil.html',
     'historial': 'historial.html'
 };
-
 // Función global para navegar
 window.navigateTo = function(section) {
     console.log('Navegando a:', section);

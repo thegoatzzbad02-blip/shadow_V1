@@ -1,0 +1,229 @@
+<!-- ================================================================
+   GENERADOR CC · CON TARJETA FLIP
+   ================================================================ -->
+
+<div class="generador-container">
+    <div class="section-header">
+        <h2><i class="fas fa-credit-card" style="color:var(--accent-primary);"></i> Generador CC</h2>
+        <p>Genera tarjetas de crédito virtuales para pruebas</p>
+    </div>
+
+    <!-- ===== TARJETA FLIP (preview) ===== -->
+    <div class="generador-preview">
+        <div class="flip-card" id="tarjetaPreview">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <p class="heading_8264">MASTERCARD</p>
+                    <svg class="logo" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36" height="36" viewBox="0 0 48 48">
+                        <path fill="#ff9800" d="M32 10A14 14 0 1 0 32 38A14 14 0 1 0 32 10Z"></path>
+                        <path fill="#d50000" d="M16 10A14 14 0 1 0 16 38A14 14 0 1 0 16 10Z"></path>
+                        <path fill="#ff3d00" d="M18,24c0,4.755,2.376,8.95,6,11.48c3.624-2.53,6-6.725,6-11.48s-2.376-8.95-6-11.48 C20.376,15.05,18,19.245,18,24z"></path>
+                    </svg>
+                    <svg version="1.1" class="chip" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 50 50" xml:space="preserve">
+                        <image id="image0" width="50" height="50" x="0" y="0" href="data:image/png;base64,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"></image>
+                    </svg>
+                    <p class="number" id="cardNumber">9759 2484 5269 6576</p>
+                    <p class="valid_thru">VALID THRU</p>
+                    <p class="date_8264" id="cardExpiry">12/24</p>
+                    <p class="name" id="cardName">BRUCE WAYNE</p>
+                </div>
+                <div class="flip-card-back">
+                    <div class="strip"></div>
+                    <div class="mstrip"></div>
+                    <div class="sstrip">
+                        <p class="code" id="cardCvv">***</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CONTROLES ===== -->
+    <div class="generador-card">
+        <div class="generador-form">
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Bin (opcional)</label>
+                <input type="text" id="binInput" placeholder="Ej: 411111" maxlength="6" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-cubes"></i> Cantidad</label>
+                <select id="cantidadInput">
+                    <option value="1">1</option>
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <button class="generador-btn" id="generarBtn">
+                <i class="fas fa-magic"></i> Generar
+            </button>
+        </div>
+
+        <div class="generador-result" id="generadorResult">
+            <p style="color: var(--text-secondary); text-align:center; padding:20px;">
+                <i class="fas fa-credit-card" style="font-size:2rem; display:block; margin-bottom:8px; opacity:0.3;"></i>
+                Las tarjetas generadas aparecerán aquí
+            </p>
+        </div>
+
+        <div class="generador-info">
+            <p><i class="fas fa-info-circle"></i> Las tarjetas generadas son para fines educativos y pruebas.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    //  GENERADOR CC · CON TARJETA FLIP
+    // ================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const generarBtn = document.getElementById('generarBtn');
+        const binInput = document.getElementById('binInput');
+        const cantidadInput = document.getElementById('cantidadInput');
+        const resultDiv = document.getElementById('generadorResult');
+
+        // Elementos de la tarjeta preview
+        const cardNumberEl = document.getElementById('cardNumber');
+        const cardExpiryEl = document.getElementById('cardExpiry');
+        const cardNameEl = document.getElementById('cardName');
+        const cardCvvEl = document.getElementById('cardCvv');
+
+        // Función para generar Luhn válido (checksum)
+        function generateLuhnNumber(prefix) {
+            let digits = prefix || '';
+            // Completar hasta 15 dígitos (el último será checksum)
+            while (digits.length < 15) {
+                digits += Math.floor(Math.random() * 10);
+            }
+            // Calcular checksum Luhn
+            let sum = 0;
+            let alternate = true;
+            for (let i = digits.length - 1; i >= 0; i--) {
+                let n = parseInt(digits[i]);
+                if (alternate) {
+                    n *= 2;
+                    if (n > 9) n = n - 9;
+                }
+                sum += n;
+                alternate = !alternate;
+            }
+            const checksum = (10 - (sum % 10)) % 10;
+            return digits + checksum;
+        }
+
+        // Función para generar una tarjeta completa
+        function generateFullCard(bin = '') {
+            const bins = ['411111', '555555', '378282', '601111', '352800', '222100'];
+            const prefix = bin || bins[Math.floor(Math.random() * bins.length)];
+            const cardNumber = generateLuhnNumber(prefix);
+            
+            // Formatear en grupos de 4
+            const formatted = cardNumber.match(/.{1,4}/g).join(' ');
+            
+            // Fecha de expiración
+            const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            const year = String(Math.floor(Math.random() * 5) + 25);
+            const expiry = `${month}/${year}`;
+            
+            // CVV
+            const cvv = String(Math.floor(Math.random() * 900) + 100);
+            
+            // Nombre aleatorio
+            const names = ['BRUCE WAYNE', 'PETER PARKER', 'CLARK KENT', 'TONY STARK', 'STEVE ROGERS', 'NATASHA ROMANOFF'];
+            const name = names[Math.floor(Math.random() * names.length)];
+            
+            return { number: formatted, raw: cardNumber, expiry, cvv, name };
+        }
+
+        // Actualizar la tarjeta preview
+        function updatePreview(card) {
+            cardNumberEl.textContent = card.number;
+            cardExpiryEl.textContent = card.expiry;
+            cardNameEl.textContent = card.name;
+            cardCvvEl.textContent = card.cvv;
+        }
+
+        // Generar una tarjeta aleatoria y mostrar en preview
+        function generatePreview() {
+            const bin = binInput.value.trim();
+            const card = generateFullCard(bin);
+            updatePreview(card);
+            return card;
+        }
+
+        // Generar múltiples tarjetas
+        function generateCards() {
+            const bin = binInput.value.trim();
+            const cantidad = parseInt(cantidadInput.value) || 5;
+
+            let html = '<div class="generador-cards">';
+            for (let i = 0; i < cantidad; i++) {
+                const card = generateFullCard(bin);
+                const fullCard = card.raw;
+                
+                html += `
+                    <div class="card-item" onclick="window.copyCardItem(this, '${fullCard}')">
+                        <div class="card-number">${card.number}</div>
+                        <div class="card-details">
+                            <span>Exp: ${card.expiry}</span>
+                            <span>CVV: ${card.cvv}</span>
+                        </div>
+                        <div class="card-copy"><i class="fas fa-copy"></i></div>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            
+            resultDiv.innerHTML = html;
+        }
+
+        // Evento del botón generar
+        generarBtn.addEventListener('click', function() {
+            generateCards();
+            // También actualizar la preview
+            generatePreview();
+        });
+
+        // Función de copia global
+        window.copyCardItem = function(element, cardNumber) {
+            const icon = element.querySelector('.card-copy i');
+            navigator.clipboard.writeText(cardNumber).then(() => {
+                if (icon) {
+                    icon.className = 'fas fa-check';
+                    icon.style.color = '#22d3ee';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        icon.style.color = '';
+                    }, 2000);
+                }
+            }).catch(() => {
+                // Fallback
+                const range = document.createRange();
+                range.selectNode(element.querySelector('.card-number'));
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                if (icon) {
+                    icon.className = 'fas fa-check';
+                    icon.style.color = '#22d3ee';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        icon.style.color = '';
+                    }, 2000);
+                }
+            });
+        };
+
+        // Generar preview inicial
+        generatePreview();
+
+        // También actualizar preview al cambiar el bin
+        binInput.addEventListener('input', function() {
+            // Solo actualizar preview, no generar lista
+            const card = generateFullCard(this.value.trim());
+            updatePreview(card);
+        });
+    });
+</script>

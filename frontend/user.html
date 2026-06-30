@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NX7G SHOP · Panel de usuario</title>
+    <title>Servinet Store · Panel de usuario</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,44 +13,58 @@
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
 </head>
 <body>
+    <!-- ===== FONDO CON LÍNEAS VERTICALES ===== -->
+<div class="page-bg"></div>
 
     <!-- ===== OVERLAY (menú lateral) ===== -->
     <div id="menuOverlay" class="menu-overlay"></div>
 
-    <!-- ===== MENÚ LATERAL ===== -->
-    <aside id="sideMenu" class="side-menu">
-        <div class="menu-header">
-            <span class="menu-brand">NX7G SHOP</span>
-            <button id="closeMenuBtn" class="close-menu-btn">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <nav class="menu-nav">
-            <a href="#" class="menu-item active" data-section="dashboard">
-                <i class="fas fa-home menu-icon"></i> Inicio
-            </a>
-            <a href="#" class="menu-item" data-section="cuentas-dominio">
-                <i class="fas fa-paper-plane menu-icon"></i> Cuentas a dominio
-            </a>
-            <a href="#" class="menu-item" data-section="giftcards">
-                <i class="fas fa-gift menu-icon"></i> Gift Cards
-            </a>
-            <a href="#" class="menu-item" data-section="cuentas-hit">
-                <i class="fas fa-film menu-icon"></i> Cuentas Hit
-            </a>
-            <a href="#" class="menu-item" data-section="cursos">
-                <i class="fas fa-graduation-cap menu-icon"></i> Cursos
-            </a>
-            <hr class="menu-divider">
-            <a href="#" class="menu-item" data-section="config">
-                <i class="fas fa-cog menu-icon"></i> Configuración
-            </a>
-            <a href="#" id="logoutMenuBtn" class="menu-item logout">
-                <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
-            </a>
-        </nav>
-    </aside>
-
+   <!-- ===== MENÚ LATERAL ===== -->
+<aside id="sideMenu" class="side-menu">
+    <div class="menu-header">
+        <span class="menu-brand">Servinet Store</span>
+        <button id="closeMenuBtn" class="close-menu-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <nav class="menu-nav">
+        <a href="#" class="menu-item active" data-section="dashboard">
+            <i class="fas fa-home menu-icon"></i> Inicio
+        </a>
+        <a href="#" class="menu-item" data-section="cuentas-dominio">
+            <i class="fas fa-paper-plane menu-icon"></i> Cuentas a dominio
+        </a>
+        <a href="#" class="menu-item" data-section="giftcards">
+            <i class="fas fa-gift menu-icon"></i> Gift Cards
+        </a>
+        <a href="#" class="menu-item" data-section="cuentas-hit">
+            <i class="fas fa-film menu-icon"></i> Cuentas Hit
+        </a>
+        <a href="#" class="menu-item" data-section="cursos">
+            <i class="fas fa-graduation-cap menu-icon"></i> Cursos
+        </a>
+        <hr class="menu-divider">
+        <a href="#" class="menu-item" data-section="canjear">
+            <i class="fas fa-ticket-alt menu-icon"></i> Canjear código
+        </a>
+        <a href="#" class="menu-item" data-section="generador">
+            <i class="fas fa-credit-card menu-icon"></i> Generador CC
+        </a>
+        <a href="#" class="menu-item" data-section="soporte">
+            <i class="fas fa-headset menu-icon"></i> Soporte
+        </a>
+        <a href="#" class="menu-item" data-section="terminos">
+            <i class="fas fa-file-contract menu-icon"></i> Términos
+        </a>
+        <hr class="menu-divider">
+        <a href="#" class="menu-item" data-section="config">
+            <i class="fas fa-cog menu-icon"></i> Configuración
+        </a>
+        <a href="#" id="logoutMenuBtn" class="menu-item logout">
+            <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
+        </a>
+    </nav>
+</aside>
     <!-- ===== CONTENEDOR PRINCIPAL ===== -->
     <div class="container">
 
@@ -62,7 +76,7 @@
                 </button>
 
                 <div class="brand-wrapper">
-                    <span class="brand-name">NX7G SHOP</span>
+                    <span class="brand-name">Servinet Store</span>
                 </div>
 
                 <div class="profile-wrapper">
@@ -139,7 +153,7 @@
         Developed by <a href="https://t.me/DraccoDev" target="_blank" class="dev-link">Dracco</a>
     </div>
     <div class="footer-copy">
-        <i class="far fa-copyright"></i> 2025 NX7G SHOP · Todos los derechos reservados
+        <i class="far fa-copyright"></i> Servinet Store · Todos los derechos reservados
     </div>
 </footer>
 

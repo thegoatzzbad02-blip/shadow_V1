@@ -1,0 +1,150 @@
+<!-- ================================================================
+   CANJEAR CÓDIGO · REDEEM CODE
+   ================================================================ -->
+
+<div class="canjear-container">
+    <div class="section-header">
+        <h2><i class="fas fa-ticket-alt" style="color:var(--accent-primary);"></i> Canjear código</h2>
+        <p>Ingresa tu código promocional para recibir créditos extras</p>
+    </div>
+
+    <div class="canjear-card">
+        <div class="canjear-icon">
+            <i class="fas fa-gift"></i>
+        </div>
+        
+        <div class="canjear-form">
+            <div class="form-group">
+                <label for="redeemCodeInput"><i class="fas fa-code"></i> Código promocional</label>
+                <input type="text" id="redeemCodeInput" placeholder="Ej: NX7G-2024-ABCD" class="redeem-input" />
+                <small>Ingresa el código que recibiste en tu correo o promoción</small>
+            </div>
+            
+            <button class="btn-canjear" id="redeemBtn">
+                <i class="fas fa-check-circle"></i> Canjear código
+            </button>
+            
+            <div id="redeemMessage" class="redeem-message"></div>
+        </div>
+
+        <div class="canjear-info">
+            <div class="info-item">
+                <i class="fas fa-coins" style="color:#fbbf24;"></i>
+                <span>Recibe créditos extras al canjear tu código</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-clock" style="color:var(--accent-primary);"></i>
+                <span>Los códigos tienen fecha de expiración</span>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-shield-alt" style="color:var(--success);"></i>
+                <span>Cada código solo puede usarse una vez</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de canjes (opcional) -->
+    <div class="canjear-historial">
+        <h4><i class="fas fa-history"></i> Historial de canjes</h4>
+        <div id="redeemHistory" class="redeem-history">
+            <p style="color: var(--text-secondary); text-align:center; padding:16px 0;">
+                <i class="fas fa-inbox" style="display:block; font-size:1.5rem; opacity:0.3; margin-bottom:4px;"></i>
+                No has canjeado ningún código aún
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    //  CANJEAR CÓDIGO · LÓGICA
+    // ================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const redeemBtn = document.getElementById('redeemBtn');
+        const redeemInput = document.getElementById('redeemCodeInput');
+        const redeemMessage = document.getElementById('redeemMessage');
+
+        // Función para canjear código
+        async function redeemCode() {
+            const code = redeemInput.value.trim().toUpperCase();
+            
+            if (!code) {
+                redeemMessage.textContent = '❌ Ingresa un código válido.';
+                redeemMessage.className = 'redeem-message error';
+                return;
+            }
+
+            // Deshabilitar botón mientras se procesa
+            redeemBtn.disabled = true;
+            redeemBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/user/redeem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Actualizar créditos en la interfaz
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    user.credits += data.amount;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    // Actualizar el header
+                    const headerCredits = document.getElementById('headerCredits');
+                    if (headerCredits) {
+                        headerCredits.textContent = user.credits;
+                    }
+                    
+                    // Actualizar dropdown
+                    const dropdownCredits = document.getElementById('dropdownCredits');
+                    if (dropdownCredits) {
+                        dropdownCredits.textContent = user.credits;
+                    }
+
+                    redeemMessage.textContent = '✅ ' + data.message;
+                    redeemMessage.className = 'redeem-message success';
+                    redeemInput.value = '';
+                    
+                    // Recargar historial
+                    loadRedeemHistory();
+                } else {
+                    redeemMessage.textContent = '❌ ' + data.message;
+                    redeemMessage.className = 'redeem-message error';
+                }
+            } catch (error) {
+                console.error('Error al canjear:', error);
+                redeemMessage.textContent = '❌ Error de conexión. Intenta de nuevo.';
+                redeemMessage.className = 'redeem-message error';
+            } finally {
+                redeemBtn.disabled = false;
+                redeemBtn.innerHTML = '<i class="fas fa-check-circle"></i> Canjear código';
+            }
+        }
+
+        // Evento click
+        redeemBtn.addEventListener('click', redeemCode);
+
+        // Evento Enter en el input
+        redeemInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                redeemCode();
+            }
+        });
+
+        // Cargar historial de canjes (simulado)
+        function loadRedeemHistory() {
+            // Aquí iría la llamada a la API para obtener el historial
+            // Por ahora mantenemos el mensaje de "No hay canjes"
+        }
+    });
+</script>

@@ -1,97 +1,195 @@
 <!-- ================================================================
-   CUENTAS A DOMINIO
+   CUENTAS A DOMINIO · REDISEÑADO
    ================================================================ -->
 
 <div class="cuentas-dominio-container">
 
-    <!-- Encabezado -->
-    <div class="cuentas-dominio-header">
-        <div class="cuentas-dominio-badge"><i class="fas fa-crown"></i> PREMIUM</div>
-        <h1 class="cuentas-dominio-title">CUENTAS <span>A DOMINIO</span></h1>
-        <p class="cuentas-dominio-subtitle">Personaliza tu cuenta de streaming</p>
+    <!-- ===== ENCABEZADO ===== -->
+    <div class="cuentas-header">
+        <div class="cuentas-header-badge">
+            <i class="fas fa-crown"></i> PREMIUM
+        </div>
+        <h1 class="cuentas-header-title">Cuentas <span>a dominio</span></h1>
+        <p class="cuentas-header-subtitle">Personaliza tu cuenta de streaming con tus datos</p>
     </div>
 
-    <!-- Formulario -->
-    <div class="cuentas-dominio-body">
-        <div class="cuentas-dominio-section-title">
-            <i class="fas fa-film"></i> ¡Elige tu plataforma!
+    <!-- ===== PASOS (guía visual) ===== -->
+    <div class="cuentas-pasos">
+        <div class="paso-item">
+            <div class="paso-numero">1</div>
+            <div class="paso-contenido">
+                <h4>Elige tu plataforma</h4>
+                <p>Selecciona el servicio que deseas</p>
+            </div>
         </div>
-        <p class="cuentas-dominio-desc">Selecciona el servicio, ingresa tu correo y contraseña.</p>
-
-        <form id="requestForm" class="cuentas-dominio-form">
-            <div class="form-group">
-                <label><i class="fas fa-tv"></i> Selecciona tu plataforma</label>
-                <div class="platform-selector">
-                    <button type="button" class="platform-btn active" data-platform="netflix">
-                        <i class="fab fa-netflix"></i> NETFLIX
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="disney">
-                        <i class="fab fa-disney"></i> DISNEY+
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="paramount">
-                        <i class="fas fa-play-circle"></i> PARAMOUNT+
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="hbo">
-                        <i class="fas fa-video"></i> HBO MAX
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="spotify">
-                        <i class="fab fa-spotify"></i> SPOTIFY
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="amazon">
-                        <i class="fab fa-amazon"></i> AMAZON PRIME
-                    </button>
-                </div>
-                <input type="hidden" id="serviceSelect" value="netflix">
+        <div class="paso-item">
+            <div class="paso-numero">2</div>
+            <div class="paso-contenido">
+                <h4>Ingresa tus datos</h4>
+                <p>Correo y contraseña personalizada</p>
             </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-envelope"></i> Ingresa tu correo electrónico</label>
-                <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required>
+        </div>
+        <div class="paso-item">
+            <div class="paso-numero">3</div>
+            <div class="paso-contenido">
+                <h4>¡Listo!</h4>
+                <p>Recibe tu cuenta al instante</p>
             </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Ingresa tu contraseña</label>
-                <input type="password" id="requestPassword" placeholder="Tu contraseña">
-            </div>
-
-            <div class="cuentas-dominio-summary">
-                <div class="summary-item">
-                    <span class="summary-label"><i class="fas fa-coins"></i> Costo:</span>
-                    <span class="summary-value" id="requestPrice">15 créditos</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label"><i class="fas fa-wallet"></i> Tu saldo:</span>
-                    <span class="summary-value balance" id="requestBalance">100 créditos</span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-cuentas-dominio">
-                <i class="fas fa-paper-plane"></i> SOLICITAR AHORA
-            </button>
-            <div id="requestMessage" class="request-message"></div>
-        </form>
+        </div>
     </div>
 
-    <!-- Historial rápido -->
-    <div class="cuentas-dominio-history">
-        <h4><i class="fas fa-clock"></i> Mis solicitudes recientes</h4>
-        <div id="recentRequests" class="requests-list">
-            <div class="request-item">
-                <span>📺 Netflix</span>
-                <span>juan@correo.com</span>
-                <span class="request-status pending">Pendiente</span>
+    <!-- ===== FORMULARIO ===== -->
+    <div class="cuentas-formulario">
+        
+        <!-- Selector de plataforma (mejorado) -->
+        <div class="form-section">
+            <label class="form-label">
+                <i class="fas fa-tv"></i> Selecciona tu plataforma
+            </label>
+            <div class="platform-grid">
+                <button type="button" class="platform-card active" data-platform="netflix">
+                    <i class="fab fa-netflix"></i>
+                    <span>Netflix</span>
+                    <small>15 créditos</small>
+                </button>
+                <button type="button" class="platform-card" data-platform="disney">
+                    <i class="fab fa-disney"></i>
+                    <span>Disney+</span>
+                    <small>18 créditos</small>
+                </button>
+                <button type="button" class="platform-card" data-platform="hbo">
+                    <i class="fas fa-video"></i>
+                    <span>HBO Max</span>
+                    <small>20 créditos</small>
+                </button>
+                <button type="button" class="platform-card" data-platform="spotify">
+                    <i class="fab fa-spotify"></i>
+                    <span>Spotify</span>
+                    <small>10 créditos</small>
+                </button>
+                <button type="button" class="platform-card" data-platform="amazon">
+                    <i class="fab fa-amazon"></i>
+                    <span>Amazon Prime</span>
+                    <small>22 créditos</small>
+                </button>
+                <button type="button" class="platform-card" data-platform="paramount">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Paramount+</span>
+                    <small>16 créditos</small>
+                </button>
             </div>
-            <div class="request-item">
-                <span>🎵 Spotify</span>
-                <span>ana@correo.com</span>
-                <span class="request-status completed">Completada</span>
+            <input type="hidden" id="serviceSelect" value="netflix">
+        </div>
+
+        <!-- Datos del usuario -->
+        <div class="form-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i> Correo electrónico
+                    </label>
+                    <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required />
+                    <small>Usa un correo válido para recibir tu cuenta</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <input type="password" id="requestPassword" placeholder="Tu contraseña (opcional)" />
+                    <small>Déjala en blanco para que la generemos</small>
+                </div>
             </div>
         </div>
-        <button class="btn-view-all" onclick="navigateTo('historial')">
-            Ver todas <i class="fas fa-arrow-right"></i>
+
+        <!-- Resumen de costos -->
+        <div class="form-section resumen">
+            <div class="resumen-item">
+                <span class="resumen-label"><i class="fas fa-coins"></i> Costo</span>
+                <span class="resumen-value" id="requestPrice">15 créditos</span>
+            </div>
+            <div class="resumen-item">
+                <span class="resumen-label"><i class="fas fa-wallet"></i> Tu saldo</span>
+                <span class="resumen-value balance" id="requestBalance">100 créditos</span>
+            </div>
+        </div>
+
+        <!-- Botón de acción -->
+        <button type="submit" class="btn-solicitar" id="solicitarBtn">
+            <i class="fas fa-paper-plane"></i> Solicitar cuenta
         </button>
+
+        <div id="requestMessage" class="request-message"></div>
+    </div>
+
+    <!-- ===== HISTORIAL RÁPIDO ===== -->
+    <div class="cuentas-historial">
+        <div class="historial-header">
+            <h4><i class="fas fa-clock"></i> Solicitudes recientes</h4>
+            <button class="btn-ver-todas" onclick="navigateTo('historial')">
+                Ver todas <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div id="recentRequests" class="requests-list">
+            <div class="request-empty">
+                <i class="fas fa-inbox"></i>
+                <p>No hay solicitudes recientes</p>
+            </div>
+        </div>
     </div>
 
 </div>
- 
 
+<script>
+    // ================================================================
+    //  SELECTOR DE PLATAFORMAS
+    // ================================================================
+
+    document.querySelectorAll('.platform-card').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.platform-card').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('serviceSelect').value = this.dataset.platform;
+            
+            // Actualizar precio según plataforma
+            const prices = {
+                'netflix': 15,
+                'disney': 18,
+                'hbo': 20,
+                'spotify': 10,
+                'amazon': 22,
+                'paramount': 16
+            };
+            const price = prices[this.dataset.platform] || 15;
+            document.getElementById('requestPrice').textContent = price + ' créditos';
+        });
+    });
+
+    // ================================================================
+    //  ENVIAR SOLICITUD
+    // ================================================================
+
+    document.getElementById('solicitarBtn').addEventListener('click', function() {
+        const email = document.getElementById('requestEmail').value.trim();
+        const password = document.getElementById('requestPassword').value.trim();
+        const platform = document.getElementById('serviceSelect').value;
+        const msg = document.getElementById('requestMessage');
+
+        if (!email) {
+            msg.textContent = '❌ El correo electrónico es obligatorio.';
+            msg.style.color = 'var(--danger)';
+            return;
+        }
+
+        // Simulación de envío
+        msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
+        msg.style.color = 'var(--success)';
+        
+        // Limpiar campos
+        document.getElementById('requestEmail').value = '';
+        document.getElementById('requestPassword').value = '';
+        
+        setTimeout(() => {
+            msg.textContent = '';
+        }, 4000);
+    });
+</script>
