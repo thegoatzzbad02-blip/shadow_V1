@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify
 from backend.utils.decorators import token_required, admin_required
 from backend.models.user_model import UserModel
 from backend.models.product_model import ProductModel
-from backend.models.voucher_model import VoucherModel  # 👈 importar
+from backend.models.voucher_model import VoucherModel
+from backend.models.solicitud_model import SolicitudModel  # 👈 NUEVO
 import traceback
 
 admin_bp = Blueprint('admin', __name__)
@@ -198,3 +199,4 @@ def delete_voucher(voucher_id):
     except Exception as e:
         print("Error en delete_voucher:", traceback.format_exc())
         return jsonify({'message': 'Error interno al eliminar código'}), 500
+

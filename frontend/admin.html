@@ -3,26 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nix Sphere · Administración</title>
+    <title>Servinet Store · Administración</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
     <style>
-        /* ================================================================
-           ADMIN · DISEÑO RESPONSIVE (TARJETAS EN MÓVILES)
-           ================================================================ */
-
-        :root {
-            --admin-sidebar-width: 260px;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
+        /* Estilos específicos del admin */
         .admin-body {
             display: flex;
             min-height: 100vh;
@@ -33,7 +23,7 @@
 
         /* ===== MENÚ LATERAL ===== */
         .admin-sidebar {
-            width: var(--admin-sidebar-width);
+            width: 260px;
             background: var(--bg-secondary);
             border-right: 1px solid var(--border-light);
             padding: 20px 16px;
@@ -134,6 +124,8 @@
             flex-wrap: wrap;
             gap: 12px;
             margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 12px;
         }
         .admin-main .page-header h1 {
             font-size: 1.5rem;
@@ -141,265 +133,6 @@
             margin: 0;
         }
 
-        /* ===== SECCIONES ===== */
-        .admin-section {
-            display: none;
-        }
-        .admin-section.active {
-            display: block;
-        }
-
-        /* ===== FORMULARIO ===== */
-        .admin-form {
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .admin-form .form-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .admin-form .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-        .admin-form .form-row .full-width {
-            grid-column: 1 / -1;
-        }
-        .admin-form label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            display: block;
-            margin-bottom: 4px;
-        }
-        .admin-form input,
-        .admin-form textarea,
-        .admin-form select {
-            width: 100%;
-            padding: 10px 12px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-sm);
-            color: var(--text-primary);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.9rem;
-            min-height: 44px;
-        }
-        .admin-form textarea {
-            min-height: 70px;
-            resize: vertical;
-        }
-        .admin-form .form-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 14px;
-        }
-        .admin-form .form-actions button {
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-height: 44px;
-            font-size: 0.9rem;
-            flex: 1 1 auto;
-        }
-        .admin-form .form-actions .btn-save {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-        }
-        .admin-form .form-actions .btn-cancel {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border-light);
-        }
-        .admin-form .form-actions .btn-cancel:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-        .validation-error {
-            color: var(--danger);
-            font-size: 0.8rem;
-            margin-top: 4px;
-            display: none;
-        }
-        .detail-message {
-            margin-top: 12px;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            text-align: center;
-            font-weight: 500;
-            display: none;
-        }
-        .detail-message.success {
-            background: rgba(34,211,238,0.15);
-            color: var(--success);
-            border: 1px solid var(--success);
-            display: block;
-        }
-        .detail-message.error {
-            background: rgba(248,113,113,0.15);
-            color: var(--danger);
-            border: 1px solid var(--danger);
-            display: block;
-        }
-
-        /* ===== LISTA DE PRODUCTOS (tarjetas en móviles) ===== */
-        .admin-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .admin-list .list-item {
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .admin-list .list-item .item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .admin-list .list-item .item-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .admin-list .list-item .item-value {
-            font-weight: 500;
-            color: var(--text-primary);
-            word-break: break-word;
-        }
-
-        .admin-list .list-item .item-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 6px;
-            justify-content: flex-end;
-        }
-        .admin-list .list-item .item-actions button {
-            background: transparent;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.8rem;
-            min-height: 36px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
-        }
-        .admin-list .list-item .item-actions .edit-btn {
-            color: var(--accent-primary);
-            background: var(--accent-bg);
-        }
-        .admin-list .list-item .item-actions .edit-btn:hover {
-            background: var(--accent-primary);
-            color: white;
-        }
-        .admin-list .list-item .item-actions .delete-btn {
-            color: var(--danger);
-            background: rgba(248,113,113,0.12);
-        }
-        .admin-list .list-item .item-actions .delete-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .admin-list .list-item .category-badge {
-            background: var(--accent-bg);
-            color: var(--accent-primary);
-            padding: 2px 10px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
-        .admin-list .list-item .codes-badge {
-            background: var(--bg-secondary);
-            padding: 2px 10px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ===== TABLA ===== */
-        .admin-table-wrapper.desktop-only {
-            display: block;
-        }
-
-        .admin-table {
-            width: 100%;
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius);
-            overflow: hidden;
-            font-size: 0.9rem;
-        }
-        .admin-table th {
-            background: var(--bg-secondary);
-            padding: 10px 14px;
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .admin-table td {
-            padding: 10px 14px;
-            border-top: 1px solid var(--border-light);
-            color: var(--text-secondary);
-        }
-        .admin-table .actions {
-            display: flex;
-            gap: 6px;
-        }
-        .admin-table .actions button {
-            background: transparent;
-            border: none;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background 0.2s;
-            font-size: 1rem;
-        }
-        .admin-table .actions .edit:hover {
-            background: var(--accent-bg);
-            color: var(--accent-primary);
-        }
-        .admin-table .actions .delete:hover {
-            background: rgba(248,113,113,0.15);
-            color: var(--danger);
-        }
-
-        /* ===== BOTÓN HAMBURGUESA ===== */
         .hamburger-toggle {
             display: none;
             background: transparent;
@@ -420,10 +153,15 @@
             z-index: 99;
         }
 
-        /* ================================================================
-           RESPONSIVE
-           ================================================================ */
+        /* ===== SECCIONES ===== */
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active {
+            display: block;
+        }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .admin-sidebar {
                 position: fixed;
@@ -454,53 +192,11 @@
             .admin-main .page-header h1 {
                 font-size: 1.3rem;
             }
-            .admin-table-wrapper.desktop-only {
-                display: none;
-            }
-            .admin-list {
-                display: grid !important;
-            }
         }
 
-        @media (max-width: 768px) {
-            .admin-form .form-row {
-                grid-template-columns: 1fr;
-            }
-            .admin-form {
-                padding: 16px;
-            }
-            .admin-form .form-actions button {
-                flex: 1 1 100%;
-            }
-            .admin-list .list-item .item-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2px;
-            }
-            .admin-list .list-item .item-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-        }
-
-        @media (min-width: 993px) {
-            .admin-list {
-                display: none !important;
-            }
-            .admin-table-wrapper.desktop-only {
-                display: block !important;
-            }
-        }
-
-        @media (max-width: 400px) {
+        @media (max-width: 480px) {
             .admin-main {
                 padding: 10px;
-            }
-            .admin-form {
-                padding: 12px;
-            }
-            .admin-list .list-item {
-                padding: 12px;
             }
             .sidebar-nav .nav-item {
                 font-size: 0.8rem;
@@ -524,26 +220,33 @@
         <!-- ===== MENÚ LATERAL ===== -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-brand">
-                <i class="fas fa-circle-nodes"></i> Nix Sphere
+                <i class="fas fa-crown"></i> Servinet Store
             </div>
 
             <nav class="sidebar-nav">
                 <button class="nav-item active" data-section="dashboard">
                     <i class="fas fa-chart-pie"></i> Dashboard
                 </button>
-                <button class="nav-item" data-section="productos">
-                    <i class="fas fa-box"></i> Productos
+                <button class="nav-item" data-section="giftcards">
+                    <i class="fas fa-gift"></i> Gift Cards
                 </button>
-                <button class="nav-item" data-section="usuarios">
-                    <i class="fas fa-users"></i> Usuarios
+                <button class="nav-item" data-section="cuentas-hit">
+                    <i class="fas fa-film"></i> Cuentas Hit
+                </button>
+                <button class="nav-item" data-section="cursos">
+                    <i class="fas fa-graduation-cap"></i> Cursos
+                </button>
+                <button class="nav-item" data-section="cuentas-dominio">
+                    <i class="fas fa-paper-plane"></i> Cuentas a dominio
                 </button>
                 <button class="nav-item" data-section="vouchers">
                     <i class="fas fa-ticket-alt"></i> Códigos
                 </button>
-                <button class="nav-item" data-section="config">
-                    <i class="fas fa-cog"></i> Configuración
+                <button class="nav-item" data-section="usuarios">
+                    <i class="fas fa-users"></i> Usuarios
                 </button>
-                <button class="nav-item logout" id="logoutBtn">
+                <hr class="menu-divider">
+                <button class="nav-item logout" id="logoutAdminBtn">
                     <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                 </button>
             </nav>
@@ -552,7 +255,7 @@
         <!-- ===== CONTENIDO PRINCIPAL ===== -->
         <main class="admin-main">
 
-            <!-- Header -->
+            <!-- HEADER -->
             <div class="page-header">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <button class="hamburger-toggle" id="hamburgerToggle">
@@ -585,163 +288,204 @@
                         <h3 style="font-size: 1.8rem; margin: 6px 0 0;" id="totalCredits">0</h3>
                         <p style="color: var(--text-secondary); margin: 0; font-size: 0.8rem;">Créditos totales</p>
                     </div>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 16px; text-align: center;">
+                        <i class="fas fa-ticket-alt" style="font-size: 1.8rem; color: var(--accent-primary);"></i>
+                        <h3 style="font-size: 1.8rem; margin: 6px 0 0;" id="totalVouchers">0</h3>
+                        <p style="color: var(--text-secondary); margin: 0; font-size: 0.8rem;">Códigos</p>
+                    </div>
                 </div>
                 <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 16px;">
                     <h3 style="margin: 0 0 6px; font-size: 1.1rem;">📊 Resumen</h3>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Bienvenido al panel de administración de Nix Sphere. Aquí puedes gestionar productos, usuarios y configuraciones.</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Bienvenido al panel de administración de Servinet Store. Aquí puedes gestionar productos, usuarios y configuraciones.</p>
                 </div>
             </div>
 
-            <!-- ===== SECCIÓN PRODUCTOS ===== -->
-            <div id="section-productos" class="admin-section">
-                <!-- Formulario -->
-                <div class="admin-form" id="productForm">
-                    <div class="form-title" id="formTitle">
-                        <i class="fas fa-plus-circle"></i> Nuevo Producto
-                    </div>
-                    <input type="hidden" id="editProductId">
-
-                    <div class="form-row">
-                        <div class="full-width">
-                            <label for="productName"><i class="fas fa-tag"></i> Nombre *</label>
-                            <input type="text" id="productName" placeholder="Ej: Netflix Premium" required>
-                        </div>
-                        <div class="full-width">
-                            <label for="productDescription"><i class="fas fa-align-left"></i> Descripción</label>
-                            <textarea id="productDescription" placeholder="Descripción detallada del producto..."></textarea>
-                        </div>
-                        <div>
-                            <label for="productPrice"><i class="fas fa-coins"></i> Precio (créditos) *</label>
-                            <input type="number" id="productPrice" placeholder="15" required>
-                        </div>
-                        <div>
-                            <label for="productStock"><i class="fas fa-boxes"></i> Stock *</label>
-                            <input type="number" id="productStock" placeholder="10" required>
-                        </div>
-                        <div>
-                            <label for="productCategory"><i class="fas fa-tags"></i> Categoría *</label>
-                            <select id="productCategory">
-                                <option value="streaming">Streaming</option>
-                                <option value="giftcards">Gift Cards</option>
-                                <option value="cursos">Cursos</option>
-                                <option value="otros">Otros</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label><i class="fas fa-code"></i> Códigos (uno por línea) *</label>
-                            <textarea id="productCodes" rows="4" placeholder="Código1&#10;Código2&#10;Código3"></textarea>
-                            <small style="color: var(--text-secondary);">Debe haber al menos tantos códigos como stock.</small>
-                            <div id="codesValidation" class="validation-error">⚠️ Necesitas al menos <span id="codesNeeded">0</span> códigos para el stock actual.</div>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button class="btn-save" id="saveProductBtn"><i class="fas fa-save"></i> Guardar</button>
-                        <button class="btn-cancel" id="cancelProductBtn"><i class="fas fa-times"></i> Cancelar</button>
-                    </div>
-                    <div id="productMessage" class="detail-message"></div>
+            <!-- ===== SECCIÓN GIFT CARDS ===== -->
+            <div id="section-giftcards" class="admin-section">
+                <div class="tab-header">
+                    <h2><i class="fas fa-gift" style="color:var(--accent-primary);"></i> Gift Cards</h2>
+                    <p>Gestiona las gift cards disponibles</p>
                 </div>
-
-                <!-- Tabla (Desktop) -->
-                <div class="admin-table-wrapper desktop-only">
-                    <table class="admin-table" id="productsTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
-                                <th>Códigos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsTableBody">
-                            <tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Cargando productos...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="product-form" data-category="giftcards">
+                    <input type="text" placeholder="Nombre del producto" class="product-name-input">
+                    <input type="number" placeholder="Precio (créditos)" class="product-price-input">
+                    <input type="number" placeholder="Stock" class="product-stock-input">
+                    <textarea placeholder="Descripción" class="product-desc-input"></textarea>
+                    <textarea placeholder="Códigos (uno por línea)" class="product-codes-input"></textarea>
+                    <button class="btn-save-product">Guardar Gift Card</button>
                 </div>
+                <div class="product-list" id="list-giftcards"></div>
+            </div>
 
-                <!-- Tarjetas (Móvil) -->
-                <div class="admin-list" id="productsList"></div>
+            <!-- ===== SECCIÓN CUENTAS HIT ===== -->
+            <div id="section-cuentas-hit" class="admin-section">
+                <div class="tab-header">
+                    <h2><i class="fas fa-film" style="color:var(--accent-primary);"></i> Cuentas Hit</h2>
+                    <p>Gestiona las cuentas de streaming premium</p>
+                </div>
+                <div class="product-form" data-category="cuentas-hit">
+                    <input type="text" placeholder="Nombre del producto" class="product-name-input">
+                    <input type="number" placeholder="Precio (créditos)" class="product-price-input">
+                    <input type="number" placeholder="Stock" class="product-stock-input">
+                    <textarea placeholder="Descripción" class="product-desc-input"></textarea>
+                    <textarea placeholder="Códigos (uno por línea)" class="product-codes-input"></textarea>
+                    <button class="btn-save-product">Guardar Cuenta Hit</button>
+                </div>
+                <div class="product-list" id="list-cuentas-hit"></div>
+            </div>
+
+            <!-- ===== SECCIÓN CURSOS ===== -->
+            <div id="section-cursos" class="admin-section">
+                <div class="tab-header">
+                    <h2><i class="fas fa-graduation-cap" style="color:var(--accent-primary);"></i> Cursos</h2>
+                    <p>Gestiona los cursos digitales</p>
+                </div>
+                <div class="product-form" data-category="cursos">
+                    <input type="text" placeholder="Nombre del curso" class="product-name-input">
+                    <input type="number" placeholder="Precio (créditos)" class="product-price-input">
+                    <input type="number" placeholder="Stock" class="product-stock-input">
+                    <textarea placeholder="Descripción" class="product-desc-input"></textarea>
+                    <textarea placeholder="Códigos (uno por línea)" class="product-codes-input"></textarea>
+                    <button class="btn-save-product">Guardar Curso</button>
+                </div>
+                <div class="product-list" id="list-cursos"></div>
+            </div>
+
+            <!-- ===== SECCIÓN CUENTAS A DOMINIO (MEJORADA) ===== -->
+<div id="section-cuentas-dominio" class="admin-section">
+    <div class="tab-header">
+        <h2><i class="fas fa-paper-plane" style="color:var(--accent-primary);"></i> Cuentas a dominio</h2>
+        <p>Gestiona las solicitudes de cuentas personalizadas</p>
+    </div>
+
+    <!-- ===== CONFIGURACIÓN DE PRECIOS Y PLATAFORMAS ===== -->
+    <div class="dominio-config">
+        <div class="config-header">
+            <h3><i class="fas fa-cog"></i> Configuración de cuentas</h3>
+            <button class="btn-add-platform" id="addPlatformBtn">
+                <i class="fas fa-plus"></i> Agregar plataforma
+            </button>
+        </div>
+        
+        <div class="config-grid" id="platformsConfig">
+            <!-- Las plataformas se cargan desde el backend -->
+        </div>
+    </div>
+
+    <!-- ===== ESTADÍSTICAS ===== -->
+    <div class="dominio-stats">
+        <div class="stat-card">
+            <span class="stat-number" id="totalSolicitudes">0</span>
+            <span class="stat-label">Total solicitudes</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="pendingSolicitudes">0</span>
+            <span class="stat-label">Pendientes</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="completedSolicitudes">0</span>
+            <span class="stat-label">Completadas</span>
+        </div>
+    </div>
+
+    <!-- ===== FILTROS ===== -->
+    <div class="dominio-filters">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="pending">Pendientes</button>
+        <button class="filter-btn" data-filter="completed">Completadas</button>
+        <button class="filter-btn" data-filter="cancelled">Canceladas</button>
+    </div>
+
+    <!-- ===== LISTA DE SOLICITUDES ===== -->
+    <div id="solicitudesList" class="solicitudes-list">
+        <div class="empty-message">
+            <i class="fas fa-inbox"></i>
+            <p>No hay solicitudes</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL PARA VER DETALLES DE SOLICITUD ===== -->
+<div id="solicitudModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-paper-plane" style="color:var(--accent-primary);"></i> Detalles de la solicitud</h3>
+            <button class="modal-close" onclick="closeSolicitudModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body" id="solicitudModalBody">
+            <!-- Contenido dinámico -->
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-close" onclick="closeSolicitudModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL PARA AGREGAR PLATAFORMA ===== -->
+<div id="addPlatformModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content" style="max-width:400px;">
+        <div class="modal-header">
+            <h3><i class="fas fa-plus-circle" style="color:var(--accent-primary);"></i> Agregar plataforma</h3>
+            <button class="modal-close" onclick="closeAddPlatformModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Nombre de la plataforma</label>
+                <input type="text" id="newPlatformName" placeholder="Ej: Apple TV+" />
+            </div>
+            <div class="form-group">
+                <label>Precio (créditos)</label>
+                <input type="number" id="newPlatformPrice" placeholder="15" min="1" />
+            </div>
+            <div class="form-group">
+                <label>Icono (Font Awesome)</label>
+                <input type="text" id="newPlatformIcon" placeholder="fab fa-apple" />
+                <small>Ej: fab fa-netflix, fas fa-film, fab fa-spotify</small>
+            </div>
+            <div class="form-group">
+                <label>Color (opcional)</label>
+                <input type="text" id="newPlatformColor" placeholder="#e50914" />
+                <small>Color hexadecimal para el icono</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="closeAddPlatformModal()">Cancelar</button>
+            <button class="btn-modal-save" id="savePlatformBtn">Guardar plataforma</button>
+        </div>
+    </div>
+</div>
+
+            <!-- ===== SECCIÓN VOUCHERS ===== -->
+            <div id="section-vouchers" class="admin-section">
+                <div class="tab-header">
+                    <h2><i class="fas fa-ticket-alt" style="color:var(--accent-primary);"></i> Códigos Promocionales</h2>
+                    <p>Genera códigos para canjear créditos</p>
+                </div>
+                <div class="voucher-form">
+                    <input type="number" id="voucherAmount" placeholder="Créditos" min="1">
+                    <input type="number" id="voucherExpiry" placeholder="Días de validez (opcional)" min="0">
+                    <button id="generateVoucherBtn">Generar código</button>
+                </div>
+                <div id="voucherList"></div>
             </div>
 
             <!-- ===== SECCIÓN USUARIOS ===== -->
             <div id="section-usuarios" class="admin-section">
-                <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px;">
-                    <p style="color: var(--text-secondary); margin: 0; font-size: 0.9rem;">Gestión de usuarios registrados en la plataforma.</p>
+                <div class="tab-header">
+                    <h2><i class="fas fa-users" style="color:var(--accent-primary);"></i> Usuarios</h2>
+                    <p>Gestiona los usuarios de la plataforma</p>
                 </div>
-
-                <!-- Tabla (Desktop) -->
-                <div class="admin-table-wrapper desktop-only">
-                    <table class="admin-table" id="usersTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Usuario</th>
-                                <th>Rol</th>
-                                <th>Créditos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <tr><td colspan="5" style="text-align:center; color: var(--text-secondary);">Cargando usuarios...</td></tr>
-                        </tbody>
-                    </table>
+                <div class="user-form">
+                    <input type="text" id="newUsername" placeholder="Usuario">
+                    <input type="password" id="newPassword" placeholder="Contraseña">
+                    <input type="number" id="newCredits" placeholder="Créditos iniciales" value="0">
+                    <button id="createUserBtn">Crear usuario</button>
                 </div>
-
-                <!-- Tarjetas (Móvil) -->
-                <div class="admin-list" id="usersList"></div>
-            </div>
-
-            <!-- ===== SECCIÓN VOUCHERS (CÓDIGOS) ===== -->
-            <div id="section-vouchers" class="admin-section">
-                <div class="admin-form" style="margin-bottom: 16px;">
-                    <div class="form-title"><i class="fas fa-plus-circle"></i> Generar código promocional</div>
-                    <div class="form-row" style="grid-template-columns: 1fr 1fr auto;">
-                        <div>
-                            <label for="voucherAmount">Créditos</label>
-                            <input type="number" id="voucherAmount" placeholder="10" min="1" required>
-                        </div>
-                        <div>
-                            <label for="voucherExpiry">Días de validez (opcional)</label>
-                            <input type="number" id="voucherExpiry" placeholder="30" min="0">
-                        </div>
-                        <div style="display: flex; align-items: flex-end;">
-                            <button class="btn-save" id="generateVoucherBtn"><i class="fas fa-plus"></i> Generar</button>
-                        </div>
-                    </div>
-                    <div id="voucherMessage" class="detail-message" style="display:none;"></div>
-                </div>
-
-                <div style="overflow-x: auto;">
-                    <table class="admin-table" id="vouchersTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Código</th>
-                                <th>Créditos</th>
-                                <th>Usado</th>
-                                <th>Expira</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="vouchersTableBody">
-                            <tr><td colspan="6" style="text-align:center; color: var(--text-secondary);">Cargando códigos...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Tarjetas para móvil -->
-                <div class="admin-list" id="vouchersList"></div>
-            </div>
-
-            <!-- ===== SECCIÓN CONFIGURACIÓN ===== -->
-            <div id="section-config" class="admin-section">
-                <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius); padding: 20px; text-align: center;">
-                    <i class="fas fa-cog" style="font-size: 2.5rem; color: var(--text-secondary);"></i>
-                    <h3 style="margin: 12px 0 6px;">Configuración</h3>
-                    <p style="color: var(--text-secondary);">Próximamente: ajustes de la plataforma.</p>
-                </div>
+                <div id="userList"></div>
             </div>
 
         </main>

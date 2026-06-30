@@ -1,83 +1,297 @@
 <!-- ================================================================
-   CUENTAS A DOMINIO
+   CUENTAS A DOMINIO · CON SELECTOR DINÁMICO DE PLATAFORMAS
    ================================================================ -->
 
 <div class="cuentas-dominio-container">
 
-    <div class="cuentas-dominio-header">
-        <div class="cuentas-dominio-badge"><i class="fas fa-crown"></i> PREMIUM</div>
-        <h1 class="cuentas-dominio-title">CUENTAS <span>A DOMINIO</span></h1>
-        <p class="cuentas-dominio-subtitle">Personaliza tu cuenta de streaming</p>
+    <!-- ===== ENCABEZADO ===== -->
+    <div class="cuentas-header">
+        <div class="cuentas-header-badge">
+            <i class="fas fa-crown"></i> PREMIUM
+        </div>
+        <h1 class="cuentas-header-title">Cuentas <span>a dominio</span></h1>
+        <p class="cuentas-header-subtitle">Personaliza tu cuenta de streaming con tus datos</p>
     </div>
 
-    <div class="cuentas-dominio-body">
-        <div class="cuentas-dominio-section-title">
-            <i class="fas fa-film"></i> ¡Elige tu plataforma!
+    <!-- ===== PASOS ===== -->
+    <div class="cuentas-pasos">
+        <div class="paso-item">
+            <div class="paso-numero">1</div>
+            <div class="paso-contenido">
+                <h4>Elige tu plataforma</h4>
+                <p>Selecciona el servicio que deseas</p>
+            </div>
         </div>
-        <p class="cuentas-dominio-desc">Selecciona el servicio, ingresa tu correo y contraseña.</p>
-
-        <form id="requestForm" class="cuentas-dominio-form">
-            <div class="form-group">
-                <label><i class="fas fa-tv"></i> Selecciona tu plataforma</label>
-                <div class="platform-selector">
-                    <button type="button" class="platform-btn active" data-platform="netflix">
-                        <i class="fab fa-netflix"></i> NETFLIX
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="disney">
-                        <i class="fab fa-disney"></i> DISNEY+
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="paramount">
-                        <i class="fas fa-play-circle"></i> PARAMOUNT+
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="hbo">
-                        <i class="fas fa-video"></i> HBO MAX
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="spotify">
-                        <i class="fab fa-spotify"></i> SPOTIFY
-                    </button>
-                    <button type="button" class="platform-btn" data-platform="amazon">
-                        <i class="fab fa-amazon"></i> AMAZON PRIME
-                    </button>
-                </div>
-                <input type="hidden" id="serviceSelect" value="netflix">
+        <div class="paso-item">
+            <div class="paso-numero">2</div>
+            <div class="paso-contenido">
+                <h4>Ingresa tus datos</h4>
+                <p>Correo y contraseña personalizada</p>
             </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-envelope"></i> Ingresa tu correo electrónico</label>
-                <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required>
+        </div>
+        <div class="paso-item">
+            <div class="paso-numero">3</div>
+            <div class="paso-contenido">
+                <h4>¡Listo!</h4>
+                <p>Recibe tu cuenta al instante</p>
             </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Ingresa tu contraseña</label>
-                <input type="password" id="requestPassword" placeholder="Tu contraseña">
-            </div>
-
-            <div class="cuentas-dominio-summary">
-                <div class="summary-item">
-                    <span class="summary-label"><i class="fas fa-coins"></i> Costo:</span>
-                    <span class="summary-value" id="requestPrice">15 créditos</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label"><i class="fas fa-wallet"></i> Tu saldo:</span>
-                    <span class="summary-value balance" id="requestBalance">100 créditos</span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-cuentas-dominio">
-                <i class="fas fa-paper-plane"></i> SOLICITAR AHORA
-            </button>
-            <div id="requestMessage" class="request-message"></div>
-        </form>
+        </div>
     </div>
 
-    <div class="cuentas-dominio-history">
-        <h4><i class="fas fa-clock"></i> Mis solicitudes recientes</h4>
-        <div id="recentRequests" class="requests-list">
-            <p style="color: var(--text-secondary);">No hay solicitudes recientes.</p>
+    <!-- ===== FORMULARIO ===== -->
+    <div class="cuentas-formulario" id="solicitudForm">
+        
+        <!-- Selector de plataforma (cargado dinámicamente) -->
+        <div class="form-section">
+            <label class="form-label">
+                <i class="fas fa-tv"></i> Selecciona tu plataforma
+            </label>
+            <div class="platform-grid" id="platformGrid">
+                <!-- Las plataformas se cargan desde el backend -->
+                <div style="text-align:center; padding:20px; color:var(--text-secondary);">
+                    <i class="fas fa-spinner fa-spin"></i> Cargando plataformas...
+                </div>
+            </div>
+            <input type="hidden" id="serviceSelect" value="">
         </div>
-        <button class="btn-view-all" onclick="navigateTo('historial')">
-            Ver todas <i class="fas fa-arrow-right"></i>
+
+        <!-- Datos del usuario -->
+        <div class="form-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i> Correo electrónico
+                    </label>
+                    <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required />
+                    <small>Usa un correo válido para recibir tu cuenta</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i> Contraseña
+                    </label>
+                    <input type="password" id="requestPassword" placeholder="Tu contraseña (opcional)" />
+                    <small>Déjala en blanco para que la generemos</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="form-section resumen">
+            <div class="resumen-item">
+                <span class="resumen-label"><i class="fas fa-coins"></i> Costo</span>
+                <span class="resumen-value" id="requestPrice">0 créditos</span>
+            </div>
+            <div class="resumen-item">
+                <span class="resumen-label"><i class="fas fa-wallet"></i> Tu saldo</span>
+                <span class="resumen-value balance" id="requestBalance">0 créditos</span>
+            </div>
+        </div>
+
+        <!-- Botón -->
+        <button type="submit" class="btn-solicitar" id="solicitarBtn">
+            <i class="fas fa-paper-plane"></i> Solicitar cuenta
         </button>
+
+        <div id="requestMessage" class="request-message"></div>
+    </div>
+
+    <!-- ===== HISTORIAL RÁPIDO ===== -->
+    <div class="cuentas-historial">
+        <div class="historial-header">
+            <h4><i class="fas fa-clock"></i> Solicitudes recientes</h4>
+            <button class="btn-ver-todas" onclick="navigateTo('historial')">
+                Ver todas <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div id="recentRequests" class="requests-list">
+            <div class="request-empty">
+                <i class="fas fa-inbox"></i>
+                <p>No hay solicitudes recientes</p>
+            </div>
+        </div>
     </div>
 
 </div>
+
+<script>
+    // ================================================================
+    //  CUENTAS A DOMINIO · CONEXIÓN CON BACKEND
+    // ================================================================
+
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    let selectedPlatform = null;
+    let platforms = [];
+
+    // ===== CARGAR PLATAFORMAS =====
+    async function loadPlatforms() {
+        const grid = document.getElementById('platformGrid');
+        
+        try {
+            const response = await fetch('/api/admin/plataformas', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (!response.ok) throw new Error('Error al cargar plataformas');
+            
+            platforms = await response.json();
+            
+            if (platforms.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:20px;">No hay plataformas disponibles</p>';
+                return;
+            }
+            
+            grid.innerHTML = '';
+            platforms.forEach(p => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'platform-card';
+                btn.dataset.id = p.id;
+                btn.dataset.precio = p.precio;
+                btn.innerHTML = `
+                    <i class="${p.icono}" style="color: ${p.color};"></i>
+                    <span>${p.nombre}</span>
+                    <small>${p.precio} créditos</small>
+                `;
+                btn.addEventListener('click', function() {
+                    selectPlatform(p.id);
+                });
+                grid.appendChild(btn);
+            });
+            
+            // Seleccionar la primera por defecto
+            if (platforms.length > 0) {
+                selectPlatform(platforms[0].id);
+            }
+            
+            // Actualizar saldo
+            document.getElementById('requestBalance').textContent = user.credits || 0;
+            
+        } catch (error) {
+            console.error('Error:', error);
+            grid.innerHTML = '<p style="color:var(--danger); text-align:center; padding:20px;">Error al cargar plataformas</p>';
+        }
+    }
+
+    // ===== SELECCIONAR PLATAFORMA =====
+    function selectPlatform(id) {
+        const platform = platforms.find(p => p.id === id);
+        if (!platform) return;
+        
+        selectedPlatform = platform;
+        
+        // Actualizar UI
+        document.querySelectorAll('.platform-card').forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.dataset.id) === id);
+        });
+        
+        document.getElementById('serviceSelect').value = id;
+        document.getElementById('requestPrice').textContent = `${platform.precio} créditos`;
+    }
+
+    // ===== ENVIAR SOLICITUD =====
+    document.getElementById('solicitarBtn').addEventListener('click', async function() {
+        const email = document.getElementById('requestEmail').value.trim();
+        const password = document.getElementById('requestPassword').value.trim();
+        const msg = document.getElementById('requestMessage');
+        
+        if (!selectedPlatform) {
+            msg.textContent = '❌ Selecciona una plataforma.';
+            msg.style.color = 'var(--danger)';
+            return;
+        }
+        
+        if (!email) {
+            msg.textContent = '❌ El correo electrónico es obligatorio.';
+            msg.style.color = 'var(--danger)';
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/user/solicitar-cuenta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    plataforma: selectedPlatform.nombre,
+                    email: email,
+                    password: password,
+                    mensaje: ''
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
+                msg.style.color = 'var(--success)';
+                document.getElementById('requestEmail').value = '';
+                document.getElementById('requestPassword').value = '';
+                
+                // Recargar historial
+                loadRecentRequests();
+            } else {
+                msg.textContent = '❌ ' + (data.message || 'Error al enviar solicitud');
+                msg.style.color = 'var(--danger)';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            msg.textContent = '❌ Error de conexión. Intenta de nuevo.';
+            msg.style.color = 'var(--danger)';
+        }
+    });
+
+    // ===== CARGAR SOLICITUDES RECIENTES =====
+    async function loadRecentRequests() {
+        const container = document.getElementById('recentRequests');
+        if (!container) return;
+        
+        try {
+            const response = await fetch('/api/user/mis-solicitudes', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            if (!response.ok) throw new Error('Error al cargar solicitudes');
+            
+            const solicitudes = await response.json();
+            const recent = solicitudes.slice(0, 3);
+            
+            if (recent.length === 0) {
+                container.innerHTML = `
+                    <div class="request-empty">
+                        <i class="fas fa-inbox"></i>
+                        <p>No hay solicitudes recientes</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            recent.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'request-item';
+                const estadoLabels = {
+                    'pending': '⏳ Pendiente',
+                    'completed': '✅ Completada',
+                    'cancelled': '❌ Cancelada'
+                };
+                div.innerHTML = `
+                    <span>${s.plataforma}</span>
+                    <span>${s.email}</span>
+                    <span class="request-status ${s.estado}">${estadoLabels[s.estado] || s.estado}</span>
+                `;
+                container.appendChild(div);
+            });
+        } catch (error) {
+            console.error('Error al cargar solicitudes recientes:', error);
+        }
+    }
+
+    // ===== INICIALIZAR =====
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPlatforms();
+        loadRecentRequests();
+    });
+</script>

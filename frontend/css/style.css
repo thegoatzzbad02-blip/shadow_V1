@@ -6093,3 +6093,578 @@ body.auth-page {
         padding: 10px 12px;
     }
 }
+/* ================================================================
+   CUENTAS A DOMINIO · CONFIGURACIÓN Y MODALES
+   ================================================================ */
+
+/* ===== CONFIGURACIÓN ===== */
+.dominio-config {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 20px;
+}
+
+.config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.config-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.btn-add-platform {
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.btn-add-platform:hover {
+    background: var(--accent-secondary);
+    transform: scale(1.02);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+}
+
+.config-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.config-item .platform-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.config-item .platform-info i {
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+.config-item .platform-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.config-item .platform-price {
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    font-weight: 700;
+}
+
+.config-item .platform-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.config-item .platform-actions button {
+    background: transparent;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+
+.config-item .platform-actions .btn-edit-platform:hover {
+    color: var(--accent-primary);
+}
+
+.config-item .platform-actions .btn-delete-platform:hover {
+    color: var(--danger);
+}
+
+/* ===== MODALES ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+.modal-content {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    max-width: 550px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-light);
+}
+
+.modal-footer button {
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    border: none;
+    transition: all 0.2s;
+}
+
+.btn-modal-close {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light) !important;
+}
+
+.btn-modal-close:hover {
+    border-color: var(--text-primary) !important;
+    color: var(--text-primary);
+}
+
+.btn-modal-cancel {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-light) !important;
+}
+
+.btn-modal-cancel:hover {
+    border-color: var(--danger) !important;
+    color: var(--danger);
+}
+
+.btn-modal-save {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+}
+
+.btn-modal-save:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* ===== SOLICITUD DETALLE ===== */
+.solicitud-detalle {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.solicitud-detalle .detalle-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.solicitud-detalle .detalle-row:last-child {
+    border-bottom: none;
+}
+
+.solicitud-detalle .detalle-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.solicitud-detalle .detalle-value {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+    word-break: break-all;
+}
+
+.solicitud-detalle .detalle-value.password {
+    font-family: monospace;
+    letter-spacing: 1px;
+    color: var(--warning);
+}
+
+.solicitud-detalle .detalle-status {
+    padding: 4px 14px;
+    border-radius: 40px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.detalle-status.pending {
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--warning);
+}
+
+.detalle-status.completed {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--success);
+}
+
+.detalle-status.cancelled {
+    background: rgba(248, 113, 113, 0.15);
+    color: var(--danger);
+}
+
+/* ===== FORM GROUP PARA MODAL ===== */
+.modal-body .form-group {
+    margin-bottom: 14px;
+}
+
+.modal-body .form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.modal-body .form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.modal-body .form-group input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.modal-body .form-group small {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    opacity: 0.7;
+}
+
+/* ================================================================
+   SOLICITUDES LISTA (MEJORADA)
+   ================================================================ */
+
+.solicitud-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    border: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    transition: border-color 0.2s;
+}
+
+.solicitud-card:hover {
+    border-color: var(--accent-primary);
+}
+
+.solicitud-card.pending {
+    border-left: 4px solid var(--warning);
+}
+
+.solicitud-card.completed {
+    border-left: 4px solid var(--success);
+}
+
+.solicitud-card.cancelled {
+    border-left: 4px solid var(--danger);
+}
+
+.solicitud-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.solicitud-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.solicitud-user i {
+    color: var(--accent-primary);
+}
+
+.solicitud-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.solicitud-platform {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.solicitud-email {
+    color: var(--text-secondary);
+}
+
+.solicitud-date {
+    opacity: 0.7;
+    font-size: 0.7rem;
+}
+
+.solicitud-status .status-badge {
+    padding: 4px 12px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.status-badge.pending {
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--warning);
+}
+
+.status-badge.completed {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--success);
+}
+
+.status-badge.cancelled {
+    background: rgba(248, 113, 113, 0.15);
+    color: var(--danger);
+}
+
+.solicitud-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.solicitud-actions button {
+    padding: 4px 14px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.btn-complete {
+    background: rgba(34, 211, 238, 0.15);
+    color: var(--success);
+}
+
+.btn-complete:hover {
+    background: var(--success);
+    color: white;
+}
+
+.btn-cancel {
+    background: rgba(248, 113, 113, 0.15);
+    color: var(--danger);
+}
+
+.btn-cancel:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-view-more {
+    background: var(--accent-bg);
+    color: var(--accent-primary);
+}
+
+.btn-view-more:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .solicitud-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .solicitud-actions {
+        justify-content: flex-end;
+    }
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        max-width: 95%;
+    }
+    .solicitud-detalle .detalle-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    .solicitud-detalle .detalle-value {
+        text-align: left;
+    }
+}
+/* ================================================================
+   SELECTOR DE PLATAFORMAS (mejorado)
+   ================================================================ */
+
+.platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.platform-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.platform-card i {
+    font-size: 1.6rem;
+    display: block;
+    margin-bottom: 4px;
+    transition: transform 0.2s;
+}
+
+.platform-card span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.platform-card small {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.platform-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.platform-card:hover i {
+    transform: scale(1.1);
+}
+
+.platform-card.active {
+    border-color: var(--accent-primary);
+    background: var(--accent-bg);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.platform-card.active span {
+    color: var(--text-primary);
+}
+
+.platform-card.active i {
+    transform: scale(1.1);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .platform-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    
+    .platform-card {
+        padding: 8px 4px;
+    }
+    
+    .platform-card i {
+        font-size: 1.2rem;
+    }
+    
+    .platform-card span {
+        font-size: 0.65rem;
+    }
+    
+    .platform-card small {
+        font-size: 0.5rem;
+    }
+}
