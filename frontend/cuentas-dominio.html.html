@@ -1,0 +1,83 @@
+<!-- ================================================================
+   CUENTAS A DOMINIO
+   ================================================================ -->
+
+<div class="cuentas-dominio-container">
+
+    <div class="cuentas-dominio-header">
+        <div class="cuentas-dominio-badge"><i class="fas fa-crown"></i> PREMIUM</div>
+        <h1 class="cuentas-dominio-title">CUENTAS <span>A DOMINIO</span></h1>
+        <p class="cuentas-dominio-subtitle">Personaliza tu cuenta de streaming</p>
+    </div>
+
+    <div class="cuentas-dominio-body">
+        <div class="cuentas-dominio-section-title">
+            <i class="fas fa-film"></i> ¡Elige tu plataforma!
+        </div>
+        <p class="cuentas-dominio-desc">Selecciona el servicio, ingresa tu correo y contraseña.</p>
+
+        <form id="requestForm" class="cuentas-dominio-form">
+            <div class="form-group">
+                <label><i class="fas fa-tv"></i> Selecciona tu plataforma</label>
+                <div class="platform-selector">
+                    <button type="button" class="platform-btn active" data-platform="netflix">
+                        <i class="fab fa-netflix"></i> NETFLIX
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="disney">
+                        <i class="fab fa-disney"></i> DISNEY+
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="paramount">
+                        <i class="fas fa-play-circle"></i> PARAMOUNT+
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="hbo">
+                        <i class="fas fa-video"></i> HBO MAX
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="spotify">
+                        <i class="fab fa-spotify"></i> SPOTIFY
+                    </button>
+                    <button type="button" class="platform-btn" data-platform="amazon">
+                        <i class="fab fa-amazon"></i> AMAZON PRIME
+                    </button>
+                </div>
+                <input type="hidden" id="serviceSelect" value="netflix">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Ingresa tu correo electrónico</label>
+                <input type="email" id="requestEmail" placeholder="nombre@ejemplo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Ingresa tu contraseña</label>
+                <input type="password" id="requestPassword" placeholder="Tu contraseña">
+            </div>
+
+            <div class="cuentas-dominio-summary">
+                <div class="summary-item">
+                    <span class="summary-label"><i class="fas fa-coins"></i> Costo:</span>
+                    <span class="summary-value" id="requestPrice">15 créditos</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label"><i class="fas fa-wallet"></i> Tu saldo:</span>
+                    <span class="summary-value balance" id="requestBalance">100 créditos</span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-cuentas-dominio">
+                <i class="fas fa-paper-plane"></i> SOLICITAR AHORA
+            </button>
+            <div id="requestMessage" class="request-message"></div>
+        </form>
+    </div>
+
+    <div class="cuentas-dominio-history">
+        <h4><i class="fas fa-clock"></i> Mis solicitudes recientes</h4>
+        <div id="recentRequests" class="requests-list">
+            <p style="color: var(--text-secondary);">No hay solicitudes recientes.</p>
+        </div>
+        <button class="btn-view-all" onclick="navigateTo('historial')">
+            Ver todas <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+</div>

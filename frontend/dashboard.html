@@ -1,0 +1,188 @@
+<!-- ================================================================
+   DASHBOARD · CON IMÁGENES REALES
+   ================================================================ -->
+
+<div class="dashboard">
+
+    <!-- ===== CARRUSEL ===== -->
+    <section class="carousel-section">
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #1a1a3e, #2d1b69, #7c3aed);">
+                    <div class="slide-content">
+                        <span class="slide-badge">🔥 OFERTA ESPECIAL</span>
+                        <h2>Gift Cards <span>Digitales</span></h2>
+                        <p>Las mejores marcas al alcance de tu mano.</p>
+                        <button class="slide-btn" onclick="navigateTo('giftcards')">
+                            Explorar <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="slide-image">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #0f2b3d, #1a4a6b, #22d3ee);">
+                    <div class="slide-content">
+                        <span class="slide-badge">🎬 STREAMING PREMIUM</span>
+                        <h2>Cuentas <span>Hit</span></h2>
+                        <p>Netflix, Disney+, HBO Max y más.</p>
+                        <button class="slide-btn" onclick="navigateTo('cuentas-hit')">
+                            Explorar <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="slide-image">
+                        <i class="fas fa-film"></i>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #1a1a2e, #2d2a5e, #a78bfa);">
+                    <div class="slide-content">
+                        <span class="slide-badge">📚 APRENDE HOY</span>
+                        <h2>Cursos <span>Digitales</span></h2>
+                        <p>Aprende nuevas habilidades.</p>
+                        <button class="slide-btn" onclick="navigateTo('cursos')">
+                            Explorar <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="slide-image">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background: linear-gradient(135deg, #0a1628, #1a365d, #3b82f6);">
+                    <div class="slide-content">
+                        <span class="slide-badge">⚡ SOLICITA AHORA</span>
+                        <h2>Solicita tu <span>Cuenta</span></h2>
+                        <p>Personaliza tu cuenta de streaming.</p>
+                        <button class="slide-btn" onclick="navigateTo('cuentas-dominio')">
+                            Solicitar <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="slide-image">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+            <div class="carousel-indicators" id="carouselIndicators"></div>
+        </div>
+    </section>
+
+    <!-- ===== TICKER ===== -->
+    <div class="stats-ticker">
+        <div class="stats-ticker-track">
+            <span class="stat-item"><i class="fas fa-box"></i> Productos: <strong>24</strong></span>
+            <span class="stat-item"><i class="fas fa-users"></i> Usuarios activos: <strong>150</strong></span>
+            <span class="stat-item"><i class="fas fa-trophy"></i> Más popular: <strong>Amazon</strong></span>
+            <span class="stat-item"><i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong></span>
+            <span class="stat-item"><i class="fas fa-fire"></i> Ofertas: <strong>12</strong></span>
+            <span class="stat-item"><i class="fas fa-box"></i> Productos: <strong>24</strong></span>
+            <span class="stat-item"><i class="fas fa-users"></i> Usuarios activos: <strong>150</strong></span>
+            <span class="stat-item"><i class="fas fa-trophy"></i> Más popular: <strong>Amazon</strong></span>
+            <span class="stat-item"><i class="fas fa-coins"></i> Créditos totales: <strong>5,230</strong></span>
+            <span class="stat-item"><i class="fas fa-fire"></i> Ofertas: <strong>12</strong></span>
+        </div>
+    </div>
+
+    <!-- ===== TARJETAS DESTACADAS CON IMÁGENES ===== -->
+    <div class="featured-section">
+        <h2 class="featured-title">
+            <i class="fas fa-star" style="color: #fbbf24;"></i> Productos destacados
+        </h2>
+        <div class="featured-grid">
+
+            <!-- Card 1: Netflix -->
+            <div class="brand-card" onclick="navigateTo('cuentas-hit')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #b81d24, #e50914);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">🔥 Popular</span>
+                        <i class="fab fa-netflix"></i>
+                        <h3>Netflix Premium</h3>
+                        <p>15 créditos · Stock: 12</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Spotify -->
+            <div class="brand-card" onclick="navigateTo('cuentas-hit')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #1db954, #1ed760);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">🎵 Música</span>
+                        <i class="fab fa-spotify"></i>
+                        <h3>Spotify Premium</h3>
+                        <p>10 créditos · Stock: 8</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Amazon -->
+            <div class="brand-card" onclick="navigateTo('giftcards')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #ff9900, #ffb347);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">🎁 Gift Card</span>
+                        <i class="fab fa-amazon"></i>
+                        <h3>Amazon Gift Card</h3>
+                        <p>$10 · Stock: 5</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Disney+ -->
+            <div class="brand-card" onclick="navigateTo('cuentas-hit')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #113cc9, #0063e5);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">✨ Nuevo</span>
+                        <i class="fas fa-film"></i>
+                        <h3>Disney+ Premium</h3>
+                        <p>18 créditos · Stock: 6</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: HBO Max -->
+            <div class="brand-card" onclick="navigateTo('cuentas-hit')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #5822b4, #9b4dff);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">⚡ Oferta</span>
+                        <i class="fas fa-video"></i>
+                        <h3>HBO Max</h3>
+                        <p>20 créditos · Stock: 4</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Curso Python -->
+            <div class="brand-card" onclick="navigateTo('cursos')">
+                <div class="brand-card-image" style="background: linear-gradient(135deg, #306998, #ffd43b);">
+                    <div class="brand-card-overlay">
+                        <span class="brand-card-badge">📚 Curso</span>
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Python desde cero</h3>
+                        <p>50 créditos · Stock: 3</p>
+                        <button class="brand-card-btn">Ver más</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== BANNER DE RECARGA ===== -->
+    <div class="recharge-banner">
+        <div class="recharge-content">
+            <i class="fas fa-coins"></i>
+            <div>
+                <h3>¿Necesitas créditos?</h3>
+                <p>Recarga tu saldo al instante y obtén <strong>10% extra</strong></p>
+            </div>
+            <a href="creditos.html" class="recharge-btn">
+                <i class="fas fa-bolt"></i> Recargar ahora
+            </a>
+        </div>
+    </div>
+
+</div>

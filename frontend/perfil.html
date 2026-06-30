@@ -1,0 +1,68 @@
+<!-- ================================================================
+   PERFIL · VERSIÓN COMPLETA Y MEJORADA
+   ================================================================ -->
+
+<div id="section-perfil" class="perfil-container">
+    
+    <!-- Encabezado -->
+    <div class="section-header">
+        <h2><i class="fas fa-user" style="color:var(--accent-primary);"></i> Mi perfil</h2>
+        <p>Información de tu cuenta</p>
+    </div>
+
+    <!-- Tarjeta de perfil -->
+    <div class="perfil-card">
+        
+        <!-- Avatar -->
+        <div class="perfil-avatar">
+            <div class="avatar-circle">
+                <i class="fas fa-user"></i>
+            </div>
+            <span class="avatar-status">● Activo</span>
+        </div>
+
+        <!-- Información -->
+        <div class="perfil-info">
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-user"></i> Usuario</span>
+                <span class="info-value" id="profileUsername">pedro</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-coins" style="color:#fbbf24;"></i> Créditos</span>
+                <span class="info-value credits" id="profileCredits">300</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-calendar-alt"></i> Miembro desde</span>
+                <span class="info-value" id="profileSince">15/06/2025</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label"><i class="fas fa-envelope"></i> Correo</span>
+                <span class="info-value" id="profileEmail">pedro@email.com</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="perfil-actions">
+        <button class="action-btn" onclick="navigateTo('historial')">
+            <i class="fas fa-history"></i> Historial
+        </button>
+        <button class="action-btn" onclick="navigateTo('config')">
+            <i class="fas fa-cog"></i> Configuración
+        </button>
+        <button class="action-btn logout" onclick="cerrarSesion()">
+            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
+    </div>
+
+</div>
+
+<script>
+    function cerrarSesion() {
+        if (confirm('¿Seguro que quieres cerrar sesión?')) {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+    }
+</script>

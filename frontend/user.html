@@ -29,22 +29,22 @@
             <a href="#" class="menu-item active" data-section="dashboard">
                 <i class="fas fa-home menu-icon"></i> Inicio
             </a>
-            <a href="#" class="menu-item" data-section="solicitar">
-                <i class="fas fa-paper-plane menu-icon"></i> Solicitar cuenta
+            <a href="#" class="menu-item" data-section="cuentas-dominio">
+                <i class="fas fa-paper-plane menu-icon"></i> Cuentas a dominio
             </a>
-            <a href="#" class="menu-item" data-section="catalogo">
-                <i class="fas fa-store menu-icon"></i> Catálogo
+            <a href="#" class="menu-item" data-section="giftcards">
+                <i class="fas fa-gift menu-icon"></i> Gift Cards
             </a>
-            <a href="#" class="menu-item" data-section="historial">
-                <i class="fas fa-history menu-icon"></i> Historial
+            <a href="#" class="menu-item" data-section="cuentas-hit">
+                <i class="fas fa-film menu-icon"></i> Cuentas Hit
             </a>
-            <a href="#" class="menu-item" data-section="perfil">
-                <i class="fas fa-user menu-icon"></i> Mi perfil
+            <a href="#" class="menu-item" data-section="cursos">
+                <i class="fas fa-graduation-cap menu-icon"></i> Cursos
             </a>
+            <hr class="menu-divider">
             <a href="#" class="menu-item" data-section="config">
                 <i class="fas fa-cog menu-icon"></i> Configuración
             </a>
-            <hr class="menu-divider">
             <a href="#" id="logoutMenuBtn" class="menu-item logout">
                 <i class="fas fa-sign-out-alt menu-icon"></i> Cerrar sesión
             </a>
@@ -60,41 +60,62 @@
                 <button id="menuToggle" class="hamburger-btn" aria-label="Abrir menú">
                     <i class="fas fa-bars"></i>
                 </button>
+
                 <div class="brand-wrapper">
                     <span class="brand-name">NX7G SHOP</span>
                 </div>
+
                 <div class="profile-wrapper">
                     <button id="profileToggle" class="avatar-btn">
-                        <div class="avatar-circle"><i class="fas fa-user"></i></div>
+                        <div class="avatar-circle">
+                            <i class="fas fa-user"></i>
+                        </div>
                         <span class="avatar-name" id="usernameDisplay"></span>
                         <i class="fas fa-chevron-down avatar-arrow"></i>
                     </button>
+
                     <div id="profileDropdown" class="profile-dropdown">
                         <div class="dropdown-header">
-                            <div class="dropdown-avatar"><i class="fas fa-user-circle"></i></div>
+                            <div class="dropdown-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
                             <div>
                                 <div class="dropdown-username" id="dropdownUsername"></div>
                                 <div class="dropdown-credits">
-                                    <i class="fas fa-coins"></i> <span id="dropdownCredits">0</span> créditos
+                                    <i class="fas fa-coins"></i>
+                                    <span id="dropdownCredits">0</span> créditos
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        <a href="#" class="dropdown-item" data-section="profile"><i class="fas fa-user"></i> Mi perfil</a>
-                        <a href="#" class="dropdown-item" data-section="purchases"><i class="fas fa-shopping-bag"></i> Mis compras</a>
-                        <a href="#" class="dropdown-item" data-section="settings"><i class="fas fa-sliders-h"></i> Configuración</a>
+                        <a href="#" class="dropdown-item" data-section="perfil">
+                            <i class="fas fa-user"></i> Mi perfil
+                        </a>
+                        <a href="#" class="dropdown-item" data-section="historial">
+                            <i class="fas fa-history"></i> Historial
+                        </a>
                         <hr>
-                        <a href="#" id="logoutDropdownBtn" class="dropdown-item logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                        <a href="#" id="logoutDropdownBtn" class="dropdown-item logout">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                        </a>
                     </div>
                 </div>
             </div>
+
+            <!-- Buscador con efecto neón -->
             <div class="header-bottom">
-                <div class="search-wrapper">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input">
-                    <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">
-                        <i class="fas fa-times-circle"></i>
-                    </button>
+                <div class="search-neon-wrapper">
+                    <div class="glow"></div>
+                    <div class="darkBorderBg"></div>
+                    <div class="white"></div>
+                    <div class="border"></div>
+                    <div class="search-input-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Buscar productos..." class="search-input-neon" />
+                        <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -104,27 +125,25 @@
             <!-- Aquí se cargará el contenido de las secciones -->
         </div>
 
-        <!-- ===== FOOTER ===== -->
-        <footer class="footer">
-            <div class="footer-top">
-                <div class="footer-social">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
-                </div>
-                <a href="creditos.html" class="btn-creditos">
-                    <i class="fas fa-bolt"></i> Adquirir créditos
-                </a>
-            </div>
-            <div class="footer-bottom">
-                <span class="footer-copy">
-                    <i class="far fa-copyright"></i> 2025 NX7G SHOP · Todos los derechos reservados
-                </span>
-            </div>
-        </footer>
+      <!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="footer-social">
+        <a href="https://t.me/DraccoDev" target="_blank" aria-label="Telegram" class="social-link telegram">
+            <i class="fab fa-telegram-plane"></i>
+        </a>
+        <a href="https://wa.me/1234567890" target="_blank" aria-label="WhatsApp" class="social-link whatsapp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
     </div>
+    <div class="footer-dev">
+        Developed by <a href="https://t.me/DraccoDev" target="_blank" class="dev-link">Dracco</a>
+    </div>
+    <div class="footer-copy">
+        <i class="far fa-copyright"></i> 2025 NX7G SHOP · Todos los derechos reservados
+    </div>
+</footer>
 
-    <!-- ===== MODALES (compra, canje) ===== -->
+    <!-- ===== MODALES ===== -->
     <div id="codeModal" class="modal">
         <div class="modal-content">
             <span id="closeModal" class="close"><i class="fas fa-times"></i></span>
@@ -147,7 +166,37 @@
             <div id="redeemMessage" style="margin-top:12px; text-align:center; font-weight:500;"></div>
         </div>
     </div>
-
+ <!-- ================================================================
+   MODAL PUBLICITARIO CON IMAGEN COMPLETA
+   ================================================================ -->
+<div id="promoModal" class="promo-modal">
+    <div class="promo-modal-content">
+        <button class="promo-close" id="promoCloseBtn">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <!-- ===== IMAGEN COMPLETA ===== -->
+        <div class="promo-image">
+            <img src="imagenes/PUBLICIDA-MODAL1.jpg" alt="Publicidad" loading="lazy" />
+        </div>
+        
+        <!-- ===== CONTENIDO ===== -->
+        <div class="promo-body">
+            <h2>🔥 ¡Oferta especial!</h2>
+            <p>Recarga ahora y obtén <strong>10% extra</strong> en créditos.</p>
+            <div class="promo-telegram">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Únete a nuestro canal</span>
+                <a href="https://t.me/DraccoDev" target="_blank" class="promo-telegram-link">
+                    @DraccoDev
+                </a>
+            </div>
+            <div class="promo-timer">
+                <span id="promoTimer">12</span>s
+            </div>
+        </div>
+    </div>
+</div>
     <script src="js/user.js"></script>
 </body>
 </html>
