@@ -4,14 +4,41 @@
 
 <div class="cuentas-dominio-container">
 
-    <!-- ===== ENCABEZADO ===== -->
-    <div class="cuentas-header">
-        <div class="cuentas-header-badge">
-            <i class="fas fa-crown"></i> PREMIUM
+    <!-- ===== ENCABEZADO CON BANNER (IMAGEN DE FONDO) ===== -->
+    <div class="cuentas-header" style="
+        background-image: url('imagenes/banner-solicitarcuenta.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        padding: 40px 24px;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: var(--radius);
+        overflow: hidden;
+    ">
+        <!-- Overlay oscuro para legibilidad -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 14, 26, 0.6);
+            backdrop-filter: blur(3px);
+            border-radius: var(--radius);
+        "></div>
+
+        <!-- Contenido (igual que antes, pero con estilos inline para mantener) -->
+        <div style="position: relative; z-index: 2; text-align: center;">
+            <div class="cuentas-header-badge">
+                <i class="fas fa-crown"></i> PREMIUM
+            </div>
+            <h1 class="cuentas-header-title">Cuentas <span>a dominio</span></h1>
+            <p class="cuentas-header-subtitle">Personaliza tu cuenta de streaming con tus datos</p>
         </div>
-        <h1 class="cuentas-header-title">Cuentas <span>a dominio</span></h1>
-        <p class="cuentas-header-subtitle">Personaliza tu cuenta de streaming con tus datos</p>
     </div>
+
 
     <!-- ===== PASOS (guía visual) ===== -->
     <div class="cuentas-pasos">
@@ -83,11 +110,11 @@
                 <span class="resumen-value balance" id="requestBalance">100 créditos</span>
             </div>
         </div>
+        <div id="requestSummary" class="request-summary">Selecciona una plataforma para ver si tu saldo alcanza.</div>
 
-        <!-- Botón de acción -->
-        <button type="submit" class="btn-solicitar" id="solicitarBtn">
-            <i class="fas fa-paper-plane"></i> Solicitar cuenta
-        </button>
+     <button type="button" class="btn-solicitar" id="solicitarBtn">
+    <i class="fas fa-paper-plane"></i> Solicitar cuenta
+</button>
 
         <div id="requestMessage" class="request-message"></div>
     </div>

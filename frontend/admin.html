@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="css/style.css">
+
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/shield.png">
     <style>
         /* Estilos específicos del admin */
@@ -427,7 +428,7 @@
 <div id="addPlatformModal" class="modal-overlay" style="display:none;">
     <div class="modal-content" style="max-width:400px;">
         <div class="modal-header">
-            <h3><i class="fas fa-plus-circle" style="color:var(--accent-primary);"></i> Agregar plataforma</h3>
+            <h3 id="platformModalTitle"><i class="fas fa-plus-circle" style="color:var(--accent-primary);"></i> Agregar plataforma</h3>
             <button class="modal-close" onclick="closeAddPlatformModal()">
                 <i class="fas fa-times"></i>
             </button>
@@ -450,6 +451,12 @@
                 <label>Color (opcional)</label>
                 <input type="text" id="newPlatformColor" placeholder="#e50914" />
                 <small>Color hexadecimal para el icono</small>
+            </div>
+            <div class="form-group">
+                <label style="display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" id="newPlatformActive" checked />
+                    Plataforma activa
+                </label>
             </div>
         </div>
         <div class="modal-footer">
@@ -491,6 +498,15 @@
         </main>
     </div>
 
+    <script src="js/api.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/helpers.js"></script>
     <script src="js/admin.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+    <script src="js/admin-usuarios.js"></script>
+    <script src="js/admin-productos.js"></script>
+    <script src="js/admin-vouchers.js"></script>
+    <script src="js/admin-plataformas.js"></script>
+    <script src="js/admin-solicitudes.js"></script>
 </body>
 </html>

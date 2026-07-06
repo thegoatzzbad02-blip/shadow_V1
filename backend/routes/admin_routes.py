@@ -25,39 +25,6 @@ def get_users():
         return jsonify({'message': 'Error interno al obtener usuarios'}), 500
 
 
-@admin_bp.route('/solicitudes', methods=['GET'])
-@token_required
-@admin_required
-def get_solicitudes():
-    """Obtener todas las solicitudes de cuentas a dominio"""
-    try:
-        solicitudes = SolicitudModel.get_all()
-        return jsonify(solicitudes), 200
-    except Exception as e:
-        print("Error en get_solicitudes:", traceback.format_exc())
-        return jsonify({'message': 'Error interno al obtener solicitudes'}), 500
-
-
-@admin_bp.route('/solicitudes/<int:solicitud_id>', methods=['PUT'])
-@token_required
-@admin_required
-def update_solicitud(solicitud_id):
-    """Actualizar estado de una solicitud: pending, completed o cancelled"""
-    try:
-        data = request.get_json() or {}
-        estado = data.get('estado')
-        if estado not in {'pending', 'completed', 'cancelled'}:
-            return jsonify({'message': 'Estado inválido'}), 400
-
-        if SolicitudModel.update_status(solicitud_id, estado):
-            solicitud = SolicitudModel.get_by_id(solicitud_id)
-            return jsonify(solicitud), 200
-        return jsonify({'message': 'Solicitud no encontrada'}), 404
-    except Exception as e:
-        print("Error en update_solicitud:", traceback.format_exc())
-        return jsonify({'message': 'Error interno al actualizar solicitud'}), 500
-
-
 @admin_bp.route('/users', methods=['POST'])
 @token_required
 @admin_required
@@ -265,9 +232,9 @@ def delete_voucher(voucher_id):
 @token_required
 @admin_required
 def get_plataformas():
-    """Obtener todas las plataformas activas"""
+    """Obtener todas las plataformas (activas e inactivas)"""
     try:
-        plataformas = PlataformaModel.get_all(solo_activas=True)
+        plataformas = PlataformaModel.get_all(solo_activas=False)
         return jsonify(plataformas), 200
     except Exception as e:
         print("Error en get_plataformas:", traceback.format_exc())

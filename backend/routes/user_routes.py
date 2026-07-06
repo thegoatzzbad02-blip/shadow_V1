@@ -85,7 +85,19 @@ def solicitar_cuenta():
         if not plataforma or not email:
             return jsonify({'message': 'Plataforma y correo son obligatorios'}), 400
 
-        user = request.user
+        user = UserModel.find_by_id(request.user['id'])
+        plataformas = PlataformaModel.get_all(solo_activas=True)
+        selected_platform = next((item for item in plataformas if item['nombre'] == plataforma), None)
+
+        if not selected_platform:
+            return jsonify({'message': 'Plataforma no disponible'}), 400
+
+        costo = int(selected_platform['precio'])
+        if user['credits'] < costo:
+            return jsonify({'message': f'No tienes créditos suficientes. Necesitas {costo} créditos.'}), 400
+
+        nueva_creditos = int(user['credits']) - costo
+        UserModel.update_credits(user['id'], nueva_creditos)
 
         solicitud = SolicitudModel.create(
             usuario_id=user['id'],
@@ -98,7 +110,9 @@ def solicitar_cuenta():
 
         return jsonify({
             'message': 'Solicitud creada exitosamente',
-            'solicitud': solicitud
+            'solicitud': solicitud,
+            'credits_remaining': nueva_creditos,
+            'price': costo
         }), 201
 
     except Exception as e:

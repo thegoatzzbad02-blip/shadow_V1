@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmación de compra</title>
+ <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+    <div class="container" style="padding: 40px 20px; max-width: 720px; margin: 0 auto;">
+        <div class="auth-card" style="text-align:center;">
+            <h1 style="margin-bottom: 10px;">✅ Compra realizada</h1>
+            <p style="color: var(--text-secondary);">Tu compra fue procesada correctamente.</p>
+            <div id="confirmationCode" style="margin: 24px 0; font-size: 1.2rem; font-weight: 800; color: var(--accent-primary);"></div>
+            <a href="user.html" class="btn-primary">Volver al catálogo</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = JSON.parse(sessionStorage.getItem('productoComprado') || '{}');
+            const codeBox = document.getElementById('confirmationCode');
+            if (codeBox) {
+                codeBox.textContent = data.contenido || 'Sin código';
+            }
+        });
+    </script>
+</body>
+</html>

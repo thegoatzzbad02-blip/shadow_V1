@@ -1,16 +1,82 @@
 <!-- ================================================================
-   CUENTAS A DOMINIO · CON SELECTOR DINÁMICO DE PLATAFORMAS
+   CUENTAS A DOMINIO · CON BANNER Y SELECTOR DINÁMICO
    ================================================================ -->
 
 <div class="cuentas-dominio-container">
 
-    <!-- ===== ENCABEZADO ===== -->
-    <div class="cuentas-header">
-        <div class="cuentas-header-badge">
-            <i class="fas fa-crown"></i> PREMIUM
+    <!-- ===== BANNER PRINCIPAL (IMAGEN COMPLETA) ===== -->
+    <div class="cuentas-banner" style="
+        width: 100%;
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 24px;
+        position: relative;
+        background-image: url('imagenes/banner-solicitarcuenta.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border-light);
+        box-shadow: var(--shadow);
+    ">
+        <!-- Overlay oscuro para mejorar legibilidad -->
+        <div style="
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 14, 26, 0.55);
+            backdrop-filter: blur(2px);
+            border-radius: var(--radius);
+        "></div>
+
+        <!-- Contenido del banner -->
+        <div style="
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px 24px;
+            max-width: 700px;
+        ">
+            <div class="cuentas-header-badge" style="
+                display: inline-block;
+                background: rgba(255, 255, 255, 0.12);
+                backdrop-filter: blur(4px);
+                padding: 6px 20px;
+                border-radius: 40px;
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: #fbbf24;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                margin-bottom: 12px;
+            ">
+                <i class="fas fa-crown"></i> PREMIUM
+            </div>
+
+            <h1 class="cuentas-header-title" style="
+                font-size: 2.8rem;
+                font-weight: 900;
+                color: white;
+                margin: 0;
+                text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            ">
+                Cuentas <span style="color: #fbbf24;">a dominio</span>
+            </h1>
+
+            <p class="cuentas-header-subtitle" style="
+                font-size: 1.1rem;
+                color: rgba(255, 255, 255, 0.85);
+                margin-top: 6px;
+                text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+                font-weight: 400;
+                letter-spacing: 0.5px;
+            ">
+                Personaliza tu cuenta de streaming con tus datos
+            </p>
         </div>
-        <h1 class="cuentas-header-title">Cuentas <span>a dominio</span></h1>
-        <p class="cuentas-header-subtitle">Personaliza tu cuenta de streaming con tus datos</p>
     </div>
 
     <!-- ===== PASOS ===== -->
@@ -41,13 +107,12 @@
     <!-- ===== FORMULARIO ===== -->
     <div class="cuentas-formulario" id="solicitudForm">
         
-        <!-- Selector de plataforma (cargado dinámicamente) -->
+        <!-- Selector de plataforma -->
         <div class="form-section">
             <label class="form-label">
                 <i class="fas fa-tv"></i> Selecciona tu plataforma
             </label>
             <div class="platform-grid" id="platformGrid">
-                <!-- Las plataformas se cargan desde el backend -->
                 <div style="text-align:center; padding:20px; color:var(--text-secondary);">
                     <i class="fas fa-spinner fa-spin"></i> Cargando plataformas...
                 </div>
@@ -88,7 +153,7 @@
         </div>
 
         <!-- Botón -->
-        <button type="submit" class="btn-solicitar" id="solicitarBtn">
+        <button type="button" class="btn-solicitar" id="solicitarBtn">
             <i class="fas fa-paper-plane"></i> Solicitar cuenta
         </button>
 
@@ -113,185 +178,5 @@
 
 </div>
 
-<script>
-    // ================================================================
-    //  CUENTAS A DOMINIO · CONEXIÓN CON BACKEND
-    // ================================================================
-
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user'));
-    let selectedPlatform = null;
-    let platforms = [];
-
-    // ===== CARGAR PLATAFORMAS =====
-    async function loadPlatforms() {
-        const grid = document.getElementById('platformGrid');
-        
-        try {
-            const response = await fetch('/api/admin/plataformas', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            
-            if (!response.ok) throw new Error('Error al cargar plataformas');
-            
-            platforms = await response.json();
-            
-            if (platforms.length === 0) {
-                grid.innerHTML = '<p style="color:var(--text-secondary); text-align:center; padding:20px;">No hay plataformas disponibles</p>';
-                return;
-            }
-            
-            grid.innerHTML = '';
-            platforms.forEach(p => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'platform-card';
-                btn.dataset.id = p.id;
-                btn.dataset.precio = p.precio;
-                btn.innerHTML = `
-                    <i class="${p.icono}" style="color: ${p.color};"></i>
-                    <span>${p.nombre}</span>
-                    <small>${p.precio} créditos</small>
-                `;
-                btn.addEventListener('click', function() {
-                    selectPlatform(p.id);
-                });
-                grid.appendChild(btn);
-            });
-            
-            // Seleccionar la primera por defecto
-            if (platforms.length > 0) {
-                selectPlatform(platforms[0].id);
-            }
-            
-            // Actualizar saldo
-            document.getElementById('requestBalance').textContent = user.credits || 0;
-            
-        } catch (error) {
-            console.error('Error:', error);
-            grid.innerHTML = '<p style="color:var(--danger); text-align:center; padding:20px;">Error al cargar plataformas</p>';
-        }
-    }
-
-    // ===== SELECCIONAR PLATAFORMA =====
-    function selectPlatform(id) {
-        const platform = platforms.find(p => p.id === id);
-        if (!platform) return;
-        
-        selectedPlatform = platform;
-        
-        // Actualizar UI
-        document.querySelectorAll('.platform-card').forEach(btn => {
-            btn.classList.toggle('active', parseInt(btn.dataset.id) === id);
-        });
-        
-        document.getElementById('serviceSelect').value = id;
-        document.getElementById('requestPrice').textContent = `${platform.precio} créditos`;
-    }
-
-    // ===== ENVIAR SOLICITUD =====
-    document.getElementById('solicitarBtn').addEventListener('click', async function() {
-        const email = document.getElementById('requestEmail').value.trim();
-        const password = document.getElementById('requestPassword').value.trim();
-        const msg = document.getElementById('requestMessage');
-        
-        if (!selectedPlatform) {
-            msg.textContent = '❌ Selecciona una plataforma.';
-            msg.style.color = 'var(--danger)';
-            return;
-        }
-        
-        if (!email) {
-            msg.textContent = '❌ El correo electrónico es obligatorio.';
-            msg.style.color = 'var(--danger)';
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/user/solicitar-cuenta', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    plataforma: selectedPlatform.nombre,
-                    email: email,
-                    password: password,
-                    mensaje: ''
-                })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                msg.textContent = '✅ Solicitud enviada. Espera la confirmación.';
-                msg.style.color = 'var(--success)';
-                document.getElementById('requestEmail').value = '';
-                document.getElementById('requestPassword').value = '';
-                
-                // Recargar historial
-                loadRecentRequests();
-            } else {
-                msg.textContent = '❌ ' + (data.message || 'Error al enviar solicitud');
-                msg.style.color = 'var(--danger)';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            msg.textContent = '❌ Error de conexión. Intenta de nuevo.';
-            msg.style.color = 'var(--danger)';
-        }
-    });
-
-    // ===== CARGAR SOLICITUDES RECIENTES =====
-    async function loadRecentRequests() {
-        const container = document.getElementById('recentRequests');
-        if (!container) return;
-        
-        try {
-            const response = await fetch('/api/user/mis-solicitudes', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            
-            if (!response.ok) throw new Error('Error al cargar solicitudes');
-            
-            const solicitudes = await response.json();
-            const recent = solicitudes.slice(0, 3);
-            
-            if (recent.length === 0) {
-                container.innerHTML = `
-                    <div class="request-empty">
-                        <i class="fas fa-inbox"></i>
-                        <p>No hay solicitudes recientes</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = '';
-            recent.forEach(s => {
-                const div = document.createElement('div');
-                div.className = 'request-item';
-                const estadoLabels = {
-                    'pending': '⏳ Pendiente',
-                    'completed': '✅ Completada',
-                    'cancelled': '❌ Cancelada'
-                };
-                div.innerHTML = `
-                    <span>${s.plataforma}</span>
-                    <span>${s.email}</span>
-                    <span class="request-status ${s.estado}">${estadoLabels[s.estado] || s.estado}</span>
-                `;
-                container.appendChild(div);
-            });
-        } catch (error) {
-            console.error('Error al cargar solicitudes recientes:', error);
-        }
-    }
-
-    // ===== INICIALIZAR =====
-    document.addEventListener('DOMContentLoaded', function() {
-        loadPlatforms();
-        loadRecentRequests();
-    });
-</script>
+<!-- ===== CARGAR EL SCRIPT EXTERNO ===== -->
+<script src="js/cuentas-dominio.js"></script>
